@@ -1,0 +1,1 @@
+{"actions":"","name":"","description":"",vers:[{"id":"L1","actions":"","text":"","type":"start","x":"-78","y":"-81",edges:[]},{"id":"L2","actions":"","text":"","type":"odinary","x":"63","y":"77",edges:[]},{"id":"L3","actions":"","text":"","type":"odinary","x":"284","y":"137",edges:[]},{"id":"L4","actions":"","text":"","type":"odinary","x":"225","y":"-238",edges:[]}]}

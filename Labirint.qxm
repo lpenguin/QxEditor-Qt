@@ -1,0 +1,118 @@
+<?xml version="1.0"?>
+<qm>
+  <triggers>clearp()
+if win = 0
+ writep("Пока еще не выиграли")
+end
+if area[curx][cury] = 2 and win = 0
+ win = 1
+ goto("win")
+end</triggers>
+  <functions>func printArea()
+ write("Кое-как вы определили свое местоположение (+)&lt;br&gt;")
+ write("&lt;font face='Courier'&gt;")
+ foreach area as ix=&gt;ax
+  foreach ax as iy=&gt;ay
+   if cury = iy and curx = ix
+    write("+")
+    else
+     if abs(ix - curx) &lt;= 2 and abs(iy - cury) &lt;= 2
+      write(symbols[area[ix][iy]])
+      else
+       write(".")
+     end
+   end
+  end
+  write("&lt;br&gt;")
+ end
+ write("&lt;/font&gt;")
+ write("&lt;br&gt;")
+end
+func FillArray()
+ area = array(array(1 ,1 ,1 ,1 ,1 ,2 ,1 ,1 ,1 ,0) ,&amp;
+ array(0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,1 ,0) ,&amp;
+ array(1 ,1 ,1 ,1 ,1 ,1 ,1 ,0 ,1 ,0) ,&amp;
+ array(1 ,0 ,0 ,0 ,0 ,0 ,1 ,0 ,1 ,0) ,&amp;
+ array(1 ,0 ,1 ,0 ,1 ,0 ,1 ,0 ,1 ,0) ,&amp;
+ array(1 ,0 ,1 ,0 ,1 ,0 ,1 ,0 ,1 ,0) ,&amp;
+ array(0 ,0 ,1 ,0 ,1 ,0 ,1 ,0 ,1 ,0) ,&amp;
+ array(0 ,0 ,1 ,0 ,1 ,0 ,0 ,0 ,1 ,0) ,&amp;
+ array(1 ,1 ,1 ,0 ,1 ,1 ,1 ,0 ,1 ,0) &amp;
+ ,array(0 ,0 ,0 ,0 ,0 ,0 ,1 ,0 ,0 ,0))
+ symbols = array(" " ,"-" ,"x")
+end</functions>
+  <var name="money">0</var>
+  <var name="showMoney">0</var>
+  <var name="motherGive">0</var>
+  <var name="area">0</var>
+  <var name="symbols">
+  </var>
+  <var name="curx">9</var>
+  <var name="cury">1</var>
+  <var name="win">0</var>
+  <loc id="start" type="start" x="1" y="2">
+    <text>Как обычно вечером вы прогуливались по своему любимому парку, почитывая книжку. По сторонам особенно не смотрев, вы сами не поняли как очутились в какой незнакомой части парка.
+Вы осмотрелись, поняли, что совершенно не помните, как сюда пришли, захлопнули дурацкую книженцию  и пошли куда глаза глядят...</text>
+    <actions>FillArray()</actions>
+    <path id="P0" show="no" loc_id="L0">
+      <text>"Черт возьми, надо было под ноги глядеть!", - подумали вы, почувствовав, что под ними уже ничего нет… 
+Слава богу это была мягкая посадка. Поднявшись на ноги, вы поняли что очутились в лабиринте. Надо было выбираться. </text>
+      <question>Как вдруг...</question>
+      <actions>
+      </actions>
+      <cond>
+      </cond>
+    </path>
+  </loc>
+  <loc id="L0" type="" x="3" y="2">
+    <text>
+    </text>
+    <actions>if area=0
+ FillArray()
+end
+printArea()</actions>
+    <path id="P1" show="yes" loc_id="L1">
+      <text>
+      </text>
+      <question>Влево</question>
+      <actions>cury = cury - 1
+goto("L0")</actions>
+      <cond><![CDATA[cury > 0 and 1 != area[curx][cury - 1]]]></cond>
+    </path>
+    <path id="deb" show="yes" loc_id="L1">
+      <text>
+      </text>
+      <question>Вправо</question>
+      <actions>cury = cury + 1
+goto("L0")</actions>
+      <cond><![CDATA[cury < 9 and 1 != area[curx][cury + 1]]]></cond>
+    </path>
+    <path id="P2" show="yes" loc_id="L1">
+      <text>
+      </text>
+      <question>Вверх</question>
+      <actions>curx = curx - 1
+goto("L0")</actions>
+      <cond><![CDATA[curx > 0 and 1 != area[curx - 1][cury]]]></cond>
+    </path>
+    <path id="P3" show="yes" loc_id="L1">
+      <text>
+      </text>
+      <question>Вниз</question>
+      <actions>curx = curx + 1
+goto("L0")</actions>
+      <cond><![CDATA[curx < 9 and 1 != area[curx + 1][cury]]]></cond>
+    </path>
+  </loc>
+  <loc id="win" type="win" x="4" y="1">
+    <text>Ну наконецто! Вот и выход!</text>
+    <actions>
+    </actions>
+  </loc>
+  <loc id="L1" type="" x="4" y="2">
+    <text>
+    </text>
+    <actions>
+    </actions>
+  </loc>
+</qm>
