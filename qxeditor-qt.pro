@@ -32,7 +32,9 @@ HEADERS = \
     src/QuestActionsDialog.h \
     src/QuestSettingsDialog.h \
     src/JavascriptHighlighter.h \
-    src/ScriptEdit.h
+    src/ScriptEdit.h \
+    src/MyDataStream.h \
+    src/QMGraphReader.h
 SOURCES = \
     src/main.cpp \
     src/Ver.cpp \
@@ -51,7 +53,9 @@ SOURCES = \
     src/QuestActionsDialog.cpp \
     src/QuestSettingsDialog.cpp \
     src/JavascriptHighlighter.cpp \
-    src/ScriptEdit.cpp
+    src/ScriptEdit.cpp \
+    src/MyDataStream.cpp \
+    src/QMGraphReader.cpp
 TEMPLATE = app
 INCLUDEPATH += src
 OTHER_FILES += 111.txt \
