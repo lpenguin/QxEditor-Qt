@@ -267,11 +267,11 @@ QMParametr * QMReader::ReadParametr(BinaryReader &br)
 {
     QMParametr * parametr = new QMParametr();
     parametr->min = br.ReadInt32();
-    br.ReadInt32();
-    br.ReadInt32();
-    parametr->start = br.ReadInt32();
-    parametr->max = br.ReadInt32();
+//    br.ReadInt32();
+//    br.ReadInt32();
+//    parametr->start = br.ReadInt32();
 //    parametr->max = br.ReadInt32();
+    parametr->max = br.ReadInt32();
     br.ReadInt32();
 
     parametr->type = IntToQMParametrType(br.ReadInt32());//IntToQMParametrType(br.ReadByte());
@@ -339,7 +339,7 @@ QMParametrList QMReader::ReadParametrs(BinaryReader & br)
     QMParametrList params;
     int i;
     try{
-        br.skipRawData(59);
+        br.skipRawData(55);
         for ( i = 0; i < paramsCount; i++)
         {
 //            QMParametr * par = ;
