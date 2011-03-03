@@ -136,22 +136,31 @@ void MainDialogImpl::newFile()
 
 void MainDialogImpl::loadFile(const QString &fileName)
 {
-	QFile file(fileName);
-	if (!file.open(QFile::ReadOnly | QFile::Text)) {
-		QMessageBox::warning(this, tr("Recent Files"),
-			tr("Cannot read file %1:\n%2.")
-			.arg(fileName)
-			.arg(file.errorString()));
-		return;
-	}
 
-	QXmlStreamReader in(&file);
+//	QFile file(fileName);
+//	if (!file.open(QFile::ReadOnly | QFile::Text)) {
+//		QMessageBox::warning(this, tr("Recent Files"),
+//			tr("Cannot read file %1:\n%2.")
+//			.arg(fileName)
+//			.arg(file.errorString()));
+//		return;
+//	}
+
+//	QXmlStreamReader in(&file);
 	QApplication::setOverrideCursor(Qt::WaitCursor);
 
 
         //graphView->Load(in);
-        graphView->Load( fileName );
-
+        if( fileName.endsWith(".json")){
+            graphView->Load( fileName, JSONGraphReaderType );
+        }else if(fileName.endsWith(".qm")){
+            graphView->Load( fileName, QMGraphReaderType );
+        }else{
+            QApplication::restoreOverrideCursor();
+            statusBar()->showMessage(tr("Unknown extention"), 2000);
+            QMessageBox::warning(this, "Warning", tr("Unknown extention: %1").arg(fileName));
+            return;
+        }
 	QApplication::restoreOverrideCursor();
 
 	setCurrentFile(fileName);

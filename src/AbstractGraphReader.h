@@ -8,6 +8,7 @@ class AbstractGraphReader
 public:
     AbstractGraphReader();
     virtual Graph * ReadGraph(const QString & filename, Graph * graph = 0) = 0;
+    virtual int type() const = 0;
 };
 
 #endif // ABSTRACTGRAPHREADER_H

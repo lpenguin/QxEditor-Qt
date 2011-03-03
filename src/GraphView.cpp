@@ -216,13 +216,23 @@ void GraphView::AddEdge( Edge * edge, QPointF pos, QPointF endPoint ){
 	AppendEdge( edge, pos, endPoint );
 	m_graph->AddEdge( edge );
 }
-void GraphView::Load( const QString & filename ){
+void GraphView::Load( const QString & filename, int type  ){
         CleanGraph();
         m_graph->Clean();
         //m_graph->Load( xml );
-        JSONGraphReader reader;
-        reader.ReadGraph(filename, m_graph);
-        LoadGraph( m_graph );
+        if( type == JSONGraphReaderType ){
+            JSONGraphReader reader;
+            m_graph = reader.ReadGraph(filename);
+        }else if( type == QMGraphReaderType ){
+            QMGraphReader reader;
+            if( QMessageBox::question(this, tr("Select params count"), tr("Choose params count"), QString("48"), QString("24") ))
+                reader.setParamsCount(48);
+            else
+                reader.setParamsCount(24);
+            m_graph = reader.ReadGraph(filename);
+        }
+        if( m_graph )
+            LoadGraph( m_graph );
 }
     
 void GraphView::Save(const QString & filename){
