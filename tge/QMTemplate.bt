@@ -72,8 +72,9 @@ struct FILE{
         int xGrid;
         int yGrid;
     } header;
-    FSkip(12);
+    
     struct ParamHeader{
+    	FSkip(12);
         Param params[paramsCount] <optimize=false> ;
     } paramHeader;
     struct StringReplaces{

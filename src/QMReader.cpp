@@ -1,8 +1,8 @@
 #include "QMReader.h"
 
-QMReader::QMReader( qint32 paramsCount )
+QMReader::QMReader( )
 {
-    this->paramsCount = paramsCount;
+    this->paramsCount = 48;
 }
 
 QMGraph * QMReader::ReadGraph(const QString &filename)
@@ -184,13 +184,15 @@ QMPath * QMReader::ReadPath(BinaryReader &br)
     qint32 ownerLocNumber = br.ReadInt32();
     qint32 nextLocNumber = br.ReadInt32();
 
-    if( m_locations.count() > ownerLocNumber )
-        path->ownerLoc = m_locations[ownerLocNumber];
+    QMLocation * loc = FindLocation(ownerLocNumber);
+    if( loc )
+        path->ownerLoc = loc;
     else
         throw QMException(QObject::tr("Location with number %1 doesnot exists").arg(ownerLocNumber));
 
-    if( m_locations.count() > nextLocNumber )
-        path->nextLoc = m_locations[nextLocNumber];
+    loc = FindLocation(nextLocNumber);
+    if( loc )
+        path->nextLoc = loc;
     else
         throw QMException(QObject::tr("Location with number %1 doesnot exists").arg(nextLocNumber));
 
@@ -275,12 +277,14 @@ QMParametr * QMReader::ReadParametr(BinaryReader &br)
     br.ReadInt32();
 
     parametr->type = IntToQMParametrType(br.ReadInt32());//IntToQMParametrType(br.ReadByte());
-    br.ReadInt32();
-    parametr->showOnZero = br.ReadBool();
+    br.ReadByte();
+    parametr->showOnZero = br.ReadByte() == 1;
     parametr->critValue = IntToQMCritValue(br.ReadByte());
-    parametr->active = br.ReadBool();
+    br.ReadByte();
+
+    //parametr->active = br.ReadBool();
     parametr->numStrings = br.ReadInt32();
-    parametr->isMoney = br.ReadBool();
+    parametr->isMoney = br.ReadByte() == 1;
     br.ReadInt32();
     parametr->name = br.ReadString();
 //    name = Transliter.Translate(name).Replace(' ','_');
@@ -288,14 +292,15 @@ QMParametr * QMReader::ReadParametr(BinaryReader &br)
     for (int i = 0; i < parametr->numStrings; i++)
         parametr->ranges.append(ReadParametrRange(br));
     br.ReadInt32();
-    len = br.ReadInt32();
-    if (len == 0)
-    {
-        parametr->critText = QString("");
+    parametr->critText = br.ReadString();
+//    len = br.ReadInt32();
+//    if (len == 0)
+//    {
+//        parametr->critText = QString("");
 
-    }
-    else
-        parametr->critText = br.ReadChars(len);
+//    }
+//    else
+//        parametr->critText = br.ReadChars(len);
     br.ReadInt32();
     parametr->start = br.ReadString();
     return parametr;
@@ -339,7 +344,7 @@ QMParametrList QMReader::ReadParametrs(BinaryReader & br)
     QMParametrList params;
     int i;
     try{
-        br.skipRawData(55);
+        br.skipRawData(12);
         for ( i = 0; i < paramsCount; i++)
         {
 //            QMParametr * par = ;
@@ -405,4 +410,13 @@ void QMReader::ReadHeader(BinaryReader & br)
     }catch(std::exception& e){
        throw( QMException(QObject::tr("Error in reading header of qm file: %1").arg(e.what())) );
     }
+}
+
+QMLocation * QMReader::FindLocation(qint32 number)
+{
+    foreach( QMLocation * loc, m_locations){
+        if( loc->locNumber == number)
+            return loc;
+    }
+    return 0;
 }

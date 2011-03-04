@@ -31,6 +31,7 @@ void GraphView::LoadGraph( Graph * graph)
     foreach( e, graph->edges() ){
             v1 = FindVer( e->v1() );
             v0 = FindVer( e->v0() );
+            qDebug()<<v0->ver()->info().id<<" "<<v1->ver()->info().id;
             AppendEdge( e, v0->pos(), v1->pos());
     }
 }
@@ -225,10 +226,10 @@ void GraphView::Load( const QString & filename, int type  ){
             m_graph = reader.ReadGraph(filename);
         }else if( type == QMGraphReaderType ){
             QMGraphReader reader;
-            if( QMessageBox::question(this, tr("Select params count"), tr("Choose params count"), QString("48"), QString("24") ))
-                reader.setParamsCount(48);
-            else
-                reader.setParamsCount(24);
+//            if( QMessageBox::question(this, tr("Select params count"), tr("Choose params count"), QString("48"), QString("24") ))
+//                reader.setParamsCount(48);
+//            else
+//                reader.setParamsCount(24);
             m_graph = reader.ReadGraph(filename);
         }
         if( m_graph )

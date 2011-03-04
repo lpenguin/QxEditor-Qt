@@ -12,9 +12,10 @@
 class QMReader
 {
 public:
-    QMReader(qint32 paramsCount = 48);
+    QMReader();
     QMGraph * ReadGraph(const QString & filename);
     QString errorString()const { return m_errorString; } ;
+    QMLocation * FindLocation( qint32 number);
 private:
     qint32 paramsCount;
     QString m_errorString;

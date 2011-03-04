@@ -16,6 +16,7 @@ Graph * QMGraphConverter::Convert(QMGraph *qmGraph)
     ConvertLocations( qmGraph->locations() );
     ConvertPaths( qmGraph->paths() );;
     graph->setScript( ConvertParams(qmGraph->params() ) );
+    return graph;
 }
 
 void QMGraphConverter::ConvertLocations( QMLocationList locations)
@@ -40,8 +41,11 @@ Ver * QMGraphConverter::ConvertLocation(QMLocation *location)
 {
     VerInfo info;
     QPoint pos = QPoint(location->x, location->y);;
-    info.id = QString("L")+QString(location->locNumber);
-    info.text = location->texts[0];
+    info.id = QString("L")+QString::number(location->locNumber);
+    if( location->texts.count() )
+        info.text = location->texts[0];
+    else
+        info.text = "";
     info.actions = ConvertActions( location->actions);
     info.type = ConvertLocationType( location->type );
     return new Ver(info, pos);
@@ -49,7 +53,7 @@ Ver * QMGraphConverter::ConvertLocation(QMLocation *location)
 
 Edge *  QMGraphConverter::ConvertPath( QMPath * path, Ver * v0, Ver * v1 ){
     EdgeInfo info;
-    info.id =  QString("P")+QString(path->pathNumber);
+    info.id =  QString("P")+QString::number(path->pathNumber);
     info.actions = ConvertActions( path->actions);
     info.conditions = ConvertConditions( path->conditions);
     info.question = path->question;

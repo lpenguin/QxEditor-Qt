@@ -12,12 +12,12 @@ enum eQMGraphReaderType {
 
 class QMGraphReader : public AbstractGraphReader
 {
-private:
-    qint32 m_paramsCount;
+//private:
+//    qint32 m_paramsCount;
 public:
-    void setParamsCount( qint32 value){ m_paramsCount = value; }
-    qint32 paramsCount( void ) const { return m_paramsCount; }
-    QMGraphReader( qint32 paramsCount = 48 );
+//    void setParamsCount( qint32 value){ m_paramsCount = value; }
+//    qint32 paramsCount( void ) const { return m_paramsCount; }
+    QMGraphReader( );
     virtual Graph * ReadGraph(const QString & filename, Graph * graph = 0);
     virtual int type() const { return QMGraphReaderType; }
 };
