@@ -1,0 +1,80 @@
+//--------------------------------------
+//--- 010 Editor v3.1.3 Binary Template
+//
+// File:
+// Author:
+// Revision:
+// Purpose:
+//--------------------------------------
+struct lstring(int len){
+    //wchar_t str[len];
+};
+wstring ReadWStringN()
+{
+    local int n = strLength();
+	local char s[n];
+    local int64 pos = FTell();
+	ReadBytes(s, pos, n);
+	return StringToWString( s );
+}
+
+wstring MyReadString(){
+    //local int len = ReadInt32( FTell() );
+    int len;
+    local int i;
+    for( i = 0;i< len; i++)
+       char c;
+    return StringToWString(c);
+}
+int strLength(){
+    local int len = ReadInt( FTell() );
+    return len;
+}
+struct Range{
+    int rangeMin;
+    int rangeMax;
+    int skip;
+    int len;// = strLength();
+    wchar_t rangeStr[len];
+    //Printf("%d", len);
+    ///wchar_t rangeStr[len];
+    //wchar_t rangeStr[rlen];
+    //wchar_t rangeStr[this.stringLen+0];
+};
+struct Param{
+    SetBackColor(cLtYellow);
+    int min;
+    int max;
+    int skip;
+    int paramType;
+    byte xz;
+    byte showOnZero;
+    byte isKritMin;
+    byte skip;
+    int rangeLength;
+    byte isMoney;
+    int skip;
+    int len;
+    wchar_t name[len];
+    Range ranges[rangeLength] <optimize=false> ;
+    int skip;
+    int len;
+    wchar_t critText[len];
+    int skip;
+    int len;
+    wchar_t str[len];
+    //FSkip(12);
+    //byte start;
+    //FSkip(3);
+};
+
+struct FILE{
+    struct Header{
+        SetBackColor(cLtGreen);
+        FSkip(37);
+        int xGrid;
+        int yGrid;
+    } header;
+    FSkip(12);
+    Param params[48] <optimize=false> ;
+} file;
