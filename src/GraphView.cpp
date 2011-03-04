@@ -1,6 +1,6 @@
 #include "GraphView.h"
 #define VER_SIZE 20
-#define GRID_SIZE 100
+#define GRID_SIZE 120
 //
 GraphView::GraphView(   QWidget * parent   )
         : QGraphicsView( parent), m_verSize( VER_SIZE ), m_gridSize( GRID_SIZE )

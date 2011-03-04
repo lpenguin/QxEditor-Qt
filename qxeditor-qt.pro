@@ -37,7 +37,10 @@ HEADERS = \
     src/QMGraphConverter.h \
     src/QMReader.h \
     src/QMGraphReader.h \
-    src/BinaryReader.h
+    src/BinaryReader.h \
+    src/BlockScript.h \
+    src/QMScriptToBsConverter.h \
+    src/Transliter.h
 SOURCES = \
     src/main.cpp \
     src/Ver.cpp \
@@ -61,7 +64,10 @@ SOURCES = \
     src/QMGraphConverter.cpp \
     src/QMReader.cpp \
     src/QMGraphReader.cpp \
-    src/BinaryReader.cpp
+    src/BinaryReader.cpp \
+    src/BlockScript.cpp \
+    src/QMScriptToBsConverter.cpp \
+    src/Transliter.cpp
 TEMPLATE = app
 INCLUDEPATH += src
 OTHER_FILES += 111.txt \
