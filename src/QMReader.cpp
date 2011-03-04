@@ -110,7 +110,7 @@ QMCondition * QMReader::ReadCondition(BinaryReader &br, qint32 paramNumber)
 //    condition->kraten = new Int32[len];
     condition->isKraten = condition->isKraten && len != 0;
     for (int i = 0; i < len; i++)
-        condition->equals.push_front( br.ReadInt32() );
+        condition->kraten.push_front( br.ReadInt32() );
 
     if( m_params.count() > paramNumber)
         condition->param = m_params[paramNumber];

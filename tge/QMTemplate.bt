@@ -6,36 +6,30 @@
 // Revision:
 // Purpose:
 //--------------------------------------
-struct lstring(int len){
-    //wchar_t str[len];
-};
-wstring ReadWStringN()
-{
-    local int n = strLength();
-	local char s[n];
-    local int64 pos = FTell();
-	ReadBytes(s, pos, n);
-	return StringToWString( s );
+
+typedef struct {
+    int len;
+    //if( len )
+        wchar_t str[len];
+    //else
+        
+} wstr <read=wstrRead>;
+typedef struct wstr wstringd; 
+
+
+wstring wstrRead(wstr & s){
+    if( s.len )
+        return s.str;
+    else 
+        return "";
 }
 
-wstring MyReadString(){
-    //local int len = ReadInt32( FTell() );
-    int len;
-    local int i;
-    for( i = 0;i< len; i++)
-       char c;
-    return StringToWString(c);
-}
-int strLength(){
-    local int len = ReadInt( FTell() );
-    return len;
-}
 struct Range{
     int rangeMin;
     int rangeMax;
     int skip;
-    int len;// = strLength();
-    wchar_t rangeStr[len];
+    //int len;// = strLength();
+    wstr rangeStr;
     //Printf("%d", len);
     ///wchar_t rangeStr[len];
     //wchar_t rangeStr[rlen];
@@ -54,21 +48,24 @@ struct Param{
     int rangeLength;
     byte isMoney;
     int skip;
-    int len;
-    wchar_t name[len];
+    //int len;
+    wstr name;
     Range ranges[rangeLength] <optimize=false> ;
     int skip;
-    int len;
-    wchar_t critText[len];
+    //int len;
+    wstr critText;
     int skip;
-    int len;
-    wchar_t str[len];
+    //int len;
+    wstr str;//[len];
     //FSkip(12);
     //byte start;
     //FSkip(3);
 };
+local int paramsCount = 48;
+local int lc; //locCount
+local int pc; //pathCount
+struct FILE{ 
 
-struct FILE{
     struct Header{
         SetBackColor(cLtGreen);
         FSkip(37);
@@ -76,5 +73,124 @@ struct FILE{
         int yGrid;
     } header;
     FSkip(12);
-    Param params[48] <optimize=false> ;
+    struct ParamHeader{
+        Param params[paramsCount] <optimize=false> ;
+    } paramHeader;
+    struct StringReplaces{
+        int skip;
+        wstr toStar;
+        FSkip(56);
+        wstr toPlanet;
+        int skip;
+        wstr date;
+        int skip;
+        wstr money;
+        int skip;
+        wstr fromPlanet;
+        int skip;
+        wstr fromStar;
+        int skip;
+        wstr ranger;
+
+        int locCount;
+        lc = locCount;
+        int pathCount;
+        pc = pathCount;
+        int skip;
+        wstr congString;
+        int skip;
+        wstr missionString;
+    } stringReaplces;
+    struct LocationsChunk{
+        byte fskip[8];
+        struct Location{
+            struct Basic1{
+            int incDay;
+            int x;
+            int y;
+            int locNumber;
+            byte isStart;
+            byte isSuccess;
+            byte isDeatth;
+            byte isFail;
+            byte isEmpty;
+            } basic1;
+            struct LoactionActions{
+                struct LocationAction{
+                    byte fskip[12];
+                    int addNumber;
+                    int visible;
+                    byte skip;
+                    byte isProcent;
+                    byte isMov;
+                    byte isEqation;
+                    int skip;
+                    wstr eqation;
+                    byte fskip2[14];
+                    wstr ts;
+                } locationAction[paramsCount]  <optimize=false> ;
+            } locationActions;
+            struct LocationTexts{
+                struct LocationText{
+                    int skip;
+                    wstr text;
+                } locationText[10] <optimize=false> ;
+            } locationTexts;
+            byte selectTextByFormula;
+            struct Skip1{
+            FSkip(8);
+            wstr temp;
+            int skip;
+            wstr temp;
+            int skip;
+            } skip1;
+            wstr textFormula;
+        } location [lc]<optimize=false> ;
+    } locationsChunk;
+    struct PathsChunk{
+        struct Path{
+            double priority;    
+			int incDay;	
+			int pathNumber;
+    		int ownerLocNumber;
+		    int nextLocNumber;
+			byte skip;
+			byte alwaysShow;
+    		int prohodimost;
+    		int showOrder;
+			struct ActionsConditions{
+				struct ActionCondition{
+                    int skip;
+					int minDiap;
+					int maxDiap;
+					struct PathAction{
+						int addNumber;
+						int show;
+						byte skip;
+		                byte isProcent;
+		                byte isMov;
+		                byte isEqation;
+		                int skip;
+		                wstr eqation;
+					} pathAction;
+					struct PathCondition{
+					    int len;
+						byte isEquals;
+						int equals[len] <optimize=false>;
+						int lenKraten;
+						byte isKraten;
+						int kraten[lenKraten] <optimize=false>;
+					} pathCondition;
+					int skip;
+					wstr temp;
+				} actionCondition[paramsCount] <optimize=false>;
+			} actionsConditions;
+			int skip;
+			wstr logicalCondition;
+			int skip;
+			wstr question;
+			int skip;
+			wstr test;
+    } path [pc]<optimize=false> ;
+    } pathsChunk;
 } file;
