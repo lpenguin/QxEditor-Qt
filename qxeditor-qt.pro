@@ -41,7 +41,8 @@ HEADERS = \
     src/BlockScript.h \
     src/QMScriptToBsConverter.h \
     src/Transliter.h \
-    src/BsToTagConverter.h
+    src/BsToTagConverter.h \
+    src/BsToESMAScriptConverter.h
 SOURCES = \
     src/main.cpp \
     src/Ver.cpp \
@@ -69,7 +70,8 @@ SOURCES = \
     src/BlockScript.cpp \
     src/QMScriptToBsConverter.cpp \
     src/Transliter.cpp \
-    src/BsToTagConverter.cpp
+    src/BsToTagConverter.cpp \
+    src/BsToESMAScriptConverter.cpp
 TEMPLATE = app
 INCLUDEPATH += src
 OTHER_FILES += 111.txt \

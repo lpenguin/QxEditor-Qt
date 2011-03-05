@@ -8,25 +8,12 @@ class BsToTagConverter
 {
 public:
     BsToTagConverter();
-    //QString ConvertBsInstructions( BsInstructionList instructions);
-private:
-    QMap<BsObject::BsOperation, QString> m_expressionTypes;
-    QMap<BsObject::BsOperation, QString> m_actionTypes;
-    void FillExpressionTypes();
-    void FillActionTypes();
-//    QString ConvertBsInstruction( BsInstruction * instruction );
-//    QString ConvertBsAction( BsAction * action );
-//    QString ConvertBsFunction( BsFunction * function, bool asLocal = false );
-//    QString ConvertBsVariableDefinition( BsVariableDefinition * varDef );
-//    QString ConvertBsUserString( BsUserString * userString );
-//    QString ConvertBsVariable( BsVariable * variable );
-//    QString ConvertBsValue( BsValue * value );
-//    QString ConvertBsExpression( BsExpression * expression );
-//    QString ConvertBsObject( BsObject * obj );
-
     QString TagStart() const ;
     QString TagEnd() const ;
+    QString ConditionTagStart() const ;
+    QString ConditionTagEnd() const ;
 
+    QString ConditionTag( BsCondition * condition );
     QString ActionTag( BsAction * action );
     QString ObjectTag(BsObject * obj)  ;
     QString VariableTag(BsVariable * variable)  ;
@@ -35,10 +22,19 @@ private:
     QString UserStringTag(BsUserString * userString)  ;
     QString ValueTag(BsValue * value)  ;
     QString ExpressionTag( BsExpression * expression)  ;
+    QString NullTag( BsNull * null)  ;
+    QString RangeTag( BsRange * range );
 
     QString ExpressionTypeToString(BsObject::BsOperation operation );
     QString ActionTypeToString(BsObject::BsOperation operation );
-
+    QString ConditionTypeToString(BsCondition::BsConditionType condition );
+private:
+    QMap<BsObject::BsOperation, QString> m_expressionTypes;
+    QMap<BsCondition::BsConditionType, QString> m_conditionTypes;
+    QMap<BsObject::BsOperation, QString> m_actionTypes;
+    void FillExpressionTypes();
+    void FillActionTypes();
+    void FillConditionTypes();
 
 };
 

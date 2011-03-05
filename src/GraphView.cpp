@@ -1,6 +1,6 @@
 #include "GraphView.h"
 #define VER_SIZE 20
-#define GRID_SIZE 120
+#define GRID_SIZE 150
 //
 GraphView::GraphView(   QWidget * parent   )
         : QGraphicsView( parent), m_verSize( VER_SIZE ), m_gridSize( GRID_SIZE )
@@ -264,7 +264,7 @@ int GraphView::Curvature(EdgeItem * edge)
     if (atan2(edge->pos().x() - edge->endPoint().x(), edge->pos().y() - edge->endPoint().y()) >= 0)
                     maxCurve = -maxCurve;
 
-    return maxCurve * 30;
+    return maxCurve * 15;
 }
 
 void GraphView::RemoveVer(VerItem * ver)

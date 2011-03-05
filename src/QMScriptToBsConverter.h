@@ -20,6 +20,10 @@ public:
     BsVariable * ConvertQMParametr( QMParametr * qmParametr);
     BsInstructionList ConvertInstruction( QMAction * qmAction );
     BsUserString * ConvertQMEquation(QString equation);
+    BsConditionList ConvertQMCondition( QMCondition * qmCondition );
+    BsConditionList ConvertQMConditions( QMConditionList qmConditions );
+    BsCondition * ConvertQMLocaigalCondition( QString condition );
+    void setQmGlobals( QMParametrList qmGlobals );
 };
 
 #endif // QMSCRIPTTOBSCONVERTER_H

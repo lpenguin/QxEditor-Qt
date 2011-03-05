@@ -68,16 +68,36 @@ struct QMPath{
     QMConditionList conditions;
     QMActionList actions;
 };
+struct QMParametr{
+    enum QMParametrType{
+        Odinary = 0, Fail = 1, Success = 2, Death = 3
+    };
+    enum QMCritValue{
+        Max = 0, Min = 1
+    };
+
+    qint32 parNumber;
+    QMParametrRangeList ranges;
+    qint32 min, max;
+    QString start;
+    QMParametrType type;
+    bool showOnZero;
+    QMCritValue critValue;
+    bool active;
+    qint32 numStrings;
+    bool isMoney;
+    QString name;
+    QString critText;
+};
 
 struct QMCondition{
-//    QString parName;
     QMParametr * param;
     QList<qint32> equals;
     QList<qint32> kraten;
     bool isEquals, isKraten;
     qint32 maxDiap, minDiap;
     bool notEmpty(){
-        return isEquals || isKraten;
+        return isEquals || isKraten || maxDiap != param->max || minDiap != param->min;
     }
 };
 struct QMAction{
@@ -103,28 +123,6 @@ struct QMAction{
 struct QMParametrRange{
     qint32 min, max;
     QString text;
-};
-
-struct QMParametr{
-    enum QMParametrType{
-        Odinary = 0, Fail = 1, Success = 2, Death = 3
-    };
-    enum QMCritValue{
-        Max = 0, Min = 1
-    };
-
-    qint32 parNumber;
-    QMParametrRangeList ranges;
-    qint32 min, max;
-    QString start;
-    QMParametrType type;
-    bool showOnZero;
-    QMCritValue critValue;
-    bool active;
-    qint32 numStrings;
-    bool isMoney;
-    QString name;
-    QString critText;
 };
 
 struct QMStringReplaces{

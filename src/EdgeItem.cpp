@@ -153,8 +153,11 @@ void EdgeItem::UpdatePath( void ){
 	QPointF control = MidPoint();
         double dist = DistancePoint(QPointF(0, 0) , control) + DistancePoint(control, m_endPoint);
 	
-
+        int maxPointsCount = 10;
 	pointsCount = (int)(dist / m_selectDistance) + 1;
+        if(pointsCount > maxPointsCount ){
+            pointsCount = maxPointsCount;
+        }
 	points = new QPointF[pointsCount];
 	QPointF point;
 	for (int i = 0; i < pointsCount; i++){

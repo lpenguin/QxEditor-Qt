@@ -2,84 +2,21 @@
 
 BsToTagConverter::BsToTagConverter()
 {
+    FillExpressionTypes();
+    FillActionTypes();
+    FillConditionTypes();
 }
 
-//QString BsToESMAScriptConverter::ConvertBsInstructions(BsInstructionList instructions)
-//{
-//    QStringList result;
-//    foreach( BsInstruction * instruction, instructions){
-//        result<<ConvertBsInstruction(instruction);
-//    }
-//    return result.join( QString("\n"));
-//}
-
-//QString BsToESMAScriptConverter::ConvertBsInstruction(BsInstruction *instruction)
-//{
-//    switch( instruction->type()){
-//    case BsObject::Action:
-//        return ConvertBsAction( (BsAction *) instruction);
-//    case BsObject::Function:
-//        return ConvertBsFunction( (BsFunction * ) instruction );
-//    case BsObject::VariableDefinition:
-//        return ConvertBsVariableDefinition( (BsVariableDefinition * ) instruction );
-//    case BsObject::UserString:
-//        return ConvertBsUserString( (BsUserString * ) instruction );
-//    default:
-//        return QString("[ERROR]");
-//    }
-//}
-
-//QString BsToESMAScriptConverter::ConvertBsAction(BsAction *action)
-//{
-
-//}
-
-//QString BsToESMAScriptConverter::ConvertBsFunction(BsFunction *function, bool asLocal)
-//{
-//    QString functionString;
-//    QStringList arguments;
-
-//}
-
-//QString BsToESMAScriptConverter::ConvertBsVariableDefinition(BsVariableDefinition *varDef)
-//{
-
-//}
-
-//QString BsToESMAScriptConverter::ConvertBsVariable(BsVariable *variable)
-//{
-
-//}
-
-//QString BsToESMAScriptConverter::ConvertBsValue(BsValue *value)
-//{
-
-//}
-
-//QString BsToESMAScriptConverter::ConvertBsExpression(BsExpression *expression)
-//{
-
-//}
-
-//QString BsToESMAScriptConverter::ConvertBsUserString(BsUserString *userString)
-//{
-
-//}
-
-QString BsToTagConverter::TagStart()
+QString BsToTagConverter::TagStart() const
 {
-    return QString("//!bs:")
+    return QString("//!bs:");
 }
 
-QString BsToTagConverter::TagEnd()
+QString BsToTagConverter::TagEnd() const
 {
-    return QString("//!bs:end")
+    return QString("//!bs:end");
 }
 
-QString BsToTagConverter::ConvertBsObject(BsObject *obj)
-{
-
-}
 
 QString BsToTagConverter::VariableTag(BsVariable * variable)
 {
@@ -97,7 +34,7 @@ QString BsToTagConverter::FunctionTag(BsFunction * function)
 
 QString BsToTagConverter::VariableDefinitionTag(BsVariableDefinition * varDef)
 {
-    return QString("vdef[%1,%2]").arg(varDef->var()->name()).arg(ObjectTag(varDef->value()));
+    return QString("vdef[%1,%2]").arg( VariableTag(varDef->var())).arg(ObjectTag(varDef->value()));
 }
 
 QString BsToTagConverter::UserStringTag(BsUserString * userString)
@@ -125,13 +62,19 @@ QString BsToTagConverter::ObjectTag(BsObject *obj)
 {
     switch( obj->type()){
     case BsObject::Value:
-        return ConvertBsValue( (BsValue * obj));
+        return ValueTag( (BsValue * )obj);
     case BsObject::Variable:
-        return ConvertBsVariable( (BsVariable * obj ));
+        return VariableTag( (BsVariable * ) obj );
     case BsObject::Expression:
-        return ConvertBsExpression(( BsExpression * obj ));
+        return ExpressionTag(( BsExpression *) obj );
     case BsObject::Function:
-        return ConvertBsFunction(( BsFunction * obj ));
+        return FunctionTag(( BsFunction * )obj );
+    case BsObject::Null:
+        return NullTag( ( BsNull * )obj);
+    case BsObject::Condition:
+        return ConditionTag( ( BsCondition * )obj);
+    case BsObject::Range:
+        return RangeTag( ( BsRange * )obj);
     default:
         return QString("[ERROR]");
     }
@@ -141,7 +84,10 @@ QString BsToTagConverter::ExpressionTypeToString(BsObject::BsOperation operation
 {
     return m_expressionTypes[ operation ];
 }
-
+QString BsToTagConverter::ActionTypeToString(BsObject::BsOperation operation)
+{
+    return m_actionTypes[ operation ];
+}
 void BsToTagConverter::FillExpressionTypes()
 {
    // m_expressionTypes.insert( BsObject::Mov, "mov");
@@ -163,16 +109,72 @@ void BsToTagConverter::FillActionTypes()
     m_actionTypes.insert( BsObject::Hide, "hide");
 }
 
+void BsToTagConverter::FillConditionTypes()
+{
+    m_conditionTypes.insert( BsCondition::Greater, "gt");
+    m_conditionTypes.insert( BsCondition::GreaterEq, "ge");
+    m_conditionTypes.insert( BsCondition::LowerEq, "lt");
+    m_conditionTypes.insert( BsCondition::Lower, "le");
+    m_conditionTypes.insert( BsCondition::Equals, "eq");
+    m_conditionTypes.insert( BsCondition::In, "in");
+    m_conditionTypes.insert( BsCondition::Multiple, "mul");
+    m_conditionTypes.insert( BsCondition::And, "and");
+    m_conditionTypes.insert( BsCondition::Or, "or");
+    m_conditionTypes.insert( BsCondition::Not, "not");
+
+}
+
+QString BsToTagConverter::ConditionTypeToString(BsCondition::BsConditionType condition)
+{
+     return m_conditionTypes[ condition ];
+}
+
+
+
 QString BsToTagConverter::ActionTag(BsAction *action)
 {
     return QString("act[%1,%2,%3]")
             .arg(ActionTypeToString(action->actionType()))
-            .arg(action->var()->name())
+            .arg(VariableTag(action->var()))
             .arg(ObjectTag(action->value()));
 }
 
-QString BsToTagConverter::ActionTypeToString(BsObject::BsOperation operation)
+QString BsToTagConverter::NullTag( BsNull * null)
 {
-    return m_actionTypes[ operation ];
+    return "null";
 }
+
+QString BsToTagConverter::ConditionTagStart() const
+{
+    return "/*!bs:";
+}
+
+QString BsToTagConverter::ConditionTagEnd() const
+{
+    return ":!bs*/";
+}
+
+QString BsToTagConverter::ConditionTag(BsCondition *condition)
+{
+    QStringList args;
+    foreach (BsObject * obj, condition->arguments()) {
+        args<<ObjectTag( obj );
+    }
+    return QString("cond[%1,%2]")
+            .arg(ConditionTypeToString( condition->condition()))
+            .arg( args.join(QString(",")));
+
+
+}
+
+QString BsToTagConverter::RangeTag(BsRange *range)
+{
+    return QString("ran[%1,%2]")
+            .arg(ObjectTag( range->min() ))
+            .arg(ObjectTag( range->max() ));
+}
+
+
+
+
 

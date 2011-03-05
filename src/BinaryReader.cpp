@@ -44,9 +44,10 @@ qreal BinaryReader::ReadReal()
 QString BinaryReader::ReadChars(int len)
 {
     if( ! len ) return QString("");
-    char *s = new char[ len * 2 + 1];
+    char *s = new char[ len * 2 + 2];
     m_file->read( s, len * 2 );
     s[len * 2 ] = '\0';
+    s[len * 2 + 1] = '\0';
     m_pos = m_file->pos();
     return QString::fromUtf16((ushort * )s);
 }
