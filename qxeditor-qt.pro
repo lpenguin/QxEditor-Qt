@@ -3,7 +3,7 @@ QT = gui \
     script
 CONFIG += qt \
     warn_on \
-    console \
+    console   \
     debug
 DESTDIR = bin
 OBJECTS_DIR = build
