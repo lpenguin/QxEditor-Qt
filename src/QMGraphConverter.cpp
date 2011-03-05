@@ -13,6 +13,8 @@ Graph * QMGraphConverter::Convert(QMGraph *qmGraph)
 
     graph->setName("Converted from QMGraph");
     graph->setDescription( qmGraph->stringReplaces().missionString );
+    m_qmToBs.setQmGlobals( qmGraph->params() );
+    ConvertParams( qmGraph->params());
     ConvertLocations( qmGraph->locations() );
     ConvertPaths( qmGraph->paths() );;
     graph->setScript( ConvertParams(qmGraph->params() ) );
@@ -55,7 +57,7 @@ Edge *  QMGraphConverter::ConvertPath( QMPath * path, Ver * v0, Ver * v1 ){
     EdgeInfo info;
     info.id =  QString("P")+QString::number(path->pathNumber);
     info.actions = ConvertActions( path->actions);
-    info.conditions = ConvertConditions( path->conditions);
+    info.conditions = ConvertPathConditions( path );
     info.question = path->question;
     info.text = path->text;
     return new Edge( info, v0, v1 );
@@ -63,22 +65,29 @@ Edge *  QMGraphConverter::ConvertPath( QMPath * path, Ver * v0, Ver * v1 ){
 
 QString QMGraphConverter::ConvertAction(QMAction * action)
 {
-    return "";
+    BsInstructionList instructions =  m_qmToBs.ConvertInstruction(action);
+    QString result = m_BsToESMA.ConvertBsInstructions( instructions );
+    return result;
 }
 
 QString QMGraphConverter::ConvertCondition(QMCondition *condition)
 {
-    return "";
+    return "[Not realized yet]";
 }
 
 QString QMGraphConverter::ConvertConditions(QMConditionList conditions)
 {
-    return "";
+    return "[Not realized yet]";
 }
 
 QString QMGraphConverter::ConvertActions(QMActionList actions)
 {
-    return "";
+    QStringList res;
+    foreach( QMAction * action, actions){
+        res<<ConvertAction( action );
+    }
+
+    return res.join("\n");
 }
 
 LocationType QMGraphConverter::ConvertLocationType(QMLocation::QMLocationType type)
@@ -97,6 +106,7 @@ LocationType QMGraphConverter::ConvertLocationType(QMLocation::QMLocationType ty
     case QMLocation::Success:
         return win;
     }
+    return odinary;
 }
 
 Ver * QMGraphConverter::FindVer( QMLocation *location)
@@ -106,5 +116,28 @@ Ver * QMGraphConverter::FindVer( QMLocation *location)
 
 QString QMGraphConverter::ConvertParams(QMParametrList params)
 {
-    return "";
+    return "[Not realized yet]";
+}
+
+
+QString QMGraphConverter::ConvertPathConditions(QMPath *path)
+{
+    BsConditionList conds = m_qmToBs.ConvertQMConditions( path->conditions );
+    BsCondition * cond;
+    if( conds.count() != 1)
+        cond = new  BsCondition( BsCondition::And, BsCondition::ConditionsToObjects(conds) );
+    else
+        cond = conds.at(0);
+
+//    if( !path->logicalCondition.isEmpty() ){
+//        BsCondition * logCond = m_qmToBs.ConvertQMLocaigalCondition(path->logicalCondition);
+//        //conds << new BsCondition( BsCondition::And, BsObjectList()<< cond << logCond <<cond);
+//    }
+    return m_BsToESMA.ConvertBsConditionInstruction( (BsObject *) cond );
+//    info.conditions = ConvertConditions( path->conditions);
+//    if( !path->logicalCondition.isEmpty() ){
+//        if( info.conditions.isEmpty())
+//            info.conditions = ConvertPathLogicalCondition( path->logicalCondition );
+//    }
+    return "[Not realized yet]";
 }

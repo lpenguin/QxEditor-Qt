@@ -3,13 +3,7 @@
 QMScriptToBsConverter::QMScriptToBsConverter(QMParametrList qmGlobals):
     m_qmGlobals( qmGlobals )
 {
-    BsVariable * var;
-    foreach( QMParametr * par, qmGlobals){
-        var = ConvertQMParametr( par );
-        m_globals.append( var);
-        m_varMap.insert(par, var);
-    }
-
+    setQmGlobals( qmGlobals );
 }
 
 BsInstructionList QMScriptToBsConverter::ConvertInstructions(QMActionList qmActions)
@@ -74,4 +68,66 @@ BsInstructionList QMScriptToBsConverter::ConvertInstruction(QMAction * qmAction)
 BsUserString * QMScriptToBsConverter::ConvertQMEquation(QString equation)
 {
     return new BsUserString( equation );
+}
+
+void QMScriptToBsConverter::setQmGlobals(QMParametrList qmGlobals)
+{
+    BsVariable * var;
+    foreach( QMParametr * par, qmGlobals){
+        var = ConvertQMParametr( par );
+        m_globals.append( var);
+        m_varMap.insert(par, var);
+    }
+
+}
+
+BsConditionList QMScriptToBsConverter::ConvertQMCondition(QMCondition *qmCondition)
+{
+    BsConditionList result;
+    BsVariable * var = m_varMap[qmCondition->param];
+    if( qmCondition->maxDiap != qmCondition->param->max ||
+            qmCondition->minDiap != qmCondition->param->min){
+        BsCondition * cond = new BsCondition( BsCondition::In,
+                                             BsObjectList() <<
+                                                var <<
+                                                new BsRange(
+                                                 new BsValue( QString::number(qmCondition->minDiap)),
+                                                 new BsValue( QString::number(qmCondition->maxDiap))
+                                                 ));
+        result<<cond;
+    }
+    if( qmCondition->isEquals ){
+        BsObjectList list;
+        foreach( int v, qmCondition->equals){
+            list<<var<<new BsValue( QString::number( v ));
+        }
+
+        BsCondition * cond = new BsCondition( BsCondition::In, list);
+        result<<cond;
+    }
+    if( qmCondition->isKraten ){
+        BsObjectList list;
+        foreach( int v, qmCondition->kraten){
+            list<<var<<new BsValue( QString::number( v ));
+        }
+
+        BsCondition * cond = new BsCondition( BsCondition::Multiple, list);
+        result<<cond;
+    }
+    return result;
+
+}
+
+BsConditionList QMScriptToBsConverter::ConvertQMConditions(QMConditionList qmConditions)
+{
+    BsConditionList result;
+    foreach(QMCondition * cond, qmConditions){
+        result<<ConvertQMCondition(cond);
+    }
+    return result;
+}
+
+BsCondition * QMScriptToBsConverter::ConvertQMLocaigalCondition(QString condition)
+{
+    return new BsCondition( BsCondition::UserString, BsObjectList() << new BsUserString( condition ));
 }

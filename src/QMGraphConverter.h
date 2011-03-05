@@ -1,16 +1,22 @@
 #ifndef QMGRAPHCONVERTER_H
 #define QMGRAPHCONVERTER_H
 
+#include <QtCore>
+
 #include "Graph.h"
 #include "QMGraph.h"
 #include "QMGraphReader.h"
-#include <QtCore>
+
+#include "BsToESMAScriptConverter.h"
+#include "QMScriptToBsConverter.h"
 
 class QMGraphConverter
 {
 private:
     Graph * m_graph;
     QMGraph * m_qmGraph;
+    QMScriptToBsConverter m_qmToBs;
+    BsToESMAScriptConverter m_BsToESMA;
 public:
     QMGraphConverter();
     Graph * Convert( QMGraph * qmGraph);
@@ -25,7 +31,7 @@ public:
     QString ConvertActions( QMActionList actions );
     QString ConvertConditions( QMConditionList conditions );
     QString ConvertParams( QMParametrList params );
-
+    QString ConvertPathConditions( QMPath * path );
     LocationType ConvertLocationType(QMLocation::QMLocationType);
 
     Ver * FindVer( QMLocation * location);
