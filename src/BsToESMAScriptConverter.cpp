@@ -167,7 +167,7 @@ QString BsToESMAScriptConverter::ConvertBsConditionInstruction(BsObject *object)
     QString res =  m_tagConverter.ConditionTagStart()+
             m_tagConverter.ObjectTag( (BsObject*)object)+
             m_tagConverter.ConditionTagEnd();
-    res+=" ";
+    res+="\n";
     res+=ConvertBsObject( object );
     return res;
 }
