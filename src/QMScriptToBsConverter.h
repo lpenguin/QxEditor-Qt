@@ -16,9 +16,9 @@ public:
     QMScriptToBsConverter(QMParametrList qmGlobals = QMParametrList() );
     BsVariableList globals(){ return m_globals; }
     QMParametrList qmGlobals(){ return m_qmGlobals; }
-    BlockScript ConvertActions( QMActionList actions);
+    BsInstructionList ConvertInstructions( QMActionList qmActions);
     BsVariable * ConvertQMParametr( QMParametr * qmParametr);
-    BsActionList ConvertAction( QMAction * qmAction );
+    BsInstructionList ConvertInstruction( QMAction * qmAction );
     BsUserString * ConvertQMEquation(QString equation);
 };
 

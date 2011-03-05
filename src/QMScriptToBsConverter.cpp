@@ -12,58 +12,57 @@ QMScriptToBsConverter::QMScriptToBsConverter(QMParametrList qmGlobals):
 
 }
 
-BlockScript QMScriptToBsConverter::ConvertActions(QMActionList actions)
+BsInstructionList QMScriptToBsConverter::ConvertInstructions(QMActionList qmActions)
 {
-    BlockScript script;
-    QListIterator<QMAction> i(actions);
-    while (i.hasNext()){
-        script.AddActions( ConvertAction(i.next() ));
+    BsInstructionList instructions;
+    foreach( QMAction * action, qmActions ){
+        instructions.append( ConvertInstruction( action ));
     }
-    return script;
+    return instructions;
 }
 
 BsVariable * QMScriptToBsConverter::ConvertQMParametr(QMParametr * qmParametr)
 {
-    return new BsVariable( Transliter::Translate( qmParametr.name ) );
+    return new BsVariable( Transliter::Translate( qmParametr->name ) );
 }
 
-BsActionList QMScriptToBsConverter::ConvertAction(QMAction * qmAction)
+BsInstructionList QMScriptToBsConverter::ConvertInstruction(QMAction * qmAction)
 {
     BsVariable * var = m_varMap[qmAction->param];
     BsAction *  action = new BsAction( var );
-    BsActionList list;
-    switch(qmAction.type){
+    BsInstructionList list;
+    switch(qmAction->type){
     case QMAction::Mov:
-        action->setActionType( BsAction::Mov);
-        action->setValue(new BsValue( QString::number(qmAction.addNumber )));
+        action->setActionType( BsObject::Mov );
+        action->setValue(new BsValue( QString::number(qmAction->addNumber )));
         break;
     case QMAction::Number:
-        if( qmAction.addNumber > 0 )
-            action->setActionType( BsAction::Addition);
+        if( qmAction->addNumber > 0 )
+            action->setActionType( BsObject::Addition);
         else
-            action->setActionType( BsAction::Substraction);
-        action->setValue(new BsValue( QString::number( abs( qmAction.addNumber ) )));
+            action->setActionType( BsObject::Substraction);
+        action->setValue(new BsValue( QString::number( abs( qmAction->addNumber ) )));
         break;
     case QMAction::Equation:
-        action->setActionType(BsAction::UserString);
+        action->setActionType(BsObject::Mov);
         action->setValue(ConvertQMEquation(qmAction->equation));
         break;
      case QMAction::Procent:
-        action->setActionType(BsAction::Mov);
-        action->setValue(new BsFunction('prc',
-                                        BsObjectList(var,
-                                                     new BsValue(QString::number(qmAction->addNumber)))));
+        action->setActionType(BsObject::Mov);
+        QString str = QString::number(qmAction->addNumber);
+        BsValue * val = new BsValue(str);
+        action->setValue(new BsFunction( QString("prc"), BsObjectList() << var << val));
         break;
     }
 
     if( qmAction->show == QMAction::Show){
         BsAction * action = new BsAction( var );
-        action->setActionType(BsAction::Show);
+        action->setActionType(BsObject::Show);
         action->setValue( new BsNull );
         list<<action;
     }else if(qmAction->show == QMAction::Hide){
         BsAction *  action = new BsAction( var );
-        action->setActionType(BsAction::Hide);
+        action->setActionType(BsObject::Hide);
         action->setValue( new BsNull );
         list<<action;
     }

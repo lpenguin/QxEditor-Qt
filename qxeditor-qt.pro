@@ -40,7 +40,8 @@ HEADERS = \
     src/BinaryReader.h \
     src/BlockScript.h \
     src/QMScriptToBsConverter.h \
-    src/Transliter.h
+    src/Transliter.h \
+    src/BsToTagConverter.h
 SOURCES = \
     src/main.cpp \
     src/Ver.cpp \
@@ -67,7 +68,8 @@ SOURCES = \
     src/BinaryReader.cpp \
     src/BlockScript.cpp \
     src/QMScriptToBsConverter.cpp \
-    src/Transliter.cpp
+    src/Transliter.cpp \
+    src/BsToTagConverter.cpp
 TEMPLATE = app
 INCLUDEPATH += src
 OTHER_FILES += 111.txt \
