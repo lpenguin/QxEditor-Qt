@@ -44,7 +44,7 @@ struct Param{
     byte xz;
     byte showOnZero;
     byte isKritMin;
-    byte skip;
+    byte active;
     int rangeLength;
     byte isMoney;
     int skip;
