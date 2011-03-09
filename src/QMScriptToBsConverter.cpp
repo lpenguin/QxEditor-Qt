@@ -6,25 +6,25 @@ QMScriptToBsConverter::QMScriptToBsConverter(QMParametrList qmGlobals):
     setQmGlobals( qmGlobals );
 }
 
-BsInstructionList QMScriptToBsConverter::ConvertInstructions(QMActionList qmActions)
+BlockScript * QMScriptToBsConverter::ConvertQMActions(QMActionList qmActions)
 {
-    BsInstructionList instructions;
+    BsStatementList instructions;
     foreach( QMAction * action, qmActions ){
-        instructions.append( ConvertInstruction( action ));
+        instructions.append( ConvertQMAction( action ));
     }
-    return instructions;
+    return new BlockScript( instructions );
 }
 
-BsVariable * QMScriptToBsConverter::ConvertQMParametr(QMParametr * qmParametr)
+BsVariable * QMScriptToBsConverter::ConvertQMParametrToVariable(QMParametr * qmParametr)
 {
     return new BsVariable( Transliter::Translate( qmParametr->name ) );
 }
 
-BsInstructionList QMScriptToBsConverter::ConvertInstruction(QMAction * qmAction)
+BsStatementList QMScriptToBsConverter::ConvertQMAction(QMAction * qmAction)
 {
     BsVariable * var = m_varMap[qmAction->param];
     BsAction *  action = new BsAction( var );
-    BsInstructionList list;
+    BsStatementList list;
     switch(qmAction->type){
     case QMAction::Mov:
         action->setActionType( BsObject::Mov );
@@ -80,7 +80,7 @@ void QMScriptToBsConverter::setQmGlobals(QMParametrList qmGlobals)
 {
     BsVariable * var;
     foreach( QMParametr * par, qmGlobals){
-        var = ConvertQMParametr( par );
+        var = ConvertQMParametrToVariable( par );
         m_globals.append( var);
         m_varMap.insert(par, var);
     }
@@ -124,16 +124,78 @@ BsConditionList QMScriptToBsConverter::ConvertQMCondition(QMCondition *qmConditi
 
 }
 
-BsConditionList QMScriptToBsConverter::ConvertQMConditions(QMConditionList qmConditions)
+BsCondition * QMScriptToBsConverter::ConvertQMConditions(QMConditionList qmConditions)
 {
     BsConditionList result;
     foreach(QMCondition * cond, qmConditions){
         result<<ConvertQMCondition(cond);
     }
-    return result;
+    return new BsCondition( BsCondition::And, BsCondition::ConditionsToExpressions(result));
 }
 
 BsCondition * QMScriptToBsConverter::ConvertQMLocaigalCondition(QString condition)
 {
     return new BsCondition( BsCondition::UserString, BsExpressionList() << new BsUserString( condition ));
+}
+
+BlockScript * QMScriptToBsConverter::ConvertQMParametr(QMParametr *qmParametr)
+{
+    BlockScript * script = new BlockScript();
+    BsVariable * var = m_varMap[ qmParametr ];
+
+    script->AddStatements( BsStatementList()<<
+                new BsVariableDefinition( var, ConvertQMEquation(qmParametr->start))
+                <<
+                new QlConstraint( var, new BsValue( QString::number(qmParametr->min)), new BsValue( QString::number(qmParametr->max)))
+                <<
+                new QlShowVariable( var, ConvertQMRanges( qmParametr->ranges), ConvertQMRangesTexts(qmParametr->ranges)));
+    if( qmParametr->type != QMParametr::Odinary){
+        QlBoundTrigger * trig = new QlBoundTrigger();
+        trig->setText( qmParametr->critText);
+        trig->setVar( var );
+        if( qmParametr->critValue == QMParametr::Max ){
+            trig->setBoundType(QlBoundTrigger::Max);
+            trig->setValue( new BsValue(QString::number(qmParametr->max)));
+        }else{
+            trig->setBoundType(QlBoundTrigger::Max);
+            trig->setValue( new BsValue(QString::number(qmParametr->max)));
+        }
+        script->AddStatement( trig );
+    }
+    return script;
+}
+
+BsRangeList QMScriptToBsConverter::ConvertQMRanges(QMParametrRangeList ranges)
+{
+    BsRangeList list;
+    foreach( QMParametrRange range, ranges){
+        list<<new BsRange( new BsValue(QString::number( range.min)), new BsValue(QString::number( range.max)));
+    }
+    return list;
+}
+
+QStringList QMScriptToBsConverter::ConvertQMRangesTexts(QMParametrRangeList ranges)
+{
+    QStringList list;
+    foreach( QMParametrRange range, ranges){
+        list<<range.text;
+    }
+    return list;
+}
+
+QString QMScriptToBsConverter::ConvertQMParametrType(QMParametr::QMParametrType type)
+{
+    switch(type){
+    case QMParametr::Fail:
+    return "fail";
+    case QMParametr::Success:
+    return "win";
+    case QMParametr::Odinary:
+    return "odinary";
+    case QMParametr::Death:
+    return "fail";
+    default:
+        return "[ERROR]";
+    }
+
 }

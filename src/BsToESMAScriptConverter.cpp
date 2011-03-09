@@ -2,21 +2,21 @@
 
 BsToESMAScriptConverter::BsToESMAScriptConverter()
 {
-    FillExpressionTypes();
+    FillOperatorTypes();
     FillActionTypes();
     FillConditionTypes();
 }
 
-QString BsToESMAScriptConverter::ConvertBsInstructions(BsInstructionList instructions)
+QString BsToESMAScriptConverter::ConvertBsStatements(BsStatementList instructions)
 {
     QStringList result;
     foreach( BsStatement * instruction, instructions){
-        result<<ConvertBsInstruction(instruction);
+        result<<ConvertBsStatement(instruction);
     }
     return result.join( QString("\n"));
 }
 
-QString BsToESMAScriptConverter::ConvertBsInstruction(BsStatement *instruction)
+QString BsToESMAScriptConverter::ConvertBsStatement(BsStatement *instruction)
 {
     switch( instruction->type()){
     case BsObject::Action:
@@ -27,6 +27,16 @@ QString BsToESMAScriptConverter::ConvertBsInstruction(BsStatement *instruction)
         return ConvertBsVariableDefinition( (BsVariableDefinition * ) instruction );
     case BsObject::UserString:
         return ConvertBsUserString( (BsUserString * ) instruction );
+    case BsObject::If:
+        return ConvertBsIf( (BsIf * ) instruction );
+    case QlType::Constraint:
+        return ConvertQlConstraint( (QlConstraint * ) instruction );
+    case QlType::Trigger:
+        return ConvertQlTrigger( (QlTrigger * ) instruction );
+    case QlType::ShowVariable:
+        return ConvertQlShowVariable( (QlShowVariable * ) instruction );
+    case QlType::BoundTrigger:
+        return ConvertQlBoundTrigger( (QlBoundTrigger *) instruction );
     default:
         return QString("[ERROR]");
     }
@@ -35,7 +45,7 @@ QString BsToESMAScriptConverter::ConvertBsInstruction(BsStatement *instruction)
 QString BsToESMAScriptConverter::ConvertBsAction(BsAction *action)
 {
     QStringList result;
-    QString value =  ConvertBsObject(action->value());
+    QString value =  ConvertBsExpression(action->value());
     result << m_tagConverter.TagStart()+m_tagConverter.ActionTag( action );
     if( action->actionType() == BsAction::Show ){
         result<<QString("show(%1);").arg( action->var()->name());
@@ -47,6 +57,8 @@ QString BsToESMAScriptConverter::ConvertBsAction(BsAction *action)
                  .arg(action->var()->name())
                  .arg( operation )
                  .arg( value );
+        result<<QString("CheckConstraints('%1');")
+                 .arg(action->var()->name());
     }
     result<<m_tagConverter.TagEnd();
     return result.join("\n");
@@ -57,8 +69,8 @@ QString BsToESMAScriptConverter::ConvertBsFunction(BsFunction *function)
     QStringList arguments;
     QStringList result;
     result << m_tagConverter.TagStart()+m_tagConverter.FunctionTag( function );
-    foreach( BsObject * obj, function->arguments()){
-        arguments<<ConvertBsObject( obj );
+    foreach( BsExpression * obj, function->arguments()){
+        arguments<<ConvertBsExpression( obj );
     }
     result<<QString("%1(%2);").arg(function->name()).arg(arguments.join(","));
     result<<m_tagConverter.TagEnd();
@@ -67,7 +79,7 @@ QString BsToESMAScriptConverter::ConvertBsFunction(BsFunction *function)
 
 QString BsToESMAScriptConverter::ConvertBsVariableDefinition(BsVariableDefinition *varDef)
 {
-    QString value =  ConvertBsObject(varDef->value());
+    QString value =  ConvertBsExpression(varDef->value());
     QStringList result;
     result << m_tagConverter.TagStart()+m_tagConverter.VariableDefinitionTag( varDef );
     result<<QString("var %1 = %2;").arg(varDef->var()->name()).arg(value);
@@ -85,7 +97,7 @@ QString BsToESMAScriptConverter::ConvertBsValue(BsValue *value)
     return value->value();
 }
 
-QString BsToESMAScriptConverter::ConvertBsExpression(BsOperator *expression)
+QString BsToESMAScriptConverter::ConvertBsOperator(BsOperator *expression)
 {
     return "[Not yet realized]";
 }
@@ -94,21 +106,23 @@ QString BsToESMAScriptConverter::ConvertBsUserString(BsUserString *userString)
 {
     return userString->string();
 }
-QString BsToESMAScriptConverter::ConvertBsObject(BsObject *obj)
+QString BsToESMAScriptConverter::ConvertBsExpression(BsExpression *obj)
 {
     switch( obj->type()){
     case BsObject::Value:
         return ConvertBsValue( (BsValue * ) obj);
     case BsObject::Variable:
         return ConvertBsVariable( (BsVariable * ) obj );
-    case BsObject::Expression:
-        return ConvertBsExpression(( BsOperator *) obj );
+    case BsObject::Operator:
+        return ConvertBsOperator(( BsOperator *) obj );
     case BsObject::Function:
         return ConvertBsFunction(( BsFunction * )obj );
     case BsObject::Condition:
         return ConvertBsCondition(( BsCondition * )obj );
     case BsObject::Range:
         return ConvertBsRange(( BsRange * )obj );
+    case BsObject::UserString:
+        return ConvertBsUserString( (BsUserString*)obj);
     default:
         return QString("[ERROR]");
     }
@@ -116,7 +130,7 @@ QString BsToESMAScriptConverter::ConvertBsObject(BsObject *obj)
 
 QString BsToESMAScriptConverter::ExpressionTypeToString(BsObject::BsOperation operation)
 {
-    return m_expressionTypes[ operation ];
+    return m_operatorTypes[ operation ];
 }
 QString BsToESMAScriptConverter::ActionTypeToString(BsObject::BsOperation operation)
 {
@@ -143,13 +157,13 @@ void BsToESMAScriptConverter::FillConditionTypes()
 //    m_conditionTypes.insert( BsCondition::Multiple, "mul");
 }
 
-void BsToESMAScriptConverter::FillExpressionTypes()
+void BsToESMAScriptConverter::FillOperatorTypes()
 {
    // m_expressionTypes.insert( BsObject::Mov, "=");
-    m_expressionTypes.insert( BsObject::Addition, "+");
-    m_expressionTypes.insert( BsObject::Division, "/");
-    m_expressionTypes.insert( BsObject::Substraction, "-");
-    m_expressionTypes.insert( BsObject::Multiplication, "*");
+    m_operatorTypes.insert( BsObject::Addition, "+");
+    m_operatorTypes.insert( BsObject::Division, "/");
+    m_operatorTypes.insert( BsObject::Substraction, "-");
+    m_operatorTypes.insert( BsObject::Multiplication, "*");
 
 }
 
@@ -162,13 +176,13 @@ void BsToESMAScriptConverter::FillActionTypes()
     m_actionTypes.insert( BsObject::Mov, "=");
 }
 
-QString BsToESMAScriptConverter::ConvertBsConditionInstruction(BsObject *object)
+QString BsToESMAScriptConverter::ConvertBsConditionStatement(BsExpression *object)
 {
     QString res =  m_tagConverter.ConditionTagStart()+
-            m_tagConverter.ObjectTag( (BsObject*)object)+
+            m_tagConverter.ExpressionTag( object )+
             m_tagConverter.ConditionTagEnd();
     res+="\n";
-    res+=ConvertBsObject( object );
+    res+=ConvertBsExpression( object );
     return res;
 }
 
@@ -184,8 +198,8 @@ QString BsToESMAScriptConverter::ConvertBsCondition(BsCondition *condition)
     {
         if( condition->arguments().count() != 2 )
             return "[ERROR]";
-        QString arg1 = ConvertBsObject( condition->arguments().at(0));
-        QString arg2 = ConvertBsObject( condition->arguments().at(1));
+        QString arg1 = ConvertBsExpression( condition->arguments().at(0));
+        QString arg2 = ConvertBsExpression( condition->arguments().at(1));
         return QString("%1 %2 %3")
                 .arg( arg1 )
                 .arg( ConditionTypeToString( condition->condition() ))
@@ -196,8 +210,8 @@ QString BsToESMAScriptConverter::ConvertBsCondition(BsCondition *condition)
     case BsCondition::Or:
     {
         QStringList args;
-        foreach( BsObject * obj, condition->arguments()){
-            args<<QString("( %1 )").arg(ConvertBsObject( obj ));
+        foreach( BsExpression * obj, condition->arguments()){
+            args<<QString("( %1 )").arg(ConvertBsExpression( obj ));
         }
         return args.join(
                     QString(" %1 ")
@@ -208,15 +222,25 @@ QString BsToESMAScriptConverter::ConvertBsCondition(BsCondition *condition)
         if( condition->arguments().count() != 1 )
             return "[ERROR]";
         return QString("not ( %1 )")
-                .arg(ConvertBsObject( condition->arguments().at(0)));
+                .arg(ConvertBsExpression( condition->arguments().at(0)));
     case BsCondition::In:
     {
         if( condition->arguments().count() < 2 )
             return "[ERROR]";
         QStringList args;
-        foreach( BsObject * obj, condition->arguments()){
-            args<<ConvertBsObject( obj );
+        QString firstStr;
+        BsExpression * first = condition->arguments().at(0);
+
+        if( first->type() == BsObject::Variable ){
+            BsVariable * var = (BsVariable*)(first);
+            firstStr = QString("'%1'").arg(var->name());
         }
+        else
+            firstStr = ConvertBsExpression(first);
+        foreach( BsExpression * obj, condition->arguments()){
+            args<<ConvertBsExpression( obj );
+        }
+        args[0] = firstStr;
         return QString("in(%1)").arg(args.join(","));
         //BsObject * target = condition->arguments().takeFirst();
 
@@ -230,8 +254,86 @@ QString BsToESMAScriptConverter::ConvertBsCondition(BsCondition *condition)
 QString BsToESMAScriptConverter::ConvertBsRange(BsRange *range)
 {
     return QString("range(%1, %2)")
-            .arg(ConvertBsObject( range->min()))
-            .arg(ConvertBsObject( range->max()));
+            .arg(ConvertBsExpression( range->min()))
+            .arg(ConvertBsExpression( range->max()));
+}
+
+QString BsToESMAScriptConverter::ConvertBlockSript(BlockScript *script)
+{
+    return ConvertBsStatements( script->statements() );
+}
+
+QString BsToESMAScriptConverter::ConvertBsIf(BsIf *if_)
+{
+    QStringList result;
+    QString expr =  ConvertBsExpression(if_->expression());
+    result << m_tagConverter.TagStart()+m_tagConverter.IfTag( if_ );
+    result << QString("if( %1 ){").arg(expr);
+    result<<ConvertBsStatements(if_->staements());
+    result << QString("}");
+    result<<m_tagConverter.TagEnd();
+    return result.join("\n");
+}
+
+QString BsToESMAScriptConverter::ConvertQlConstraint(QlConstraint *con)
+{
+    QStringList result;
+    result << m_tagConverter.TagStart()+m_tagConverter.ConstraintTag( con );
+    result << QString("AddConstraint('%1', %2, %3);")
+              .arg(con->var()->name())
+              .arg(ConvertBsExpression(con->min()))
+              .arg(ConvertBsExpression(con->max()));
+    result<<m_tagConverter.TagEnd();
+    return result.join("\n");
+}
+
+QString BsToESMAScriptConverter::ConvertQlTrigger(QlTrigger *trig)
+{
+    QStringList result;
+    result << m_tagConverter.TagStart()+m_tagConverter.TriggerTag( trig );
+    result << ConvertBsIf(trig->if_());
+    result<<m_tagConverter.TagEnd();
+    return result.join("\n");
+}
+
+QString BsToESMAScriptConverter::ConvertQlShowVariable(QlShowVariable *sv)
+{
+    QStringList result;
+    QStringList ranges;
+    QStringList texts;
+    foreach( BsRange * ran, sv->ranges()){
+        ranges<<ConvertBsRange( ran );
+    }
+    foreach( QString str, sv->strings()){
+        texts<<QString("'%1'").arg(str);
+    }
+    result << m_tagConverter.TagStart()+m_tagConverter.ShowVariableTag( sv );
+    result << QString("AddShowRanges('%1', [%2], [%3]);")
+              .arg(sv->var()->name())
+              .arg( ranges.join(","))
+              .arg( texts.join(","));
+    result<<m_tagConverter.TagEnd();
+    return result.join("\n");
+}
+
+QString BsToESMAScriptConverter::ConvertQlBoundTrigger(QlBoundTrigger *trig)
+{
+    QStringList result;
+    QString type;
+    if( trig->boundType() == QlBoundTrigger::Min){
+        type = "min";
+    }else{
+        type = "max";
+    }
+
+    result << m_tagConverter.TagStart()+m_tagConverter.BoundTriggerTag( trig );
+    result << QString("AddBound('%1','%2', %3, '%4');")
+              .arg(trig->var()->name())
+              .arg(type)
+              .arg(trig->value()->value())
+              .arg(trig->text());
+    result<<m_tagConverter.TagEnd();
+    return result.join("\n");
 }
 
 //QStringList BsToESMAScriptConverter::ConvertBsObjectList(BsObjectList list)

@@ -7,33 +7,38 @@ class BsToESMAScriptConverter
 {
 public:
     BsToESMAScriptConverter();
-    QString ConvertBsInstructions( BsInstructionList instructions);
-
-
-    QString ConvertBsInstruction( BsStatement * instruction );
-    QString ConvertBsConditionInstruction( BsObject *object );
+    QString ConvertBlockSript( BlockScript * script);
+    QString ConvertBsConditionStatement( BsExpression *object );
 private:
+    QString ConvertBsStatements( BsStatementList instructions);
+    QString ConvertBsStatement( BsStatement * instruction );
     QString ConvertBsAction( BsAction * action );
+    QString ConvertBsIf( BsIf * if_ );
     QString ConvertBsFunction( BsFunction * function );
     QString ConvertBsVariableDefinition( BsVariableDefinition * varDef );
     QString ConvertBsUserString( BsUserString * userString );
     QString ConvertBsVariable( BsVariable * variable );
     QString ConvertBsValue( BsValue * value );
-    QString ConvertBsExpression( BsOperator * expression );
-    QString ConvertBsObject( BsObject * obj );
+    QString ConvertBsOperator( BsOperator * expression );
+    QString ConvertBsExpression( BsExpression * obj );
     QString ConvertBsRange( BsRange * range );
     QString ConvertBsCondition( BsCondition * condition );
+
+    QString ConvertQlConstraint( QlConstraint * con);
+    QString ConvertQlTrigger( QlTrigger * trig);
+    QString ConvertQlBoundTrigger( QlBoundTrigger * trig);
+    QString ConvertQlShowVariable( QlShowVariable * sv);
 
     QString ExpressionTypeToString(BsObject::BsOperation operation );
     QString ActionTypeToString(BsObject::BsOperation operation );
     QString ConditionTypeToString(BsCondition::BsConditionType operation );
 private:
     BsToTagConverter m_tagConverter;
-    QMap<BsObject::BsOperation, QString> m_expressionTypes;
+    QMap<BsObject::BsOperation, QString> m_operatorTypes;
     QMap<BsObject::BsOperation, QString> m_actionTypes;
     QMap<BsCondition::BsConditionType, QString> m_conditionTypes;
 //    QStringList ConvertBsObjectList( BsObjectList list );
-    void FillExpressionTypes();
+    void FillOperatorTypes();
     void FillActionTypes();
     void FillConditionTypes();
 

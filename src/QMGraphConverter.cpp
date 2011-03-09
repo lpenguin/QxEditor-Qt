@@ -14,7 +14,6 @@ Graph * QMGraphConverter::Convert(QMGraph *qmGraph)
     graph->setName("Converted from QMGraph");
     graph->setDescription( qmGraph->stringReplaces().missionString );
     m_qmToBs.setQmGlobals( qmGraph->params() );
-    ConvertParams( qmGraph->params());
     ConvertLocations( qmGraph->locations() );
     ConvertPaths( qmGraph->paths() );;
     graph->setScript( ConvertParams(qmGraph->params() ) );
@@ -63,12 +62,12 @@ Edge *  QMGraphConverter::ConvertPath( QMPath * path, Ver * v0, Ver * v1 ){
     return new Edge( info, v0, v1 );
 }
 
-QString QMGraphConverter::ConvertAction(QMAction * action)
-{
-    BsInstructionList instructions =  m_qmToBs.ConvertInstruction(action);
-    QString result = m_BsToESMA.ConvertBsInstructions( instructions );
-    return result;
-}
+//QString QMGraphConverter::ConvertAction(QMAction * action)
+//{
+//    BlockScript * script =  m_qmToBs.ConvertStatement(action);
+//    QString result = m_BsToESMA.ConvertBlockSript( script );
+//    return result;
+//}
 
 QString QMGraphConverter::ConvertCondition(QMCondition *condition)
 {
@@ -82,12 +81,16 @@ QString QMGraphConverter::ConvertConditions(QMConditionList conditions)
 
 QString QMGraphConverter::ConvertActions(QMActionList actions)
 {
-    QStringList res;
-    foreach( QMAction * action, actions){
-        res<<ConvertAction( action );
-    }
+     BlockScript * script =  m_qmToBs.ConvertQMActions(actions);
+     QString result = m_BsToESMA.ConvertBlockSript( script );
+     delete script;
+     return result;
+//    QStringList res;
+//    foreach( QMAction * action, actions){
+//        res<<ConvertAction( action );
+//    }
 
-    return res.join("\n");
+//    return res.join("\n");
 }
 
 LocationType QMGraphConverter::ConvertLocationType(QMLocation::QMLocationType type)
@@ -116,28 +119,41 @@ Ver * QMGraphConverter::FindVer( QMLocation *location)
 
 QString QMGraphConverter::ConvertParams(QMParametrList params)
 {
-    return "[Not realized yet]";
+    QStringList result;
+    BlockScript * script;
+    foreach( QMParametr * par, params){
+        if( par->active ){
+            script = m_qmToBs.ConvertQMParametr( par );
+            result<<m_BsToESMA.ConvertBlockSript( script );
+            delete script;
+        }
+    }
+
+    return result.join("\n");
 }
 
 
 QString QMGraphConverter::ConvertPathConditions(QMPath *path)
 {
-    BsConditionList conds = m_qmToBs.ConvertQMConditions( path->conditions );
-    BsCondition * cond;
-    if( conds.count() != 1)
-        cond = new  BsCondition( BsCondition::And, BsCondition::ConditionsToExpressions(conds) );
+    BsCondition * cond = m_qmToBs.ConvertQMConditions( path->conditions );
+    BsExpressionList exprs = cond->arguments();
+    BsExpression * expr;
+    if( exprs.count() != 1)
+        expr = (BsExpression *)cond;
     else
-        cond = conds.at(0);
+        expr = exprs.at(0);
 
 //    if( !path->logicalCondition.isEmpty() ){
 //        BsCondition * logCond = m_qmToBs.ConvertQMLocaigalCondition(path->logicalCondition);
 //        //conds << new BsCondition( BsCondition::And, BsObjectList()<< cond << logCond <<cond);
 //    }
-    return m_BsToESMA.ConvertBsConditionInstruction( (BsObject *) cond );
+    QString result = m_BsToESMA.ConvertBsConditionStatement( expr );
+    delete cond;
+    return result;
 //    info.conditions = ConvertConditions( path->conditions);
 //    if( !path->logicalCondition.isEmpty() ){
 //        if( info.conditions.isEmpty())
 //            info.conditions = ConvertPathLogicalCondition( path->logicalCondition );
 //    }
-    return "[Not realized yet]";
+//    return "[Not realized yet]";
 }

@@ -280,7 +280,7 @@ QMParametr * QMReader::ReadParametr(BinaryReader &br)
     br.ReadByte();
     parametr->showOnZero = br.ReadByte() == 1;
     parametr->critValue = IntToQMCritValue(br.ReadByte());
-    br.ReadByte();
+    parametr->active = br.ReadByte() == 1;
 
     //parametr->active = br.ReadBool();
     parametr->numStrings = br.ReadInt32();
@@ -349,7 +349,9 @@ QMParametrList QMReader::ReadParametrs(BinaryReader & br)
         {
 //            QMParametr * par = ;
 ////                par.parNumber = i;
-            params.append(ReadParametr(br));
+            QMParametr * p = ReadParametr(br);
+//            if( p->active )
+                params.append(p);
         }
     }
     catch (std::exception&  e)

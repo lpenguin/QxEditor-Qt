@@ -1,8 +1,8 @@
 #include "BlockScript.h"
 
-BlockScript::BlockScript(QObject *parent) :
-    QObject(parent)
+BlockScript::BlockScript( BsStatementList statements  )
 {
+    AddStatements(statements);
 }
 
 BsVariableDefinition::BsVariableDefinition(BsVariable *var, BsExpression *value)
@@ -29,19 +29,44 @@ void BsObject::setList( BsObjectList & list, BsObjectList value ){
         add( list, obj);
     }
 }
+
+void BsObject::setList( BsStatementList & list, BsStatementList value ){
+    list.clear();
+    foreach(  BsStatement * obj, value ){
+        add( list, obj);
+    }
+}
+
 void BsObject::setList( BsExpressionList & list, BsExpressionList value ){
     list.clear();
     foreach( BsExpression * obj, value ){
         add( list, obj);
     }
 }
+void BsObject::setList( BsRangeList & list, BsRangeList value ){
+    list.clear();
+    foreach( BsRange * obj, value ){
+        add( list, obj);
+    }
+}
 
+void BsObject::add( BsStatementList & list, BsStatement * value){
+    list.append( value );
+    if( value && isLocal((BsObjectP) value ))
+        value->setParent( this );
+}
 void BsObject::add( BsExpressionList & list, BsExpression * value){
     list.append( value );
     if( value && isLocal((BsObjectP) value ))
         value->setParent( this );
 }
+
 void BsObject::add( BsObjectList & list, BsObject * value){
+    list.append( value );
+    if( value && isLocal( value ))
+        value->setParent( this );
+}
+void BsObject::add( BsRangeList & list, BsRange * value){
     list.append( value );
     if( value && isLocal( value ))
         value->setParent( this );

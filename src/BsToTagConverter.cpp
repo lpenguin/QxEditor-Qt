@@ -2,7 +2,7 @@
 
 BsToTagConverter::BsToTagConverter()
 {
-    FillExpressionTypes();
+    FillOperatorTypes();
     FillActionTypes();
     FillConditionTypes();
 }
@@ -26,15 +26,15 @@ QString BsToTagConverter::VariableTag(BsVariable * variable)
 QString BsToTagConverter::FunctionTag(BsFunction * function)
 {
     QStringList arguments;
-    foreach ( BsObject * obj, function->arguments()) {
-        arguments<<ObjectTag(obj);
+    foreach ( BsExpression * obj, function->arguments()) {
+        arguments<<ExpressionTag(obj);
     }
     return QString("func[%1,%2]").arg(function->name()).arg(arguments.join(","));
 }
 
 QString BsToTagConverter::VariableDefinitionTag(BsVariableDefinition * varDef)
 {
-    return QString("vdef[%1,%2]").arg( VariableTag(varDef->var())).arg(ObjectTag(varDef->value()));
+    return QString("vdef[%1,%2]").arg( VariableTag(varDef->var())).arg(ExpressionTag(varDef->value()));
 }
 
 QString BsToTagConverter::UserStringTag(BsUserString * userString)
@@ -47,26 +47,26 @@ QString BsToTagConverter::ValueTag(BsValue * value)
     return QString("val[%1]").arg( value->value());
 }
 
-QString BsToTagConverter::ExpressionTag( BsOperator * expression)
+QString BsToTagConverter::OperatorTag( BsOperator * expression)
 {
     QStringList args;
-    foreach (BsObject * obj, expression->arguments()) {
-        args<<ObjectTag( obj );
+    foreach (BsExpression * obj, expression->arguments()) {
+        args<<ExpressionTag( obj );
     }
     return QString("expr[%1,%2]")
             .arg(ExpressionTypeToString( expression->operation()))
             .arg( args.join(QString(",")));
 }
 
-QString BsToTagConverter::ObjectTag(BsObject *obj)
+QString BsToTagConverter::ExpressionTag(BsExpression *obj)
 {
     switch( obj->type()){
     case BsObject::Value:
         return ValueTag( (BsValue * )obj);
     case BsObject::Variable:
         return VariableTag( (BsVariable * ) obj );
-    case BsObject::Expression:
-        return ExpressionTag(( BsOperator *) obj );
+    case BsObject::Operator:
+        return OperatorTag(( BsOperator *) obj );
     case BsObject::Function:
         return FunctionTag(( BsFunction * )obj );
     case BsObject::Null:
@@ -75,6 +75,8 @@ QString BsToTagConverter::ObjectTag(BsObject *obj)
         return ConditionTag( ( BsCondition * )obj);
     case BsObject::Range:
         return RangeTag( ( BsRange * )obj);
+    case BsObject::UserString:
+        return UserStringTag(( BsUserString * )obj);
     default:
         return QString("[ERROR]");
     }
@@ -82,19 +84,19 @@ QString BsToTagConverter::ObjectTag(BsObject *obj)
 
 QString BsToTagConverter::ExpressionTypeToString(BsObject::BsOperation operation)
 {
-    return m_expressionTypes[ operation ];
+    return m_operatorTypes[ operation ];
 }
 QString BsToTagConverter::ActionTypeToString(BsObject::BsOperation operation)
 {
     return m_actionTypes[ operation ];
 }
-void BsToTagConverter::FillExpressionTypes()
+void BsToTagConverter::FillOperatorTypes()
 {
    // m_expressionTypes.insert( BsObject::Mov, "mov");
-    m_expressionTypes.insert( BsObject::Addition, "add");
-    m_expressionTypes.insert( BsObject::Division, "div");
-    m_expressionTypes.insert( BsObject::Substraction, "sub");
-    m_expressionTypes.insert( BsObject::Multiplication, "mul");
+    m_operatorTypes.insert( BsObject::Addition, "add");
+    m_operatorTypes.insert( BsObject::Division, "div");
+    m_operatorTypes.insert( BsObject::Substraction, "sub");
+    m_operatorTypes.insert( BsObject::Multiplication, "mul");
 
 }
 
@@ -136,7 +138,7 @@ QString BsToTagConverter::ActionTag(BsAction *action)
     return QString("act[%1,%2,%3]")
             .arg(ActionTypeToString(action->actionType()))
             .arg(VariableTag(action->var()))
-            .arg(ObjectTag(action->value()));
+            .arg(ExpressionTag(action->value()));
 }
 
 QString BsToTagConverter::NullTag( BsNull * null)
@@ -157,8 +159,8 @@ QString BsToTagConverter::ConditionTagEnd() const
 QString BsToTagConverter::ConditionTag(BsCondition *condition)
 {
     QStringList args;
-    foreach (BsObject * obj, condition->arguments()) {
-        args<<ObjectTag( obj );
+    foreach (BsExpression * obj, condition->arguments()) {
+        args<<ExpressionTag( obj );
     }
     return QString("cond[%1,%2]")
             .arg(ConditionTypeToString( condition->condition()))
@@ -170,8 +172,61 @@ QString BsToTagConverter::ConditionTag(BsCondition *condition)
 QString BsToTagConverter::RangeTag(BsRange *range)
 {
     return QString("ran[%1,%2]")
-            .arg(ObjectTag( range->min() ))
-            .arg(ObjectTag( range->max() ));
+            .arg(ExpressionTag( range->min() ))
+            .arg(ExpressionTag( range->max() ));
+}
+
+QString BsToTagConverter::IfTag(BsIf *if_)
+{
+    return QString("if[%1]")
+            .arg(ExpressionTag(if_->expression()));
+}
+
+QString BsToTagConverter::ConstraintTag(QlConstraint *con)
+{
+    return QString("ql.cons[%1, %2, %3]")
+            .arg(VariableTag(con->var()))
+            .arg(ExpressionTag(con->min()))
+            .arg(ExpressionTag(con->max()));
+}
+
+QString BsToTagConverter::TriggerTag(QlTrigger *trig)
+{
+    return QString("ql.trig[%1, %2]")
+            .arg(VariableTag(trig->var()))
+            .arg(IfTag(trig->if_()));
+}
+
+QString BsToTagConverter::ShowVariableTag(QlShowVariable *sv)
+{
+    QStringList ranges;
+    QStringList texts;
+    foreach( BsRange * ran, sv->ranges()){
+        ranges<< RangeTag( ran );
+    }
+    foreach( QString str, sv->strings()){
+        texts<<QString("'%1'").arg(str);
+    }
+
+    return QString("ql.show[%1, [%2], [%3] ]")
+            .arg( VariableTag(sv->var()))
+            .arg( ranges.join(", ") )
+            .arg( texts.join(", ") );
+}
+
+QString BsToTagConverter::BoundTriggerTag(QlBoundTrigger *trig)
+{
+    QString type;
+    if( trig->boundType() == QlBoundTrigger::Min){
+        type = "min";
+    }else{
+        type = "max";
+    }
+    return QString("ql.bound[%1, %2, %3, '%4']")
+            .arg(VariableTag(trig->var()))
+            .arg( type )
+            .arg(ValueTag(trig->value()))
+            .arg(  trig->text() );
 }
 
 
