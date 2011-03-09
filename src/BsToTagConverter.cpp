@@ -47,7 +47,7 @@ QString BsToTagConverter::ValueTag(BsValue * value)
     return QString("val[%1]").arg( value->value());
 }
 
-QString BsToTagConverter::ExpressionTag( BsExpression * expression)
+QString BsToTagConverter::ExpressionTag( BsOperator * expression)
 {
     QStringList args;
     foreach (BsObject * obj, expression->arguments()) {
@@ -66,7 +66,7 @@ QString BsToTagConverter::ObjectTag(BsObject *obj)
     case BsObject::Variable:
         return VariableTag( (BsVariable * ) obj );
     case BsObject::Expression:
-        return ExpressionTag(( BsExpression *) obj );
+        return ExpressionTag(( BsOperator *) obj );
     case BsObject::Function:
         return FunctionTag(( BsFunction * )obj );
     case BsObject::Null:

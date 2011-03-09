@@ -10,7 +10,7 @@ public:
     QString ConvertBsInstructions( BsInstructionList instructions);
 
 
-    QString ConvertBsInstruction( BsInstruction * instruction );
+    QString ConvertBsInstruction( BsStatement * instruction );
     QString ConvertBsConditionInstruction( BsObject *object );
 private:
     QString ConvertBsAction( BsAction * action );
@@ -19,7 +19,7 @@ private:
     QString ConvertBsUserString( BsUserString * userString );
     QString ConvertBsVariable( BsVariable * variable );
     QString ConvertBsValue( BsValue * value );
-    QString ConvertBsExpression( BsExpression * expression );
+    QString ConvertBsExpression( BsOperator * expression );
     QString ConvertBsObject( BsObject * obj );
     QString ConvertBsRange( BsRange * range );
     QString ConvertBsCondition( BsCondition * condition );

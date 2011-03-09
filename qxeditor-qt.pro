@@ -42,7 +42,8 @@ HEADERS = \
     src/QMScriptToBsConverter.h \
     src/Transliter.h \
     src/BsToTagConverter.h \
-    src/BsToESMAScriptConverter.h
+    src/BsToESMAScriptConverter.h \
+    src/QuestLogic.h
 SOURCES = \
     src/main.cpp \
     src/Ver.cpp \
@@ -71,7 +72,8 @@ SOURCES = \
     src/QMScriptToBsConverter.cpp \
     src/Transliter.cpp \
     src/BsToTagConverter.cpp \
-    src/BsToESMAScriptConverter.cpp
+    src/BsToESMAScriptConverter.cpp \
+    src/QuestLogic.cpp
 TEMPLATE = app
 INCLUDEPATH += src
 OTHER_FILES += 111.txt \

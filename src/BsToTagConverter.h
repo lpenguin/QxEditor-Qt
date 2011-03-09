@@ -21,7 +21,7 @@ public:
     QString VariableDefinitionTag(BsVariableDefinition * varDef)  ;
     QString UserStringTag(BsUserString * userString)  ;
     QString ValueTag(BsValue * value)  ;
-    QString ExpressionTag( BsExpression * expression)  ;
+    QString ExpressionTag( BsOperator * expression)  ;
     QString NullTag( BsNull * null)  ;
     QString RangeTag( BsRange * range );
 

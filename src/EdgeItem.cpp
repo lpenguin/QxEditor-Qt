@@ -138,9 +138,9 @@ void EdgeItem::UpdateArrow(){
     control = BezierValue( 0.5, control );
     m_arrowPath = QPainterPath();
     m_arrowPath.moveTo( control );
-    m_arrowPath.lineTo( control.x()  - 15  * cos( anglem ), control.y() - 15  * sin( anglem) );
+    m_arrowPath.lineTo( control.x()  - 10  * cos( anglem ), control.y() - 10  * sin( anglem) );
     m_arrowPath.moveTo( control );
-    m_arrowPath.lineTo( control.x() - 15  * cos( anglep ), control.y() - 15  * sin( anglep) );
+    m_arrowPath.lineTo( control.x() - 10  * cos( anglep ), control.y() - 10  * sin( anglep) );
 }
 
 void EdgeItem::UpdatePath( void ){
@@ -153,7 +153,7 @@ void EdgeItem::UpdatePath( void ){
 	QPointF control = MidPoint();
         double dist = DistancePoint(QPointF(0, 0) , control) + DistancePoint(control, m_endPoint);
 	
-        int maxPointsCount = 10;
+        int maxPointsCount = 8;
 	pointsCount = (int)(dist / m_selectDistance) + 1;
         if(pointsCount > maxPointsCount ){
             pointsCount = maxPointsCount;

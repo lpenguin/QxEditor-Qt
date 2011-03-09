@@ -10,13 +10,13 @@ BsToESMAScriptConverter::BsToESMAScriptConverter()
 QString BsToESMAScriptConverter::ConvertBsInstructions(BsInstructionList instructions)
 {
     QStringList result;
-    foreach( BsInstruction * instruction, instructions){
+    foreach( BsStatement * instruction, instructions){
         result<<ConvertBsInstruction(instruction);
     }
     return result.join( QString("\n"));
 }
 
-QString BsToESMAScriptConverter::ConvertBsInstruction(BsInstruction *instruction)
+QString BsToESMAScriptConverter::ConvertBsInstruction(BsStatement *instruction)
 {
     switch( instruction->type()){
     case BsObject::Action:
@@ -85,7 +85,7 @@ QString BsToESMAScriptConverter::ConvertBsValue(BsValue *value)
     return value->value();
 }
 
-QString BsToESMAScriptConverter::ConvertBsExpression(BsExpression *expression)
+QString BsToESMAScriptConverter::ConvertBsExpression(BsOperator *expression)
 {
     return "[Not yet realized]";
 }
@@ -102,7 +102,7 @@ QString BsToESMAScriptConverter::ConvertBsObject(BsObject *obj)
     case BsObject::Variable:
         return ConvertBsVariable( (BsVariable * ) obj );
     case BsObject::Expression:
-        return ConvertBsExpression(( BsExpression *) obj );
+        return ConvertBsExpression(( BsOperator *) obj );
     case BsObject::Function:
         return ConvertBsFunction(( BsFunction * )obj );
     case BsObject::Condition:

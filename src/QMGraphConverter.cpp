@@ -125,7 +125,7 @@ QString QMGraphConverter::ConvertPathConditions(QMPath *path)
     BsConditionList conds = m_qmToBs.ConvertQMConditions( path->conditions );
     BsCondition * cond;
     if( conds.count() != 1)
-        cond = new  BsCondition( BsCondition::And, BsCondition::ConditionsToObjects(conds) );
+        cond = new  BsCondition( BsCondition::And, BsCondition::ConditionsToExpressions(conds) );
     else
         cond = conds.at(0);
 

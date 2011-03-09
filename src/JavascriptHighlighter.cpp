@@ -19,12 +19,12 @@ JavascriptHighlighter::JavascriptHighlighter(QTextDocument *parent)
     namePatterns << "\\bArray\\b" << "\\bString\\b" << "\\bObject\\b";
 
 
-    singleLineCommentFormat.setForeground(Qt::red);
+    singleLineCommentFormat.setForeground(Qt::darkGreen);
     rule.pattern = QRegExp("//[^\n]*");
     rule.format = singleLineCommentFormat;
     highlightingRules.append(rule);
 
-    multiLineCommentFormat.setForeground(Qt::red);
+    multiLineCommentFormat.setForeground(Qt::darkGreen);
 
     quotationFormat.setForeground(Qt::darkGreen);
     rule.pattern = QRegExp("\".*\"");

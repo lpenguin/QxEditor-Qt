@@ -29,23 +29,29 @@ BsInstructionList QMScriptToBsConverter::ConvertInstruction(QMAction * qmAction)
     case QMAction::Mov:
         action->setActionType( BsObject::Mov );
         action->setValue(new BsValue( QString::number(qmAction->addNumber )));
+        list<<action;
         break;
     case QMAction::Number:
-        if( qmAction->addNumber > 0 )
+        if( !qmAction->addNumber )
+            break;
+        else if( qmAction->addNumber > 0 )
             action->setActionType( BsObject::Addition);
         else
             action->setActionType( BsObject::Substraction);
         action->setValue(new BsValue( QString::number( abs( qmAction->addNumber ) )));
+        list<<action;
         break;
     case QMAction::Equation:
         action->setActionType(BsObject::Mov);
         action->setValue(ConvertQMEquation(qmAction->equation));
+        list<<action;
         break;
      case QMAction::Procent:
         action->setActionType(BsObject::Mov);
         QString str = QString::number(qmAction->addNumber);
         BsValue * val = new BsValue(str);
-        action->setValue(new BsFunction( QString("prc"), BsObjectList() << var << val));
+        action->setValue(new BsFunction( QString("prc"), BsExpressionList() << var << val));
+        list<<action;
         break;
     }
 
@@ -61,7 +67,7 @@ BsInstructionList QMScriptToBsConverter::ConvertInstruction(QMAction * qmAction)
         list<<action;
     }
 
-    list<<action;
+
     return list;
 }
 
@@ -88,7 +94,7 @@ BsConditionList QMScriptToBsConverter::ConvertQMCondition(QMCondition *qmConditi
     if( qmCondition->maxDiap != qmCondition->param->max ||
             qmCondition->minDiap != qmCondition->param->min){
         BsCondition * cond = new BsCondition( BsCondition::In,
-                                             BsObjectList() <<
+                                             BsExpressionList() <<
                                                 var <<
                                                 new BsRange(
                                                  new BsValue( QString::number(qmCondition->minDiap)),
@@ -97,7 +103,7 @@ BsConditionList QMScriptToBsConverter::ConvertQMCondition(QMCondition *qmConditi
         result<<cond;
     }
     if( qmCondition->isEquals ){
-        BsObjectList list;
+        BsExpressionList list;
         foreach( int v, qmCondition->equals){
             list<<var<<new BsValue( QString::number( v ));
         }
@@ -106,7 +112,7 @@ BsConditionList QMScriptToBsConverter::ConvertQMCondition(QMCondition *qmConditi
         result<<cond;
     }
     if( qmCondition->isKraten ){
-        BsObjectList list;
+        BsExpressionList list;
         foreach( int v, qmCondition->kraten){
             list<<var<<new BsValue( QString::number( v ));
         }
@@ -129,5 +135,5 @@ BsConditionList QMScriptToBsConverter::ConvertQMConditions(QMConditionList qmCon
 
 BsCondition * QMScriptToBsConverter::ConvertQMLocaigalCondition(QString condition)
 {
-    return new BsCondition( BsCondition::UserString, BsObjectList() << new BsUserString( condition ));
+    return new BsCondition( BsCondition::UserString, BsExpressionList() << new BsUserString( condition ));
 }
