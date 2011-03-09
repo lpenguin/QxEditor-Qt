@@ -81,7 +81,7 @@ QString Transliter::Translate(QString source)
         value = i.value();
         source = source.replace( i.key(), i.value());
     }
-    return source.replace(" ","_");
+    return source.replace(" ","_").replace("-","_");
 
 }
 void initTransliter(){

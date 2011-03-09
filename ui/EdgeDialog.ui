@@ -24,7 +24,7 @@
   </property>
   <property name="maximumSize">
    <size>
-    <width>682</width>
+    <width>167777</width>
     <height>16777215</height>
    </size>
   </property>
@@ -91,8 +91,17 @@
          <property name="sizePolicy">
           <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
            <horstretch>0</horstretch>
-           <verstretch>50</verstretch>
+           <verstretch>64</verstretch>
           </sizepolicy>
+         </property>
+         <property name="minimumSize">
+          <size>
+           <width>0</width>
+           <height>100</height>
+          </size>
+         </property>
+         <property name="lineWrapMode">
+          <enum>QTextEdit::NoWrap</enum>
          </property>
         </widget>
        </item>
@@ -129,22 +138,13 @@
     </layout>
    </item>
   </layout>
-  <zorder>actionsEdit</zorder>
-  <zorder>label</zorder>
-  <zorder>conditionsEdit</zorder>
-  <zorder>label_3</zorder>
-  <zorder>label_4</zorder>
-  <zorder>questionEdit</zorder>
-  <zorder>textEdit</zorder>
-  <zorder>label_5</zorder>
-  <zorder>layoutWidget</zorder>
   <zorder></zorder>
  </widget>
  <customwidgets>
   <customwidget>
    <class>ScriptEdit</class>
    <extends>QTextEdit</extends>
-   <header location="global">ScriptEdit.h</header>
+   <header>ScriptEdit.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

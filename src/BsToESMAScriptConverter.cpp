@@ -228,19 +228,19 @@ QString BsToESMAScriptConverter::ConvertBsCondition(BsCondition *condition)
         if( condition->arguments().count() < 2 )
             return "[ERROR]";
         QStringList args;
-        QString firstStr;
-        BsExpression * first = condition->arguments().at(0);
+//        QString firstStr;
+//        BsExpression * first = condition->arguments().at(0);
 
-        if( first->type() == BsObject::Variable ){
-            BsVariable * var = (BsVariable*)(first);
-            firstStr = QString("'%1'").arg(var->name());
-        }
-        else
-            firstStr = ConvertBsExpression(first);
+//        if( first->type() == BsObject::Variable ){
+//            BsVariable * var = (BsVariable*)(first);
+//            firstStr = QString("'%1'").arg(var->name());
+//        }
+//        else
+//            firstStr = ConvertBsExpression(first);
         foreach( BsExpression * obj, condition->arguments()){
             args<<ConvertBsExpression( obj );
         }
-        args[0] = firstStr;
+//        args[0] = firstStr;
         return QString("in(%1)").arg(args.join(","));
         //BsObject * target = condition->arguments().takeFirst();
 
