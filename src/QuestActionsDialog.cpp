@@ -12,7 +12,7 @@ QuestActionsDialog::~QuestActionsDialog()
 {
     delete ui;
 }
-void QuestActionsDialog::ShowGraph(Graph * graph){
+void QuestActionsDialog::ShowGraph(BaseGraph * graph){
     ui->actionsEdit->setPlainText( graph->script() );
     if( exec() ){
         graph->setScript( ui->actionsEdit->toPlainText() );

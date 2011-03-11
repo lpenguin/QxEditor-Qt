@@ -12,11 +12,12 @@ LocationType Str2Type( QString type ){
         return odinary;
 }
 
-JSONGraphReader::JSONGraphReader()
+JSONGraphReader::JSONGraphReader(AbstractInfoReader * infoReader):
+    AbstractGraphReader( infoReader )
 {
 }
 
-Graph * JSONGraphReader::ReadGraph(const QString & filename, Graph * graph){
+BaseGraph * JSONGraphReader::ReadGraph(const QString & filename, BaseGraph * graph){
     QFile file( filename );
     if ( file.open(  QIODevice::ReadOnly ) ) {
 
@@ -31,13 +32,11 @@ Graph * JSONGraphReader::ReadGraph(const QString & filename, Graph * graph){
             return 0;
         }
         if( !graph )
-            graph = new Graph;
+            graph = new BaseGraph;
 
         LoadVers(graph, sc);
         LoadEdges(graph, sc);
-        graph->setScript( sc.property("actions").toString());
-        graph->setName( sc.property("name").toString());
-        graph->setDescription( sc.property("description").toString());
+        graph->setInfo( m_infoReader->ReadGraphInfo( sc ));
         file.close();
 
         return graph;
@@ -47,7 +46,7 @@ Graph * JSONGraphReader::ReadGraph(const QString & filename, Graph * graph){
     return 0;
 }
 
-void JSONGraphReader::LoadVers(  Graph * graph, QScriptValue value ){
+void JSONGraphReader::LoadVers(  BaseGraph * graph, QScriptValue value ){
     QScriptValueIterator it(value.property("vers"));
 
     while (it.hasNext()) {
@@ -59,31 +58,19 @@ void JSONGraphReader::LoadVers(  Graph * graph, QScriptValue value ){
     }
 }
 
-Ver * JSONGraphReader::LoadVer( QScriptValue value){
-    VerInfo info;
-
-    info.actions = value.property("actions").toString();
-    info.id = value.property("id").toString();
-    info.text = value.property("text").toString();
-    info.type = Str2Type( value.property("type").toString() );
-
+BaseVer * JSONGraphReader::LoadVer( QScriptValue value){
+    BaseInfo * info = m_infoReader->ReadVerInfo( value );
     QPoint point( value.property("x").toInteger(), value.property("y").toInteger());
-    return new Ver(info, point);
+    return new BaseVer(info, point);
 }
 
-Edge * JSONGraphReader::LoadEdge( Graph * graph, QScriptValue value, Ver * ver){
-    Ver * v1 = graph->FindVer( value.property("nextVer").toString());
-    EdgeInfo info;
-    info.actions = value.property("actions").toString();
-    info.conditions = value.property("conditions").toString();
-    info.id = value.property("id").toString();
-    info.question = value.property("question").toString();
-    info.text = value.property("text").toString();
-
-    return new Edge(info, ver, v1);
+BaseEdge * JSONGraphReader::LoadEdge( BaseGraph * graph, QScriptValue value, Ver * ver){
+    BaseVer * v1 = graph->FindVer( value.property("nextVer").toString());
+    BaseInfo * info = m_infoReader->ReadEdgeInfo( value );
+    return new BaseEdge(info, ver, v1);
 }
 
-void JSONGraphReader::LoadEdges( Graph * graph, QScriptValue value ){
+void JSONGraphReader::LoadEdges( BaseGraph * graph, QScriptValue value ){
     QScriptValueIterator verIt(value.property("vers"));
     QListIterator<Ver*> i(graph->vers());
     while (verIt.hasNext()) {
@@ -102,4 +89,37 @@ void JSONGraphReader::LoadEdges( Graph * graph, QScriptValue value ){
             graph->AddEdge(edge);
         }
     }
+}
+
+BaseInfo * SimpleJSONInfoReader::ReadVerInfo(QScriptValue value)
+{
+    SimpleVerInfo * info = new SimpleVerInfo();
+
+    info->setActions( value.property("actions").toString() );
+    info->setId( value.property("id").toString() );
+    info->setText( value.property("text").toString() );
+    info->setType( Str2Type( value.property("type").toString() ) );
+
+    QPoint point( value.property("x").toInteger(), value.property("y").toInteger());
+    return info;
+}
+
+BaseInfo * SimpleJSONInfoReader::ReadEdgeInfo(QScriptValue value)
+{
+    SimpleEdgeInfo * info = new SimpleEdgeInfo();
+    info->setActions( value.property("actions").toString() );
+    info->setConditions( value.property("conditions").toString() );
+    info->setId( value.property("id").toString() );
+    info->setQuestion( value.property("question").toString() );
+    info->setText( value.property("text").toString() );
+    return info;
+}
+
+BaseInfo * SimpleJSONInfoReader::ReadGraphInfo(QScriptValue value)
+{
+    SimpleGraphInfo * info = new SimpleGraphInfo(value.property("name").toString(),
+                                                 value.property("description"),
+                                                 value.property("actions").toString()
+                                                 );
+    return info;
 }

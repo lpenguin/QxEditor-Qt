@@ -250,11 +250,11 @@ void MainDialogImpl::EdgeClicked( EdgeItem * edge, Qt::MouseButton button ){
 
 void MainDialogImpl::AreaClicked( QPointF point, Qt::MouseButton){
         Ver * ver = new Ver;
-        ver->info().id = graphView->graph()->GetNewVerId();
+        ver->info()->id() = graphView->graph()->GetNewVerId();
         if( graphView->graph()->vers().count())
-            ver->info().type = odinary;
+            ver->info()->setType( odinary );
         else
-            ver->info().type = start;
+            ver->info()->setType( start );
 
 	QSettings settings;
 	if( settings.value("openNewDialog").toBool() ){
@@ -268,7 +268,7 @@ void MainDialogImpl::AreaClicked( QPointF point, Qt::MouseButton){
 
 void MainDialogImpl::VersConnected( VerItem * ver1, VerItem * ver2){
 	Edge * edge = new Edge( ver1->ver(), ver2->ver() );
-        edge->info().id = graphView->graph()->GetNewEdgeId();
+        edge->info()->setId( graphView->graph()->GetNewEdgeId() );
 	QSettings settings;
 	if( settings.value("openNewDialog").toBool() ){
 		if( edgeDialog->ShowEdge( edge ) == QDialog::Accepted )

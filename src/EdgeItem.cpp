@@ -6,7 +6,7 @@ float DistancePoint(QPointF p0, QPointF p1){
 }
 
 //
-EdgeItem::EdgeItem( Edge * edge, QPointF endPoint, float curvature, float selectDistance, QGraphicsItem * parent  ) 
+EdgeItem::EdgeItem( BaseEdge * edge, QPointF endPoint, float curvature, float selectDistance, QGraphicsItem * parent  )
 	: QGraphicsPathItem(  parent )
 {
     m_edge = edge;
@@ -201,9 +201,9 @@ qreal EdgeItem::Distance( QPointF point){
 }
 QString EdgeItem::toString(){
 		return QString("EdgeItem( id: %1, v0: %2, v1: %3, this: %4)")
-		.arg( m_edge->info().id )
-		.arg( m_edge->v0()->info().id )
-		.arg( m_edge->v1()->info().id )
+                .arg( m_edge->info()->id() )
+                .arg( m_edge->v0()->info()->id() )
+                .arg( m_edge->v1()->info()->id() )
 		.arg( (int)this );
 	
 }

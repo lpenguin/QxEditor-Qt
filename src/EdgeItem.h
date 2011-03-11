@@ -4,7 +4,7 @@
 #include <QGraphicsItem>
 #include <QtGui>
 #include <QtCore>
-#include "Edge.h"
+#include "BaseGraph.h"
 //
 
 //float Distance(QPointF p0, QPointF p1);
@@ -13,7 +13,7 @@ class EdgeItem : public QGraphicsPathItem {
 //Q_OBJECT
 private:
     QPointF m_endPoint;
-    Edge * m_edge;
+    BaseEdge * m_edge;
     QPainterPath m_arrowPath;
     qreal m_curvature;
     QColor m_color;
@@ -25,16 +25,16 @@ private:
     QPointF BezierValue( double t, QPointF pm  );
     QPointF MidPoint();
 public:
-    EdgeItem(Edge * edge, QPointF endPoint, float curvature, float selectDistance, QGraphicsItem * parent = 0);
+    EdgeItem(BaseEdge * edge, QPointF endPoint, float curvature, float selectDistance, QGraphicsItem * parent = 0);
     ~EdgeItem();
     QString toString();
-    void set_color( QColor value) { m_color = value; }
+    void setColor( QColor value) { m_color = value; }
     QColor color() { return m_color; }
-    void set_endPoint(QPointF value){ m_endPoint = value; }
+    void setEndPoint(QPointF value){ m_endPoint = value; }
     QPointF endPoint(){ return m_endPoint; }
-    void set_edge( Edge * value) { m_edge = value; }
-    Edge * edge() { return m_edge; }
-    void set_curvature( int value) { m_curvature = value; UpdatePath();}
+    void setEdge( BaseEdge * value) { m_edge = value; }
+    BaseEdge * edge() { return m_edge; }
+    void setCurvature( int value) { m_curvature = value; UpdatePath();}
     int curvature() { return m_curvature; }
 
     void UpdatePath();

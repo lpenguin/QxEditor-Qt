@@ -1,12 +1,26 @@
 #ifndef ABSTRACTGRAPHWRITER_H
 #define ABSTRACTGRAPHWRITER_H
 
-#include "Graph.h"
+#include "BaseGraph.h"
 #include <QtCore>
+
+class AbstractInfoWriter{
+public:
+    virtual QString ReadVerInfo( BaseInfo * info ) = 0;
+    virtual QString ReadEdgeInfo( BaseInfo * info ) = 0;
+    virtual QString ReadGraphInfo( BaseInfo * info ) = 0;
+};
+
 class AbstractGraphWriter
 {
+private:
+    AbstractInfoWriter * m_infoWriter;
 public:
-    virtual void WriteGraph( Graph * graph, const QString & filename ) = 0;
+    AbstractGraphWriter( AbstractInfoWriter * infoWriter = 0):
+        m_infoWriter( infoWriter ){}
+    virtual void WriteGraph( BaseGraph * graph, const QString & filename ) = 0;
+    void setInfoWriter( AbstractInfoWriter * infoWriter ){ m_infoWriter = infoWriter; }
+    AbstractInfoWriter * infoWriter( void ) const { return m_infoWriter; }
 };
 
 #endif // ABSTRACTGRAPHWRITER_H

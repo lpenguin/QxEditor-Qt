@@ -2,7 +2,7 @@
 #define QUESTSETTINGSDIALOG_H
 
 #include <QDialog>
-#include "Graph.h"
+#include "BaseGraph.h"
 
 namespace Ui {
     class QuestSettingsDialog;
@@ -13,7 +13,7 @@ class QuestSettingsDialog : public QDialog {
 public:
     QuestSettingsDialog(QWidget *parent = 0);
     ~QuestSettingsDialog();
-    void ShowGraph(Graph * graph);
+    void ShowGraph(BaseGraph * graph);
 protected:
     void changeEvent(QEvent *e);
 

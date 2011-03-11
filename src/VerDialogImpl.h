@@ -4,7 +4,7 @@
 #include <QDialog>
 #include "ui_VerDialog.h"
 
-#include "Ver.h"
+#include "BaseGraph.h"
 //
 class VerDialogImpl : public QDialog, public Ui::VerDialog
 {

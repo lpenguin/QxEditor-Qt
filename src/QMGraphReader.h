@@ -1,7 +1,7 @@
 #ifndef QMGRAPHREADER_H
 #define QMGRAPHREADER_H
 #include "AbstractGraphReader.h"
-#include "Graph.h"
+#include "BaseGraph.h"
 #include "QMGraph.h"
 #include "QMReader.h"
 #include "QMGraphConverter.h"
@@ -18,7 +18,7 @@ public:
 //    void setParamsCount( qint32 value){ m_paramsCount = value; }
 //    qint32 paramsCount( void ) const { return m_paramsCount; }
     QMGraphReader( );
-    virtual Graph * ReadGraph(const QString & filename, Graph * graph = 0);
+    virtual BaseGraph * ReadGraph(const QString & filename, BaseGraph * graph = 0);
     virtual int type() const { return QMGraphReaderType; }
 };
 

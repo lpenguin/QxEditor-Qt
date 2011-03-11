@@ -42,20 +42,20 @@ void VerDialogImpl::type2radio( LocationType type){
 int VerDialogImpl::ShowVer(Ver * ver)
 {
 	m_ver = ver;
-	actionsEdit->setText( ver->info().actions);
-	verIdEdit->setText( ver->info().id );
-	textEdit->setText(ver->info().text );
-        type2radio( ver->info().type);
+        actionsEdit->setText( ver->info()->actions());
+        verIdEdit->setText( ver->info()->id() );
+        textEdit->setText(ver->info()->text() );
+        type2radio( ver->info()->type());
 	return exec();
 }
 
 void VerDialogImpl::on_buttonBox_accepted()
 {
 	if( m_ver ) {
-		m_ver->info().actions = actionsEdit->toPlainText();
-		m_ver->info().id = verIdEdit->text();
-		m_ver->info().text = textEdit->toPlainText();
-                m_ver->info().type = radio2type();
+                m_ver->info()->setActions( actionsEdit->toPlainText() );
+                m_ver->info()->setId( verIdEdit->text() );
+                m_ver->info()->setText( textEdit->toPlainText() );
+                m_ver->info()->setType( radio2type() );
 	}
 	accept();
 }

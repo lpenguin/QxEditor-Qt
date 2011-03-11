@@ -11,7 +11,7 @@
 
 
 #include "GraphView.h"
-#include "Graph.h"
+#include "BaseGraph.h"
 #include "VerDialogImpl.h"
 #include "EdgeDialogImpl.h"
 //

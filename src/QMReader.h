@@ -2,7 +2,7 @@
 #define QMREADER_H
 
 #include "AbstractGraphReader.h"
-#include "Graph.h"
+#include "BaseGraph.h"
 #include <QFile>
 #include <QString>
 #include "BinaryReader.h"

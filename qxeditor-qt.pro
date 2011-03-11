@@ -16,9 +16,6 @@ FORMS = ui/dialog.ui \
     src/QuestActionsDialog.ui \
     src/QuestSettingsDialog.ui
 HEADERS = \
-    src/Graph.h \
-    src/Ver.h \
-    src/Edge.h \
     src/GraphView.h \
     src/VerItem.h \
     src/EdgeItem.h \
@@ -43,12 +40,11 @@ HEADERS = \
     src/Transliter.h \
     src/BsToTagConverter.h \
     src/BsToESMAScriptConverter.h \
-    src/QuestLogic.h
+    src/QuestLogic.h \
+    src/SimpleGraph.h \
+    src/BaseGraph.h
 SOURCES = \
     src/main.cpp \
-    src/Ver.cpp \
-    src/Graph.cpp \
-    src/Edge.cpp \
     src/GraphView.cpp \
     src/EdgeItem.cpp \
     src/VerItem.cpp \
@@ -73,7 +69,9 @@ SOURCES = \
     src/Transliter.cpp \
     src/BsToTagConverter.cpp \
     src/BsToESMAScriptConverter.cpp \
-    src/QuestLogic.cpp
+    src/QuestLogic.cpp \
+    src/SimpleGraph.cpp \
+    src/BaseGraph.cpp
 TEMPLATE = app
 INCLUDEPATH += src
 OTHER_FILES += 111.txt \

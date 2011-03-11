@@ -3,7 +3,7 @@
 //
 #include <QDialog>
 #include "ui_EdgeDialog.h"
-#include "Edge.h"
+#include "BaseGraph.h"
 //
 class EdgeDialogImpl : public QDialog, public Ui::EdgeDialog
 {

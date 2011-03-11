@@ -4,10 +4,10 @@ QMGraphConverter::QMGraphConverter()
 {
 }
 
-Graph * QMGraphConverter::Convert(QMGraph *qmGraph)
+BaseGraph * QMGraphConverter::Convert(QMGraph *qmGraph)
 {
     if( !qmGraph ) return 0;
-    Graph * graph = new Graph();
+    BaseGraph * graph = new BaseGraph();
     m_graph = graph;
     m_qmGraph = qmGraph;
 
@@ -40,25 +40,31 @@ void  QMGraphConverter::ConvertPaths( QMPathList paths)
 
 Ver * QMGraphConverter::ConvertLocation(QMLocation *location)
 {
-    VerInfo info;
-    QPoint pos = QPoint(location->x, location->y);;
-    info.id = QString("L")+QString::number(location->locNumber);
+
+    QString text;
     if( location->texts.count() )
-        info.text = location->texts[0];
-    else
-        info.text = "";
-    info.actions = ConvertActions( location->actions);
-    info.type = ConvertLocationType( location->type );
+        text = location->texts[0];
+    QPoint pos = QPoint(location->x, location->y);;
+    VerInfo * info = new VerInfo(QString("L")+QString::number(location->locNumber),
+                                 ConvertActions( location->actions),
+                                 text,
+                                 ConvertLocationType( location->type ));
+//    info.id = QString("L")+QString::number(location->locNumber);
+//    if( location->texts.count() )
+//        info.text = location->texts[0];
+//    else
+//        info.text = "";
+//    info.actions = ConvertActions( location->actions);
+//    info.type = ConvertLocationType( location->type );
     return new Ver(info, pos);
 }
 
 Edge *  QMGraphConverter::ConvertPath( QMPath * path, Ver * v0, Ver * v1 ){
-    EdgeInfo info;
-    info.id =  QString("P")+QString::number(path->pathNumber);
-    info.actions = ConvertActions( path->actions);
-    info.conditions = ConvertPathConditions( path );
-    info.question = path->question;
-    info.text = path->text;
+    EdgeInfo *  info = new EdgeInfo(QString("P")+QString::number(path->pathNumber),
+                                    ConvertActions( path->actions),
+                                    ConvertPathConditions( path ),
+                                    path->text,
+                                    path->question);
     return new Edge( info, v0, v1 );
 }
 

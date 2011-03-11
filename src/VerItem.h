@@ -1,6 +1,6 @@
 #ifndef VerItem_H
 #define VerItem_H
-#include "Ver.h"
+#include "BaseGraph.h"
 #include <QGraphicsItem>
 #include <QGraphicsEllipseItem>
 #include <QtGui>
@@ -9,7 +9,7 @@
 class VerItem : public QGraphicsEllipseItem {
 //Q_OBJECT
 private:
-	Ver * m_ver;
+        BaseVer * m_ver;
 	QSizeF m_size;
 	QColor m_color;
 	QString typeString;
@@ -18,10 +18,10 @@ public:
         void setPos ( qreal x, qreal y );
 	QRectF boundingRect() const;
 	void UpdateBrush();
-	VerItem( Ver * ver, const QSizeF &size = QSizeF(), QGraphicsItem * parent = 0 );
+        VerItem( BaseVer * ver, const QSizeF &size = QSizeF(), QGraphicsItem * parent = 0 );
 	
-	void set_ver(Ver * value) { m_ver = value; }
-	Ver * ver() { return m_ver; }
+        void setVer(BaseVer * value) { m_ver = value; }
+        BaseVer * ver() { return m_ver; }
 //	VerItem(Ver * ver);
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
                 QWidget *widget);

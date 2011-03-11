@@ -16,7 +16,7 @@ QString Property2JSON(QString name, QString value){
     return "\""+name+"\""+":\""+value.replace("\"","\\\"").replace("\n", "\\n").replace("\t","\\t")+"\"";
 }
 
-void JSONGraphWriter::WriteGraph( Graph * graph, const QString & filename ){
+void JSONGraphWriter::WriteGraph( BaseGraph * graph, const QString & filename ){
     QFile file( filename );
     if ( file.open(  QIODevice::WriteOnly ) ) {
 
@@ -38,25 +38,25 @@ void JSONGraphWriter::WriteGraph( Graph * graph, const QString & filename ){
 
 
 
-QString JSONGraphWriter::Edge2JSON(Edge * edge){
+QString JSONGraphWriter::Edge2JSON(BaseEdge * edge){
     QStringList props;
-    EdgeInfo info = edge->info();
-    props<<Property2JSON("id", info.id)
-            <<Property2JSON("actions", info.actions)
-            <<Property2JSON("text", info.text)
-            <<Property2JSON("conditions", info.conditions)
-            <<Property2JSON("question", info.question)
-            <<Property2JSON("nextVer", edge->v1()->info().id);
+    EdgeInfo * info = edge->info();
+    props<<Property2JSON("id", info->id())
+            <<Property2JSON("actions", info->actions())
+            <<Property2JSON("text", info->text())
+            <<Property2JSON("conditions", info->conditions())
+            <<Property2JSON("question", info->question())
+            <<Property2JSON("nextVer", edge->v1()->info()->id());
     return "{"+props.join(",\n    ")+"}";
 }
 
-QString JSONGraphWriter::Ver2JSON(Ver * ver){
+QString JSONGraphWriter::Ver2JSON(BaseEdge * ver){
     QStringList props;
-    VerInfo info = ver->info();
-    props<<Property2JSON("id", info.id)
-            <<Property2JSON("actions", info.actions)
-            <<Property2JSON("text", info.text)
-            <<Property2JSON("type", Type2Str(info.type))
+    VerInfo * info = ver->info();
+    props<<Property2JSON("id", info->id())
+            <<Property2JSON("actions", info->actions())
+            <<Property2JSON("text", info->text())
+            <<Property2JSON("type", Type2Str(info->type()))
             <<Property2JSON("x", QString::number(ver->pos().x()))
             <<Property2JSON("y", QString::number(ver->pos().y()));
     QStringList edgesStrings;

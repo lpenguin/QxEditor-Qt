@@ -12,11 +12,11 @@ GraphView::GraphView(   QWidget * parent   )
 	setSceneRect( this->rect());
 	markedVer = 0;
 	movingVer = 0;
-	m_graph = new Graph(this);
+        m_graph = new BaseGraph(this);
 }
 //
 
-void GraphView::LoadGraph( Graph * graph)
+void GraphView::LoadGraph( BaseGraph * graph)
 {
     Ver * v;
     foreach(v, graph->vers() ){
@@ -31,7 +31,7 @@ void GraphView::LoadGraph( Graph * graph)
     foreach( e, graph->edges() ){
             v1 = FindVer( e->v1() );
             v0 = FindVer( e->v0() );
-            qDebug()<<v0->ver()->info().id<<" "<<v1->ver()->info().id;
+//            qDebug()<<v0->ver()->info()->id()<<" "<<v1->ver()->info()->id();
             AppendEdge( e, v0->pos(), v1->pos());
     }
 }
@@ -129,7 +129,7 @@ void GraphView::mouseMoveEvent ( QMouseEvent * e ){
 					edge->update();
 				}					
 				else if( edge->edge()->v1() == markedVer->ver()){
-					edge->set_endPoint(markedVer->pos());
+                                        edge->setEndPoint(markedVer->pos());
 					edge->UpdatePath();
 					edge->update();					
 				}
@@ -192,7 +192,7 @@ void GraphView::mouseReleaseEvent ( QMouseEvent * e ){
 void GraphView::AppendEdge( Edge * edge, QPointF pos, QPointF endPoint ){
 	EdgeItem * edgeItem = new EdgeItem( edge, endPoint, 0, 5);
 	edgeItem->setPos( pos );
-	edgeItem->set_curvature( Curvature(edgeItem) );
+        edgeItem->setCurvature( Curvature(edgeItem) );
 	edgeItem->setZValue( 0 );
         m_edges.append( edgeItem );
 	scene()->addItem( edgeItem );

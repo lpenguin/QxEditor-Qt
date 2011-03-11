@@ -1,6 +1,6 @@
 #include "VerItem.h"
 //
-VerItem::VerItem( Ver * ver, const QSizeF &size, QGraphicsItem * parent ) 
+VerItem::VerItem( BaseVer * ver, const QSizeF &size, QGraphicsItem * parent )
 	:  QGraphicsEllipseItem( parent ),  m_ver( ver ), m_size( size )
 {
 	UpdateBrush();
@@ -11,11 +11,6 @@ VerItem::VerItem( Ver * ver, const QSizeF &size, QGraphicsItem * parent )
 }
 //
 void VerItem::setPos ( const QPointF & pos ){
-//    QPointF p = mapToParent(pos);
-//    qDebug()<<"pos "<<pos<<" p "<<p;
-    //m_ver->setPos( pos );
-    //qDebug()<<"pos "<<pos<<" map "<< mapToScene(pos.toPoint());
-    //m_ver->setPos( mapToScene(pos.toPoint()));
     QGraphicsEllipseItem::setPos( pos );
 }
 
@@ -26,7 +21,7 @@ void VerItem::setPos ( qreal x, qreal y) {
 
 void VerItem::UpdateBrush()
 {
-	switch( m_ver->info().type){
+        switch( m_ver->info()->type()){
 		case win:
 			m_color =  QColor( Qt::blue);
 			typeString = "w";

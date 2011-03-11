@@ -1,14 +1,29 @@
 #ifndef ABSTRACTGRAPHREADER_H
 #define ABSTRACTGRAPHREADER_H
 
-#include "Graph.h"
+#include "BaseGraph.h"
 #include <QtCore>
+#include <QtScript>
+class AbstractInfoReader{
+public:
+    virtual BaseInfo * ReadVerInfo( QScriptValue value ){};
+    virtual BaseInfo * ReadEdgeInfo( QScriptValue value ) = 0;
+    virtual BaseInfo * ReadGraphInfo( QScriptValue value ) = 0;
+};
+
 class AbstractGraphReader
 {
+private:
+    AbstractInfoReader * m_infoReader;
 public:
-    AbstractGraphReader();
-    virtual Graph * ReadGraph(const QString & filename, Graph * graph = 0) = 0;
+    AbstractGraphReader( AbstractInfoReader * infoReader = 0):
+        m_infoReader(infoReader){}
+    virtual BaseGraph * ReadGraph(const QString & filename, BaseGraph * graph = 0) = 0;
     virtual int type() const = 0;
+    void setInfoReader( AbstractInfoReader * infoReader ){ m_infoReader = infoReader; }
+    AbstractInfoReader * infoReader( void ) const { return m_infoReader; }
 };
+
+
 
 #endif // ABSTRACTGRAPHREADER_H

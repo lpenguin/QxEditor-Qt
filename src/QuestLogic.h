@@ -10,7 +10,9 @@ class QlConstraint;
 class QlTrigger;
 class QlShowVariable;
 class QlLocationTexts;
+class QlParamStatement;
 
+typedef QList<QlParamStatement> QlParamStatementList;
 //class QlObject{
 //public:
 //    void set( BsObjectP & obj, BsObjectP value );
@@ -22,7 +24,11 @@ namespace QlType{
     };
 }
 
-class QlConstraint : public BsStatement{
+class QlParamStatement : public BsStatement{
+
+};
+
+class QlConstraint : public QlParamStatement{
 private:
     BsVariable * m_var;
     BsExpression * m_min;
@@ -70,7 +76,7 @@ public:
 
 };
 
-class QlShowVariable : public BsStatement{
+class QlShowVariable : public QlParamStatement{
 private:
     BsVariable * m_var;
     BsRangeList m_ranges;
@@ -98,7 +104,7 @@ public:
     virtual int type() const{ return QlType::ShowVariable; }
 };
 
-class QlBoundTrigger : public BsStatement{
+class QlBoundTrigger : public QlParamStatement{
 public:
     enum BoundType{
         Min, Max
@@ -120,6 +126,13 @@ public:
         set( (BsObjectP&)m_var, (BsObjectP)var);
     }
     virtual int type() const{ return QlType::BoundTrigger; }
+
+};
+
+class QlParametr : public BsStatement{
+private:
+    BsVariable * m_var;
+    QlParamStatementList m_patramStatements;
 
 };
 

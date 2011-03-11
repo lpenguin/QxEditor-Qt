@@ -12,7 +12,7 @@ QuestSettingsDialog::~QuestSettingsDialog()
 {
     delete ui;
 }
-void QuestSettingsDialog::ShowGraph(Graph * graph){
+void QuestSettingsDialog::ShowGraph(BaseGraph * graph){
     ui->questNameEdit->setText( graph->name() );
     ui->questDescriptionEdit->setPlainText( graph->description() );
 

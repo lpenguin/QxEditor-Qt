@@ -3,7 +3,7 @@
 
 #include <QtCore>
 
-#include "Graph.h"
+#include "BaseGraph.h"
 #include "QMGraph.h"
 #include "QMGraphReader.h"
 
@@ -13,13 +13,13 @@
 class QMGraphConverter
 {
 private:
-    Graph * m_graph;
+    BaseGraph * m_graph;
     QMGraph * m_qmGraph;
     QMScriptToBsConverter m_qmToBs;
     BsToESMAScriptConverter m_BsToESMA;
 public:
     QMGraphConverter();
-    Graph * Convert( QMGraph * qmGraph);
+    BaseGraph * Convert( QMGraph * qmGraph);
     void ConvertLocations(  QMLocationList locations );
     void ConvertPaths(  QMPathList paths );
 

@@ -5,7 +5,7 @@
 #include <QList>
 #include "ui_MainDialog.h"
 #include "GraphView.h"
-#include "Graph.h"
+#include "BaseGraph.h"
 #include "VerDialogImpl.h"
 #include "EdgeDialogImpl.h"
 #include "QuestActionsDialog.h"

@@ -4,7 +4,7 @@
 #include <QGraphicsView>
 #include <QGraphicsScene>
 #include <QtCore>
-#include "Graph.h"
+#include "BaseGraph.h"
 #include "VerItem.h"
 #include "EdgeItem.h"
 #include "JSONGraphReader.h"
@@ -19,7 +19,7 @@ class GraphView : public QGraphicsView
 {
 Q_OBJECT
 private:
-	Graph * m_graph;
+        BaseGraph * m_graph;
 	//QGraphicsItemGroup m_vers;
    // QGraphicsItemGroup m_edges;
    	QList<VerItem *> m_vers;
@@ -39,10 +39,10 @@ public:
     VerItem * FindVer(Ver * v);
 	~GraphView();
 	void CleanGraph();
-        void LoadGraph(Graph * graph);
+        void LoadGraph(BaseGraph * graph);
         void Load(const QString & filename, int type = JSONGraphReaderType);
         void Save(const QString & filename);
-    Graph * graph() { return m_graph; }
+    BaseGraph * graph() { return m_graph; }
     GraphView( QWidget * parent = 0  );
 	void AddVer( Ver * ver, QPointF pos);
     void AddEdge( Edge * edge, QPointF pos, QPointF endPoint );

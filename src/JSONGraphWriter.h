@@ -1,7 +1,7 @@
 #ifndef JSONGRAPHWRITER_H
 #define JSONGRAPHWRITER_H
 
-#include "Graph.h"
+#include "BaseGraph.h"
 #include "AbstractGraphWriter.h"
 #include <QtCore>
 #include <QtScript>
@@ -10,9 +10,11 @@
 class JSONGraphWriter : public AbstractGraphWriter
 {
 public:
-    virtual void WriteGraph( Graph * graph, const QString & filename );
-    QString Edge2JSON(Edge * edge);
-    QString Ver2JSON(Ver * ver);
+    JSONGraphWriter( AbstractInfoWriter * infoWriter):
+        AbstractGraphWriter( infoWriter ){}
+    virtual void WriteGraph( BaseGraph * graph, const QString & filename );
+    QString Edge2JSON(BaseEdge * edge);
+    QString Ver2JSON(BaseEdge * ver);
 };
 
 #endif // JSONGRAPHWRITER_H
