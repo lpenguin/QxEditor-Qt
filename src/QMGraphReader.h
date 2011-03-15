@@ -4,21 +4,44 @@
 #include "BaseGraph.h"
 #include "QMGraph.h"
 #include "QMReader.h"
-#include "QMGraphConverter.h"
-
+#include "QlGraph.h"
 enum eQMGraphReaderType {
     QMGraphReaderType = 2
+};
+
+class AbstractQMInfoReader{
+public:
+    virtual BaseInfo * ReadVerInfo( QMLocation * location ) = 0;
+    virtual BaseInfo * ReadEdgeInfo( QMPath * path ) = 0;
+    virtual BaseInfo * ReadGraphInfo( QMGraph * graph ) = 0;
+};
+
+class QlQMInfoReader : public AbstractQMInfoReader{
+public:
+    virtual BaseInfo * ReadVerInfo( QMLocation * location );
+    virtual BaseInfo * ReadEdgeInfo( QMPath * path );
+    virtual BaseInfo * ReadGraphInfo( QMGraph * graph );
 };
 
 class QMGraphReader : public AbstractGraphReader
 {
 //private:
 //    qint32 m_paramsCount;
+private:
+    BaseGraph * m_graph;
+    QMGraph * m_qmGraph;
+    AbstractQMInfoReader * m_infoReader;
 public:
 //    void setParamsCount( qint32 value){ m_paramsCount = value; }
 //    qint32 paramsCount( void ) const { return m_paramsCount; }
-    QMGraphReader( );
+    QMGraphReader( AbstractGraphReader * infoReader = 0 );
     virtual BaseGraph * ReadGraph(const QString & filename, BaseGraph * graph = 0);
+    void ReadVers( );
+    BaseVer * ReadVer( QMLocation * location);
+    void ReadEdges();
+    BaseEdge * ReadEdge( QMPath * path );
+    void ReadGraphInfo();
+    BaseVer * FindVer( QMLocation *location);
     virtual int type() const { return QMGraphReaderType; }
 };
 

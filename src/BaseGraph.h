@@ -14,6 +14,10 @@ class BaseInfo : public QObject{
 protected:
     QString m_id;
 public:
+    enum LocationType{
+
+    };
+
     BaseInfo(){}
     BaseInfo( QString id, QObject * parent = 0 ):
         m_id(id), QObject(parent){}

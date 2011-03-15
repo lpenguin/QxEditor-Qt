@@ -7,10 +7,18 @@
 #include <QtScript>
 //#include <parser.h>
 
+class AbstractJSONInfoWriter{
+public:
+    virtual QString ReadVerInfo( BaseInfo * info ) = 0;
+    virtual QString ReadEdgeInfo( BaseInfo * info ) = 0;
+    virtual QString ReadGraphInfo( BaseInfo * info ) = 0;
+};
+
+
 class JSONGraphWriter : public AbstractGraphWriter
 {
 public:
-    JSONGraphWriter( AbstractInfoWriter * infoWriter):
+    JSONGraphWriter( AbstractJSONInfoWriter * infoWriter):
         AbstractGraphWriter( infoWriter ){}
     virtual void WriteGraph( BaseGraph * graph, const QString & filename );
     QString Edge2JSON(BaseEdge * edge);

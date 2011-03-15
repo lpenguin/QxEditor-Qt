@@ -6,10 +6,6 @@
 
 
 class SimpleVerInfo : public BaseInfo {
-public:
-    enum LocationType{
-
-    };
 private:
     QString m_actions;
     QString m_text;

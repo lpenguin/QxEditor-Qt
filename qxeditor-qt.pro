@@ -42,7 +42,8 @@ HEADERS = \
     src/BsToESMAScriptConverter.h \
     src/QuestLogic.h \
     src/SimpleGraph.h \
-    src/BaseGraph.h
+    src/BaseGraph.h \
+    src/QlGraph.h
 SOURCES = \
     src/main.cpp \
     src/GraphView.cpp \
@@ -60,7 +61,6 @@ SOURCES = \
     src/JavascriptHighlighter.cpp \
     src/ScriptEdit.cpp \
     src/QMGraph.cpp \
-    src/QMGraphConverter.cpp \
     src/QMReader.cpp \
     src/QMGraphReader.cpp \
     src/BinaryReader.cpp \
@@ -71,7 +71,9 @@ SOURCES = \
     src/BsToESMAScriptConverter.cpp \
     src/QuestLogic.cpp \
     src/SimpleGraph.cpp \
-    src/BaseGraph.cpp
+    src/BaseGraph.cpp \
+    src/QMGraphConverter.cpp \
+    src/QlGraph.cpp
 TEMPLATE = app
 INCLUDEPATH += src
 OTHER_FILES += 111.txt \

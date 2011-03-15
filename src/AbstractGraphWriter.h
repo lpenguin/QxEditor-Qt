@@ -4,13 +4,6 @@
 #include "BaseGraph.h"
 #include <QtCore>
 
-class AbstractInfoWriter{
-public:
-    virtual QString ReadVerInfo( BaseInfo * info ) = 0;
-    virtual QString ReadEdgeInfo( BaseInfo * info ) = 0;
-    virtual QString ReadGraphInfo( BaseInfo * info ) = 0;
-};
-
 class AbstractGraphWriter
 {
 private:

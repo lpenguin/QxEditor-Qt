@@ -4,12 +4,6 @@
 #include "BaseGraph.h"
 #include <QtCore>
 #include <QtScript>
-class AbstractInfoReader{
-public:
-    virtual BaseInfo * ReadVerInfo( QScriptValue value ){};
-    virtual BaseInfo * ReadEdgeInfo( QScriptValue value ) = 0;
-    virtual BaseInfo * ReadGraphInfo( QScriptValue value ) = 0;
-};
 
 class AbstractGraphReader
 {

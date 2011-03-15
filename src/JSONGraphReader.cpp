@@ -12,7 +12,7 @@ LocationType Str2Type( QString type ){
         return odinary;
 }
 
-JSONGraphReader::JSONGraphReader(AbstractInfoReader * infoReader):
+JSONGraphReader::JSONGraphReader(AbstractJSONInfoReader * infoReader):
     AbstractGraphReader( infoReader )
 {
 }

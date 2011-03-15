@@ -5,7 +5,6 @@
 #include "BlockScript.h"
 #include <QtCore>
 
-//class QlObject;
 class QlConstraint;
 class QlTrigger;
 class QlShowVariable;
@@ -13,10 +12,6 @@ class QlLocationTexts;
 class QlParamStatement;
 
 typedef QList<QlParamStatement> QlParamStatementList;
-//class QlObject{
-//public:
-//    void set( BsObjectP & obj, BsObjectP value );
-//};
 
 namespace QlType{
     enum _t{
