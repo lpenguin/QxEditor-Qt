@@ -8,15 +8,15 @@ class QlVerInfo : BaseInfo{
 private:
     QlLocationTexts * m_locationTexts;
     BlockScript * m_actions;
-    LocationType m_verType;
+    VerType m_verType;
 public:
-    QlVerInfo( QlLocationTexts * locationTexts, BlockScript * actions, LocationType verType, QString id, QObject * parent = 0 ):
+    QlVerInfo( QlLocationTexts * locationTexts, BlockScript * actions, VerType verType, QString id, QObject * parent = 0 ):
         m_locationTexts(locationTexts), m_actions(actions), m_verType( verType), BaseInfo(id, parent){}
 
     void setLocationsText(QlLocationTexts * locationTexts ){
         m_locationTexts = locationTexts;
     }
-    void setVerType(LocationType verType){
+    void setVerType(VerType verType){
         m_verType = verType;
     }
     void setActions( BlockScript * actions ){
@@ -31,7 +31,7 @@ public:
         return m_actions;
     }
 
-    LocationType * verType( ) const{
+    VerType verType( ) const{
         return m_verType;
     }
 };
@@ -82,19 +82,15 @@ public:
 
 class QlGraphInfo : BaseInfo{
 private:
-    QlParamStatementList m_paramStatementList;
+    QlParametrList m_parametrList;
     QString m_name;
     QString m_description;
 public:
-    QlGraphInfo( QString name, QString description, QlParamStatementList paramStatementList, QString id, QObject * parent = 0 ):
-        m_name( name ), m_description( description ), m_paramStatementList(paramStatementList), BaseInfo(id, parent ){}
+    QlGraphInfo( QString name, QString description, QlParametrList parametrList, QString id, QObject * parent = 0 ):
+        m_name( name ), m_description( description ), m_parametrList(parametrList), BaseInfo(id, parent ){}
 
-    BsVariable * var() const{
-        return m_var;
-    }
-
-    QlParamStatementList paramStatementList() const{
-        return m_paramStatementList;
+    QlParametrList parametrList() const{
+        return m_parametrList;
     }
 
     QString name() const {
@@ -113,13 +109,9 @@ public:
         m_description = description;
     }
 
-    void setParamStatementList( QlParamStatementList paramStatementList ){
-        m_paramStatementList = paramStatementList;
+    void setParametrList( QlParametrList parametrList ){
+        m_parametrList = parametrList;
     }
-    void setVar(BsVariable * var ){
-        m_var = var;
-    }
-
 };
 
 class QlGraph : public BaseGraph

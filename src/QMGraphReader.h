@@ -5,9 +5,7 @@
 #include "QMGraph.h"
 #include "QMReader.h"
 #include "QlGraph.h"
-enum eQMGraphReaderType {
-    QMGraphReaderType = 2
-};
+#include "QMScriptToBsConverter.h"
 
 class AbstractQMInfoReader{
 public:
@@ -16,11 +14,8 @@ public:
     virtual BaseInfo * ReadGraphInfo( QMGraph * graph ) = 0;
 };
 
-class QlQMInfoReader : public AbstractQMInfoReader{
-public:
-    virtual BaseInfo * ReadVerInfo( QMLocation * location );
-    virtual BaseInfo * ReadEdgeInfo( QMPath * path );
-    virtual BaseInfo * ReadGraphInfo( QMGraph * graph );
+enum eQMGraphReaderType {
+    QMGraphReaderType = 2
 };
 
 class QMGraphReader : public AbstractGraphReader

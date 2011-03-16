@@ -10,17 +10,20 @@ class QlTrigger;
 class QlShowVariable;
 class QlLocationTexts;
 class QlParamStatement;
+class QlParametr;
 
-typedef QList<QlParamStatement> QlParamStatementList;
+typedef QList<QlParamStatement *> QlParamStatementList;
+typedef QList<QlParametr *> QlParametrList;
 
 namespace QlType{
     enum _t{
-        Constraint = BsObject::UserType + 1, Trigger, ShowVariable, BoundTrigger
+        Constraint = BsObject::UserType + 1, Trigger, ShowVariable, BoundTrigger, ParamStatement
     };
 }
 
 class QlParamStatement : public BsStatement{
-
+public:
+    virtual int type() const{ return QlType::ParamStatement; }
 };
 
 class QlConstraint : public QlParamStatement{
@@ -124,11 +127,60 @@ public:
 
 };
 
+class QlLocationTexts : public BsStatement{
+private:
+    QStringList m_texts;
+    BsExpression * m_expr;
+public:
+    QlLocationTexts( QStringList texts,BsExpression * expr  ){
+        setTexts( texts );
+        setExpr( expr );
+    }
+
+    void setTexts( QStringList texts){
+        m_texts = texts;
+    }
+
+    QStringList texts() const {
+        return m_texts;
+    }
+
+    void setExpr( BsExpression * expr ){
+        set( (BsObjectP &) m_expr, (BsObjectP ) expr);
+    }
+
+    BsExpression * expr() const{
+        return m_expr;
+    }
+
+};
+
 class QlParametr : public BsStatement{
 private:
     BsVariable * m_var;
     QlParamStatementList m_patramStatements;
+    void setList( QlParamStatementList & list, QlParamStatementList value );
 
+    void add( QlParamStatementList & list, QlParamStatement * value);
+public:
+    QlParametr( BsVariable * var, QlParamStatementList paramStatementList = QlParamStatementList()):
+        m_var(var){
+        setList( m_patramStatements, paramStatementList );
+    }
+
+    QlParamStatementList paramStatements() const{
+        return m_patramStatements;
+    }
+
+    BsVariable * var() const { return m_var; }
+
+    void setVar(BsVariable * var){
+        m_var = var;
+    }
+
+    void setParamStatements( QlParamStatementList paramStatementList ){
+        m_patramStatements = paramStatementList;
+    }
 };
 
 #endif // QUESTLOGIC_H

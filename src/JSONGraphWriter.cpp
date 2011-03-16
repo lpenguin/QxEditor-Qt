@@ -27,9 +27,7 @@ void JSONGraphWriter::WriteGraph( BaseGraph * graph, const QString & filename ){
             versStrings<<Ver2JSON(v);
         }
 
-        props<<Property2JSON("actions", graph->script())
-                <<Property2JSON("name", graph->name())
-                <<Property2JSON("description", graph->description())
+        props<< m_infoWriter->GraphInfo2JSON( graph->info())
                 <<"\"vers\":[\n  "+versStrings .join(",\n  ")+"]";
         stream<<"{"+props.join(",\n ")+"}";
     }
@@ -40,25 +38,14 @@ void JSONGraphWriter::WriteGraph( BaseGraph * graph, const QString & filename ){
 
 QString JSONGraphWriter::Edge2JSON(BaseEdge * edge){
     QStringList props;
-    EdgeInfo * info = edge->info();
-    props<<Property2JSON("id", info->id())
-            <<Property2JSON("actions", info->actions())
-            <<Property2JSON("text", info->text())
-            <<Property2JSON("conditions", info->conditions())
-            <<Property2JSON("question", info->question())
-            <<Property2JSON("nextVer", edge->v1()->info()->id());
-    return "{"+props.join(",\n    ")+"}";
+    props << m_infoWriter->EdgeInfo2JSON( edge->info())
+             << Property2JSON("nextVer", edge->v1()->info()->id());
+    return "{"+props.join(",\n  ")+"}";
 }
 
 QString JSONGraphWriter::Ver2JSON(BaseEdge * ver){
     QStringList props;
-    VerInfo * info = ver->info();
-    props<<Property2JSON("id", info->id())
-            <<Property2JSON("actions", info->actions())
-            <<Property2JSON("text", info->text())
-            <<Property2JSON("type", Type2Str(info->type()))
-            <<Property2JSON("x", QString::number(ver->pos().x()))
-            <<Property2JSON("y", QString::number(ver->pos().y()));
+    props<<m_infoWriter->VerInfo2JSON(ver->info());
     QStringList edgesStrings;
     foreach(Edge * e, ver->parentGraph()->edges()){
         if(e->v0() == ver ){
@@ -67,4 +54,38 @@ QString JSONGraphWriter::Ver2JSON(BaseEdge * ver){
     }
     props<<"\"edges\":[\n   "+edgesStrings.join(",\n   ")+"]";
     return "{"+props.join(",\n   ")+"}";
+}
+
+QStringList SimpleJSONIngoWriter::VerInfo2JSON(BaseInfo *info)
+{
+    QStringList props;
+    SimpleVerInfo * simpleInfo = (SimpleVerInfo *)edge->info();
+    props<<Property2JSON("id", simpleInfo->id())
+            <<Property2JSON("actions", simpleInfo->actions())
+            <<Property2JSON("text", simpleInfo->text())
+            <<Property2JSON("type", Type2Str(simpleInfo->type()));
+    return props;
+}
+
+QStringList SimpleJSONIngoWriter::EdgeInfo2JSON(BaseInfo *info)
+{
+    QStringList props;
+    SimpleEdgeInfo * simpleInfo = (SimpleEdgeInfo *)edge->info();
+    props<<Property2JSON("id", simpleInfo->id())
+            <<Property2JSON("actions", simpleInfo->actions())
+            <<Property2JSON("text", simpleInfo->text())
+            <<Property2JSON("conditions", simpleInfo->conditions())
+            <<Property2JSON("question", simpleInfo->question());
+
+    return props;
+}
+
+QStringList SimpleJSONIngoWriter::GraphInfo2JSON(BaseInfo *info)
+{
+    QStringList props;
+    SimpleGraphInfo * simpleInfo = (SimpleGraphInfo *)info;
+    props<<Property2JSON("actions", simpleInfo->actions())
+            <<Property2JSON("name", simpleInfo->name())
+            <<Property2JSON("description", simpleInfo->description());
+    return props;
 }

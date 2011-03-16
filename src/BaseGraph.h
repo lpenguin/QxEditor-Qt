@@ -14,7 +14,7 @@ class BaseInfo : public QObject{
 protected:
     QString m_id;
 public:
-    enum LocationType{
+    enum VerType{
 
     };
 
@@ -40,7 +40,7 @@ public:
     BaseInfo * info() { return m_info; }
 };
 
-class BaseVer : BaseGraphObject{
+class BaseVer : public BaseGraphObject{
 private:
     QPointF m_pos;
 public:
@@ -61,6 +61,8 @@ private:
 public:
     BaseEdge(BaseInfo * info, BaseVer * v0, BaseVer * v1, QObject * parent = 0):
         BaseGraphObject( info, parent ), m_v0( v0 ), m_v1 ( v1 ){}
+    BaseEdge(BaseVer * v0, BaseVer * v1, QObject * parent = 0):
+        BaseGraphObject( 0, parent ), m_v0( v0 ), m_v1 ( v1 ){}
     int ConnectSame(BaseEdge * edge);
     QString toString() const;
 

@@ -6,8 +6,8 @@
 #include "ui_MainDialog.h"
 #include "GraphView.h"
 #include "BaseGraph.h"
-#include "VerDialogImpl.h"
-#include "EdgeDialogImpl.h"
+#include "SimpleVerDialogImpl.h"
+#include "SimpleEdgeDialogImpl.h"
 #include "QuestActionsDialog.h"
 #include "QuestSettingsDialog.h"
 
@@ -23,8 +23,8 @@ public:
 
 private:
         //Dialogs
-	VerDialogImpl * verDialog;
-	EdgeDialogImpl * edgeDialog;
+	SimpleVerDialogImpl * verDialog;
+        SimpleEdgeDialogImpl * edgeDialog;
         QuestActionsDialog * questActionsDialog;
         QuestSettingsDialog * questSettingsDialog;
 private slots:

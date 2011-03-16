@@ -138,17 +138,13 @@ BsCondition * QMScriptToBsConverter::ConvertQMLocaigalCondition(QString conditio
     return new BsCondition( BsCondition::UserString, BsExpressionList() << new BsUserString( condition ));
 }
 
-BlockScript * QMScriptToBsConverter::ConvertQMParametr(QMParametr *qmParametr)
+QlParametr *  QMScriptToBsConverter::ConvertQMParametr(QMParametr *qmParametr)
 {
-    BlockScript * script = new BlockScript();
     BsVariable * var = m_varMap[ qmParametr ];
-
-    script->AddStatements( BsStatementList()<<
-                new BsVariableDefinition( var, ConvertQMEquation(qmParametr->start))
+    QlParamStatementList list;
+    list<<      new QlConstraint( var, new BsValue( QString::number(qmParametr->min)), new BsValue( QString::number(qmParametr->max)))
                 <<
-                new QlConstraint( var, new BsValue( QString::number(qmParametr->min)), new BsValue( QString::number(qmParametr->max)))
-                <<
-                new QlShowVariable( var, ConvertQMRanges( qmParametr->ranges), ConvertQMRangesTexts(qmParametr->ranges)));
+                new QlShowVariable( var, ConvertQMRanges( qmParametr->ranges),  ConvertQMRangesTexts(qmParametr->ranges));
     if( qmParametr->type != QMParametr::Odinary){
         QlBoundTrigger * trig = new QlBoundTrigger();
         trig->setText( qmParametr->critText);
@@ -160,9 +156,9 @@ BlockScript * QMScriptToBsConverter::ConvertQMParametr(QMParametr *qmParametr)
             trig->setBoundType(QlBoundTrigger::Max);
             trig->setValue( new BsValue(QString::number(qmParametr->max)));
         }
-        script->AddStatement( trig );
+        list << trig ;
     }
-    return script;
+    return new QlParametr( var, list );
 }
 
 BsRangeList QMScriptToBsConverter::ConvertQMRanges(QMParametrRangeList ranges)

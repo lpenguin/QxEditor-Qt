@@ -15,7 +15,7 @@ enum eJSONGraphReaderType {
 
 class AbstractJSONInfoReader{
 public:
-    virtual BaseInfo * ReadVerInfo( QScriptValue value ){};
+    virtual BaseInfo * ReadVerInfo( QScriptValue value ) = 0;
     virtual BaseInfo * ReadEdgeInfo( QScriptValue value ) = 0;
     virtual BaseInfo * ReadGraphInfo( QScriptValue value ) = 0;
 };

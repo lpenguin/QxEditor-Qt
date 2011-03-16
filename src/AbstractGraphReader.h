@@ -5,18 +5,23 @@
 #include <QtCore>
 #include <QtScript>
 
+class AbstractGraphReader;
+
+
 class AbstractGraphReader
 {
-private:
-    AbstractInfoReader * m_infoReader;
+//private:
+//    AbstractQMInfoReader * m_infoReader;
 public:
-    AbstractGraphReader( AbstractInfoReader * infoReader = 0):
-        m_infoReader(infoReader){}
+    AbstractGraphReader( /*AbstractQMInfoReader * infoReader = 0*/)/*:
+        m_infoReader(infoReader)*/{}
     virtual BaseGraph * ReadGraph(const QString & filename, BaseGraph * graph = 0) = 0;
     virtual int type() const = 0;
-    void setInfoReader( AbstractInfoReader * infoReader ){ m_infoReader = infoReader; }
-    AbstractInfoReader * infoReader( void ) const { return m_infoReader; }
+//    void setInfoReader( AbstractQMInfoReader * infoReader ){ m_infoReader = infoReader; }
+//    AbstractQMInfoReader * infoReader( void ) const { return m_infoReader; }
 };
+
+
 
 
 

@@ -19,8 +19,6 @@ HEADERS = \
     src/GraphView.h \
     src/VerItem.h \
     src/EdgeItem.h \
-    src/VerDialogImpl.h \
-    src/EdgeDialogImpl.h \
     src/MainDialogImpl.h \
     src/AbstractGraphReader.h \
     src/JSONGraphReader.h \
@@ -31,7 +29,6 @@ HEADERS = \
     src/JavascriptHighlighter.h \
     src/ScriptEdit.h \
     src/QMGraph.h \
-    src/QMGraphConverter.h \
     src/QMReader.h \
     src/QMGraphReader.h \
     src/BinaryReader.h \
@@ -43,14 +40,15 @@ HEADERS = \
     src/QuestLogic.h \
     src/SimpleGraph.h \
     src/BaseGraph.h \
-    src/QlGraph.h
+    src/QlGraph.h \
+    src/QlQMInfoReader.h \
+    src/SimpleVerDialogImpl.h \
+    src/SimpleEdgeDialogImpl.h
 SOURCES = \
     src/main.cpp \
     src/GraphView.cpp \
     src/EdgeItem.cpp \
     src/VerItem.cpp \
-    src/VerDialogImpl.cpp \
-    src/EdgeDialogImpl.cpp \
     src/MainDialogImpl.cpp \
     src/AbstractGraphReader.cpp \
     src/JSONGraphReader.cpp \
@@ -72,8 +70,10 @@ SOURCES = \
     src/QuestLogic.cpp \
     src/SimpleGraph.cpp \
     src/BaseGraph.cpp \
-    src/QMGraphConverter.cpp \
-    src/QlGraph.cpp
+    src/QlGraph.cpp \
+    src/QlQMInfoReader.cpp \
+    src/SimpleVerDialogImpl.cpp \
+    src/SimpleEdgeDialogImpl.cpp
 TEMPLATE = app
 INCLUDEPATH += src
 OTHER_FILES += 111.txt \

@@ -1,6 +1,6 @@
-#include "EdgeDialogImpl.h"
+#include "SimpleEdgeDialogImpl.h"
 //
-EdgeDialogImpl::EdgeDialogImpl( QWidget * parent, Qt::WFlags f) 
+SimpleEdgeDialogImpl::SimpleEdgeDialogImpl( QWidget * parent, Qt::WFlags f) 
 	: QDialog(parent, f)
 {
 	setupUi(this);
@@ -9,7 +9,7 @@ EdgeDialogImpl::EdgeDialogImpl( QWidget * parent, Qt::WFlags f)
 //
 
 
-int EdgeDialogImpl::ShowEdge(Edge * edge)
+int SimpleEdgeDialogImpl::ShowEdge(BaseEdge * edge)
 {
 	m_edge = edge;
         actionsEdit->setText( edge->info()->actions());
@@ -21,7 +21,7 @@ int EdgeDialogImpl::ShowEdge(Edge * edge)
 	return exec();
 }
 
-void EdgeDialogImpl::on_buttonBox_accepted()
+void SimpleEdgeDialogImpl::on_buttonBox_accepted()
 {
 	if( m_edge ) {
                 m_edge->info()->setActions( actionsEdit->toPlainText() );
@@ -33,7 +33,7 @@ void EdgeDialogImpl::on_buttonBox_accepted()
 	accept();
 }
 
-void EdgeDialogImpl::Reset(){
+void SimpleEdgeDialogImpl::Reset(){
 	actionsEdit->setText( "" );
 	conditionsEdit->setPlainText( "" );
 	textEdit->setText( "" );

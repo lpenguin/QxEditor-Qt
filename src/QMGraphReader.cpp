@@ -58,15 +58,3 @@ BaseVer * QMGraphReader::FindVer( QMLocation *location)
     return m_graph->vers().at( m_qmGraph->locations().indexOf( location ) );
 }
 
-BaseInfo * QlQMInfoReader::ReadVerInfo(QMLocation *location)
-{
-    //QlVerInfo * info = new QlVerInfo()
-}
-
-BaseInfo * QlQMInfoReader::ReadEdgeInfo(QMPath *path)
-{
-}
-
-BaseInfo * QlQMInfoReader::ReadGraphInfo(QMGraph *graph)
-{
-}

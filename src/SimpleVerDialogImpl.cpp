@@ -1,6 +1,6 @@
-#include "VerDialogImpl.h"
+#include "SimpleVerDialogImpl.h"
 //
-VerDialogImpl::VerDialogImpl( QWidget * parent, Qt::WFlags f) 
+SimpleVerDialogImpl::SimpleVerDialogImpl( QWidget * parent, Qt::WFlags f)
 	: QDialog(parent, f)
 {
 	setupUi(this);
@@ -9,7 +9,7 @@ VerDialogImpl::VerDialogImpl( QWidget * parent, Qt::WFlags f)
 }
 //
 
-LocationType VerDialogImpl::radio2type ( void ){
+LocationType SimpleVerDialogImpl::radio2type ( void ){
     if( odinaryRadio->isChecked())
         return odinary;
     if( startRadio->isChecked())
@@ -21,7 +21,7 @@ LocationType VerDialogImpl::radio2type ( void ){
     return odinary;
 }
 
-void VerDialogImpl::type2radio( LocationType type){
+void SimpleVerDialogImpl::type2radio( LocationType type){
     switch( type ){
     case odinary:
         odinaryRadio->setChecked(true);
@@ -39,7 +39,7 @@ void VerDialogImpl::type2radio( LocationType type){
     }
 }
 
-int VerDialogImpl::ShowVer(Ver * ver)
+int SimpleVerDialogImpl::ShowVer(BaseVer * ver)
 {
 	m_ver = ver;
         actionsEdit->setText( ver->info()->actions());
@@ -49,7 +49,7 @@ int VerDialogImpl::ShowVer(Ver * ver)
 	return exec();
 }
 
-void VerDialogImpl::on_buttonBox_accepted()
+void SimpleVerDialogImpl::on_buttonBox_accepted()
 {
 	if( m_ver ) {
                 m_ver->info()->setActions( actionsEdit->toPlainText() );

@@ -9,9 +9,9 @@ class SimpleVerInfo : public BaseInfo {
 private:
     QString m_actions;
     QString m_text;
-    LocationType m_type;
+    VerType m_type;
 public:
-    SimpleVerInfo( QString id, QString actions, QString text, LocationType type, QObject * parent = 0 ):
+    SimpleVerInfo( QString id, QString actions, QString text, VerType type, QObject * parent = 0 ):
         BaseInfo(id, parent), m_actions(actions), m_text(text), m_type(type) { setId(id); }
 
     SimpleVerInfo(){}
@@ -23,7 +23,7 @@ public:
         m_text = text;
     }
 
-    void setType( LocationType type ){
+    void setType( VerType type ){
         m_type = type;
     }
 
@@ -31,7 +31,7 @@ public:
         return m_actions;
     }
 
-    LocationType type() const {
+    VerType type() const {
         return m_type;
     }
     QString text() const {

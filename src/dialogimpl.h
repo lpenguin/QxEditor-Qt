@@ -12,8 +12,8 @@
 
 #include "GraphView.h"
 #include "BaseGraph.h"
-#include "VerDialogImpl.h"
-#include "EdgeDialogImpl.h"
+#include "SimpleVerDialogImpl.h"
+#include "SimpleEdgeDialogImpl.h"
 //
 class DialogImpl : public QDialog, public Ui::Dialog
 {
@@ -21,8 +21,8 @@ Q_OBJECT
 public:
 	DialogImpl( QWidget * parent = 0, Qt::WFlags f = 0 );
 private:
-	VerDialogImpl * verDialog;
-	EdgeDialogImpl * edgeDialog;  
+	SimpleVerDialogImpl * verDialog;
+        SimpleEdgeDialogImpl * edgeDialog;
 private slots:
 	void VerClicked( VerItem * , Qt::MouseButton );
 	void EdgeClicked( EdgeItem *, Qt::MouseButton );

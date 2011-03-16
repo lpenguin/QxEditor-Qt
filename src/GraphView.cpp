@@ -18,17 +18,14 @@ GraphView::GraphView(   QWidget * parent   )
 
 void GraphView::LoadGraph( BaseGraph * graph)
 {
-    Ver * v;
-    foreach(v, graph->vers() ){
+    foreach(BaseVer * v, graph->vers() ){
         AppendVer( v, v->pos() );
     }
 	
-    Edge * e;
-
     VerItem * v1;
     VerItem * v0;
     qDebug()<<"Loading";
-    foreach( e, graph->edges() ){
+    foreach(BaseEdge * e, graph->edges() ){
             v1 = FindVer( e->v1() );
             v0 = FindVer( e->v0() );
 //            qDebug()<<v0->ver()->info()->id()<<" "<<v1->ver()->info()->id();
@@ -73,7 +70,7 @@ GraphView::~GraphView()
 
 
 
-VerItem * GraphView::FindVer(Ver * v)
+VerItem * GraphView::FindVer(BaseVer * v)
 {
 	VerItem * t;
 	foreach(t, m_vers){		
@@ -189,7 +186,7 @@ void GraphView::mouseReleaseEvent ( QMouseEvent * e ){
 
 	QGraphicsView::mouseReleaseEvent(e);
 }
-void GraphView::AppendEdge( Edge * edge, QPointF pos, QPointF endPoint ){
+void GraphView::AppendEdge( BaseEdge * edge, QPointF pos, QPointF endPoint ){
 	EdgeItem * edgeItem = new EdgeItem( edge, endPoint, 0, 5);
 	edgeItem->setPos( pos );
         edgeItem->setCurvature( Curvature(edgeItem) );
@@ -197,7 +194,7 @@ void GraphView::AppendEdge( Edge * edge, QPointF pos, QPointF endPoint ){
         m_edges.append( edgeItem );
 	scene()->addItem( edgeItem );
 }
-void GraphView::AppendVer( Ver * ver, QPointF pos ){
+void GraphView::AppendVer( BaseVer * ver, QPointF pos ){
 	VerItem * verItem = new VerItem( ver,  QSizeF(m_verSize, m_verSize)  );
 	verItem->setZValue( 1 );
 	scene()->addItem( verItem );
@@ -206,14 +203,14 @@ void GraphView::AppendVer( Ver * ver, QPointF pos ){
         qDebug()<<"Pos for new verItem: "<<verItem->pos();
 }
 
-void GraphView::AddVer( Ver * ver, QPointF pos){
+void GraphView::AddVer( BaseVer * ver, QPointF pos){
         ver->setPos( pos );
         qDebug()<<"Pos for new ver: "<<ver->pos();
 
         AppendVer( ver, pos );
 	m_graph->AddVer( ver );
 }
-void GraphView::AddEdge( Edge * edge, QPointF pos, QPointF endPoint ){
+void GraphView::AddEdge( BaseEdge * edge, QPointF pos, QPointF endPoint ){
 	AppendEdge( edge, pos, endPoint );
 	m_graph->AddEdge( edge );
 }
@@ -237,7 +234,7 @@ void GraphView::Load( const QString & filename, int type  ){
 }
     
 void GraphView::Save(const QString & filename){
-    JSONGraphWriter writer;
+    JSONGraphWriter writer( new SimpleJSONIngoWriter );
     writer.WriteGraph(m_graph, filename);
 }
 

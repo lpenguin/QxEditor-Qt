@@ -21,7 +21,7 @@ typedef QList<BsExpression * > BsExpressionList;
 typedef QList<BsRange * > BsRangeList;
 typedef BsObject * BsObjectP;
 
-class BsObject : QObject{
+class BsObject : public QObject{
 public:
     virtual int type() const = 0;
     enum  BsType{

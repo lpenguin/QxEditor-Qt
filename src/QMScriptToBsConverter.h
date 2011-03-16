@@ -21,7 +21,7 @@ public:
     void setQmGlobals( QMParametrList qmGlobals );
 
     BlockScript * ConvertQMActions( QMActionList qmActions);
-    BlockScript * ConvertQMParametr( QMParametr * qmParametr);
+    QlParametr *  ConvertQMParametr( QMParametr * qmParametr);
     BsCondition * ConvertQMLocaigalCondition( QString condition );
     BsCondition * ConvertQMConditions( QMConditionList qmConditions );
 private:

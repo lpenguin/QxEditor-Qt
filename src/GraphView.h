@@ -17,44 +17,44 @@
 
 class GraphView : public QGraphicsView
 {
-Q_OBJECT
+    Q_OBJECT
 private:
-        BaseGraph * m_graph;
-	//QGraphicsItemGroup m_vers;
-   // QGraphicsItemGroup m_edges;
-   	QList<VerItem *> m_vers;
-   	QList<EdgeItem *> m_edges;
+    BaseGraph * m_graph;
+    //QGraphicsItemGroup m_vers;
+    // QGraphicsItemGroup m_edges;
+    QList<VerItem *> m_vers;
+    QList<EdgeItem *> m_edges;
     int m_verSize;
-    int m_gridSize; 
+    int m_gridSize;
     VerItem * markedVer;
     bool movingVer;
 
-    void AppendEdge( Edge * edge, QPointF pos, QPointF endPoint );
-    void AppendVer( Ver * ver, QPointF pos );
+    void AppendEdge( BaseEdge * edge, QPointF pos, QPointF endPoint );
+    void AppendVer( BaseVer * ver, QPointF pos );
 public:
-	void RemoveEdge(EdgeItem * edge);
-	void RemoveVer(VerItem * ver);
-	int Curvature(EdgeItem * edge);
-//	void setGraph(Graph * graph);
-    VerItem * FindVer(Ver * v);
-	~GraphView();
-	void CleanGraph();
-        void LoadGraph(BaseGraph * graph);
-        void Load(const QString & filename, int type = JSONGraphReaderType);
-        void Save(const QString & filename);
+    void RemoveEdge(EdgeItem * edge);
+    void RemoveVer(VerItem * ver);
+    int Curvature(EdgeItem * edge);
+    //	void setGraph(Graph * graph);
+    VerItem * FindVer(BaseVer * v);
+    ~GraphView();
+    void CleanGraph();
+    void LoadGraph(BaseGraph * graph);
+    void Load(const QString & filename, int type = JSONGraphReaderType);
+    void Save(const QString & filename);
     BaseGraph * graph() { return m_graph; }
     GraphView( QWidget * parent = 0  );
-	void AddVer( Ver * ver, QPointF pos);
-    void AddEdge( Edge * edge, QPointF pos, QPointF endPoint );
+    void AddVer( BaseVer * ver, QPointF pos);
+    void AddEdge( BaseEdge * edge, QPointF pos, QPointF endPoint );
 protected:
     void mouseMoveEvent ( QMouseEvent * e );
     void mousePressEvent ( QMouseEvent * e );
     void mouseReleaseEvent ( QMouseEvent * e );
 signals:
-	void VerClicked( VerItem * , Qt::MouseButton );
-	void EdgeClicked( EdgeItem *, Qt::MouseButton );
-	void AreaClicked( QPointF , Qt::MouseButton);
-	void VersConnected( VerItem *, VerItem *);
+    void VerClicked( VerItem * , Qt::MouseButton );
+    void EdgeClicked( EdgeItem *, Qt::MouseButton );
+    void AreaClicked( QPointF , Qt::MouseButton);
+    void VersConnected( VerItem *, VerItem *);
 
 };
 
