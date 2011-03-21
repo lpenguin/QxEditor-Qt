@@ -39,7 +39,7 @@ public:
 
     virtual void WriteGraph( BaseGraph * graph, const QString & filename );
     QString Edge2JSON(BaseEdge * edge);
-    QString Ver2JSON(BaseEdge * ver);
+    QString Ver2JSON(BaseVer * ver);
 };
 
 #endif // JSONGRAPHWRITER_H

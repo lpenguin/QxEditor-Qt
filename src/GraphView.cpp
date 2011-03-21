@@ -227,6 +227,7 @@ void GraphView::Load( const QString & filename, int type  ){
 //                reader.setParamsCount(48);
 //            else
 //                reader.setParamsCount(24);
+            reader.setReader( new QlQMInfoReader );
             m_graph = reader.ReadGraph(filename);
         }
         if( m_graph )

@@ -1,19 +1,19 @@
 #include "JSONGraphReader.h"
 
-LocationType Str2Type( QString type ){
+SimpleVerInfo::VerType Str2Type( QString type ){
         if( type == "start"	)
-                return start;
+                return SimpleVerInfo::start;
         if( type == "odinary"	)
-                return odinary;
+                return SimpleVerInfo::odinary;
         if( type == "fail"	)
-                return fail;
+                return SimpleVerInfo::fail;
         if( type == "win"	)
-                return win;
-        return odinary;
+                return SimpleVerInfo::win;
+        return SimpleVerInfo::odinary;
 }
 
 JSONGraphReader::JSONGraphReader(AbstractJSONInfoReader * infoReader):
-    AbstractGraphReader( infoReader )
+   m_infoReader( infoReader )
 {
 }
 
@@ -53,29 +53,29 @@ void JSONGraphReader::LoadVers(  BaseGraph * graph, QScriptValue value ){
         it.next();
         if( ! it.value().isObject() )
             continue;
-        Ver * ver = LoadVer(it.value());
+        BaseVer * ver = LoadVer(it.value());
         graph->AddVer(ver);
     }
 }
 
 BaseVer * JSONGraphReader::LoadVer( QScriptValue value){
-    BaseInfo * info = m_infoReader->ReadVerInfo( value );
+    BaseVerInfo * info = m_infoReader->ReadVerInfo( value );
     QPoint point( value.property("x").toInteger(), value.property("y").toInteger());
     return new BaseVer(info, point);
 }
 
-BaseEdge * JSONGraphReader::LoadEdge( BaseGraph * graph, QScriptValue value, Ver * ver){
+BaseEdge * JSONGraphReader::LoadEdge( BaseGraph * graph, QScriptValue value, BaseVer * ver){
     BaseVer * v1 = graph->FindVer( value.property("nextVer").toString());
-    BaseInfo * info = m_infoReader->ReadEdgeInfo( value );
+    BaseEdgeInfo * info = m_infoReader->ReadEdgeInfo( value );
     return new BaseEdge(info, ver, v1);
 }
 
 void JSONGraphReader::LoadEdges( BaseGraph * graph, QScriptValue value ){
     QScriptValueIterator verIt(value.property("vers"));
-    QListIterator<Ver*> i(graph->vers());
+    QListIterator<BaseVer*> i(graph->vers());
     while (verIt.hasNext()) {
         verIt.next();
-        Ver * v = i.next();
+        BaseVer * v = i.next();
         if( ! verIt.value().isObject() )
             continue;
 
@@ -85,26 +85,26 @@ void JSONGraphReader::LoadEdges( BaseGraph * graph, QScriptValue value ){
             edgeIt.next();
             if( !edgeIt.value().isObject() )
                 continue;
-            Edge * edge = LoadEdge( graph, edgeIt.value(),v);
+            BaseEdge * edge = LoadEdge( graph, edgeIt.value(),v);
             graph->AddEdge(edge);
         }
     }
 }
 
-BaseInfo * SimpleJSONInfoReader::ReadVerInfo(QScriptValue value)
+BaseVerInfo * SimpleJSONInfoReader::ReadVerInfo(QScriptValue value)
 {
     SimpleVerInfo * info = new SimpleVerInfo();
 
     info->setActions( value.property("actions").toString() );
     info->setId( value.property("id").toString() );
     info->setText( value.property("text").toString() );
-    info->setType( Str2Type( value.property("type").toString() ) );
+    info->setVerType( Str2Type( value.property("type").toString() ) );
 
-    QPoint point( value.property("x").toInteger(), value.property("y").toInteger());
+//    QPoint point( value.property("x").toInteger(), value.property("y").toInteger());
     return info;
 }
 
-BaseInfo * SimpleJSONInfoReader::ReadEdgeInfo(QScriptValue value)
+BaseEdgeInfo * SimpleJSONInfoReader::ReadEdgeInfo(QScriptValue value)
 {
     SimpleEdgeInfo * info = new SimpleEdgeInfo();
     info->setActions( value.property("actions").toString() );
@@ -115,10 +115,10 @@ BaseInfo * SimpleJSONInfoReader::ReadEdgeInfo(QScriptValue value)
     return info;
 }
 
-BaseInfo * SimpleJSONInfoReader::ReadGraphInfo(QScriptValue value)
+BaseGraphInfo * SimpleJSONInfoReader::ReadGraphInfo(QScriptValue value)
 {
     SimpleGraphInfo * info = new SimpleGraphInfo(value.property("name").toString(),
-                                                 value.property("description"),
+                                                 value.property("description").toString(),
                                                  value.property("actions").toString()
                                                  );
     return info;

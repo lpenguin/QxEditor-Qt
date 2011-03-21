@@ -10,7 +10,7 @@
 #include "JSONGraphReader.h"
 #include "JSONGraphWriter.h"
 #include "QMGraphReader.h"
-
+#include "QlQMInfoReader.h"
 //
 	enum Types {EdgeType = QGraphicsItem::UserType + 1,
 		 VerType = QGraphicsItem::UserType + 2};

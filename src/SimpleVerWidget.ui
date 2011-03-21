@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>VerDialog</class>
- <widget class="QDialog" name="VerDialog">
+ <class>SimpleVerWidget</class>
+ <widget class="QWidget" name="SimpleVerWidget">
   <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>773</width>
-    <height>663</height>
+    <width>647</width>
+    <height>662</height>
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Edit location</string>
+   <string>Form</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout_2">
    <item>
@@ -118,22 +118,5 @@
   </customwidget>
  </customwidgets>
  <resources/>
- <connections>
-  <connection>
-   <sender>buttonBox</sender>
-   <signal>rejected()</signal>
-   <receiver>VerDialog</receiver>
-   <slot>reject()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>516</x>
-     <y>425</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>313</x>
-     <y>375</y>
-    </hint>
-   </hints>
-  </connection>
- </connections>
+ <connections/>
 </ui>

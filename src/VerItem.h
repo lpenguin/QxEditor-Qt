@@ -1,6 +1,7 @@
 #ifndef VerItem_H
 #define VerItem_H
 #include "BaseGraph.h"
+#include "SimpleGraph.h"
 #include <QGraphicsItem>
 #include <QGraphicsEllipseItem>
 #include <QtGui>

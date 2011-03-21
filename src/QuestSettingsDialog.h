@@ -3,7 +3,7 @@
 
 #include <QDialog>
 #include "BaseGraph.h"
-
+#include "SimpleGraph.h"
 namespace Ui {
     class QuestSettingsDialog;
 }

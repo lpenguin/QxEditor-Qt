@@ -1,12 +1,13 @@
 #include "BaseGraph.h"
 
-BaseGraph::BaseGraph( QObject * object ):BaseGraphObject( object ){
+BaseGraph::BaseGraph( BaseGraphInfo * info, QObject * object ):
+    m_info( info ), QObject( object ){
 
 }
 
 BaseVer * BaseGraph::FindVer(QString id)
 {
-	Ver * v;
+        BaseVer * v;
 	foreach(v, m_vers){
                 if( v->info()->id() == id )
 			return v;
@@ -21,7 +22,7 @@ QString BaseGraph::GetNewVerId(  ){
     int id;
 
     bool ok;
-    foreach(Ver * ver, m_vers){
+    foreach(BaseVer * ver, m_vers){
         intString = ver->info()->id();
         intString.replace(QRegExp("^"+prefix),"");
         id = intString.toInt( &ok );
@@ -60,7 +61,7 @@ BaseGraph::~BaseGraph()
 
 
 
-void BaseGraph::AddVer(Ver * ver)
+void BaseGraph::AddVer(BaseVer * ver)
 {
 	ver->setParent(this);
 	m_vers.append( ver );
@@ -87,7 +88,7 @@ void BaseGraph::Clean()
 	qDebug()<<"Graph:: deleted all";
 }
 
-void BaseGraph::RemoveVer(Ver * ver)
+void BaseGraph::RemoveVer(BaseVer * ver)
 {
         BaseEdge * e;
 	foreach( e, m_edges ){

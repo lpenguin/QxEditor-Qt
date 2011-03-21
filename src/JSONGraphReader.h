@@ -15,20 +15,22 @@ enum eJSONGraphReaderType {
 
 class AbstractJSONInfoReader{
 public:
-    virtual BaseInfo * ReadVerInfo( QScriptValue value ) = 0;
-    virtual BaseInfo * ReadEdgeInfo( QScriptValue value ) = 0;
-    virtual BaseInfo * ReadGraphInfo( QScriptValue value ) = 0;
+    virtual BaseVerInfo * ReadVerInfo( QScriptValue value ) = 0;
+    virtual BaseEdgeInfo * ReadEdgeInfo( QScriptValue value ) = 0;
+    virtual BaseGraphInfo * ReadGraphInfo( QScriptValue value ) = 0;
 };
 
 class SimpleJSONInfoReader : public AbstractJSONInfoReader{
 public:
-    BaseInfo * ReadVerInfo( QScriptValue value );
-    BaseInfo * ReadEdgeInfo(  QScriptValue value );
-    BaseInfo * ReadGraphInfo( QScriptValue value );
+    BaseVerInfo * ReadVerInfo( QScriptValue value );
+    BaseEdgeInfo * ReadEdgeInfo(  QScriptValue value );
+    BaseGraphInfo * ReadGraphInfo( QScriptValue value );
 };
 
 class JSONGraphReader : public AbstractGraphReader
 {
+private:
+    AbstractJSONInfoReader * m_infoReader;
 public:
     JSONGraphReader( AbstractJSONInfoReader * infoReader = 0);
     virtual BaseGraph * ReadGraph(const QString & filename, BaseGraph * graph = 0);

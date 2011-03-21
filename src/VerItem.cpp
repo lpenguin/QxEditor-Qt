@@ -21,24 +21,29 @@ void VerItem::setPos ( qreal x, qreal y) {
 
 void VerItem::UpdateBrush()
 {
-//        switch( m_ver->info()->type()){
-//		case win:
-//			m_color =  QColor( Qt::blue);
-//			typeString = "w";
-//		break;
-//		case start:
-//			m_color =  QColor( Qt::green) ;
-//			typeString = "s";
-//		break;
-//		case fail:
-//			m_color =  QColor( Qt::red);
-//			typeString = "f";
-//		break;
-//		case odinary:
-//			m_color =  QColor( Qt::gray );
-//			typeString = "";
-//		break;
-//	}
+//    BaseInfo * info = m_ver->info();
+//    SimpleVerInfo * simpleInfo;
+//    if( simpleInfo = qobject_cast<SimpleVerInfo*>( m_ver->info() )){
+    BaseVerInfo* info = (BaseVerInfo*) (m_ver->info());
+    switch( info->verType()){
+    case SimpleVerInfo::win:
+        m_color =  QColor( Qt::blue);
+        typeString = "w";
+        break;
+    case SimpleVerInfo::start:
+        m_color =  QColor( Qt::green) ;
+        typeString = "s";
+        break;
+    case SimpleVerInfo::fail:
+        m_color =  QColor( Qt::red);
+        typeString = "f";
+        break;
+    case SimpleVerInfo::odinary:
+        m_color =  QColor( Qt::gray );
+        typeString = "";
+        break;
+    }
+//    }
 }
 
 void VerItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option,

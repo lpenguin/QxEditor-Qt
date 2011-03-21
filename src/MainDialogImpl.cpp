@@ -30,8 +30,8 @@ MainDialogImpl::MainDialogImpl( QWidget * parent, Qt::WFlags f)
     QObject::connect(graphView, SIGNAL( VersConnected( VerItem *, VerItem *) ),
                      this, SLOT( VersConnected( VerItem *, VerItem *)));
 
-    verDialog = new SimpleVerDialogImpl( this );
-    edgeDialog= new SimpleEdgeDialogImpl( this );
+    verDialog = new VerDialog( this );
+    edgeDialog= new EdgeDialog( this );
     questActionsDialog = new QuestActionsDialog( this );
     questSettingsDialog = new QuestSettingsDialog( this );
 
@@ -249,8 +249,10 @@ void MainDialogImpl::EdgeClicked( EdgeItem * edge, Qt::MouseButton button ){
 }
 
 void MainDialogImpl::AreaClicked( QPointF point, Qt::MouseButton){
-    BaseVer * ver = new BaseVer;
-    ver->setInfo( new BaseInfo(graphView->graph()->GetNewVerId()));
+//    SimpleVerInfo * info = new SimpleVerInfo;
+//    info->setId( graphView->graph()->GetNewVerId() );
+    BaseVer * ver = new BaseVer( new SimpleVerInfo(graphView->graph()->GetNewVerId() ) );
+//    ver->setInfo( new SimpleVerInfo(graphView->graph()->GetNewVerId()));
     //        if( graphView->graph()->vers().count())
     //            ver->info()->setType( odinary );
     //        else
@@ -268,7 +270,7 @@ void MainDialogImpl::AreaClicked( QPointF point, Qt::MouseButton){
 
 void MainDialogImpl::VersConnected( VerItem * ver1, VerItem * ver2){
     BaseEdge * edge = new BaseEdge( ver1->ver(), ver2->ver() );
-    edge->setInfo( new BaseInfo(graphView->graph()->GetNewEdgeId()));
+    edge->setInfo( new SimpleEdgeInfo(graphView->graph()->GetNewEdgeId()));
     QSettings settings;
     if( settings.value("openNewDialog").toBool() ){
         if( edgeDialog->ShowEdge( edge ) == QDialog::Accepted )

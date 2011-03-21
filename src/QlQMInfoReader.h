@@ -6,14 +6,15 @@
 #include "QuestLogic.h"
 #include "QlGraph.h"
 #include "QMScriptToBsConverter.h"
+#include "QMGraphReader.h"
 
 class QlQMInfoReader : public AbstractQMInfoReader{
 private:
     QMScriptToBsConverter * m_qmToBs;
 public:
-    BaseInfo * ReadVerInfo( QMLocation * location );
-    virtual BaseInfo * ReadEdgeInfo( QMPath * path );
-    virtual BaseInfo * ReadGraphInfo( QMGraph * graph );
+    BaseVerInfo * ReadVerInfo( QMLocation * location );
+    virtual BaseEdgeInfo * ReadEdgeInfo( QMPath * path );
+    virtual BaseGraphInfo * ReadGraphInfo( QMGraph * graph );
 private:
     QlLocationTexts * ConvertLocationTexts(QMLocation * location);
 
@@ -21,7 +22,7 @@ private:
     QlParametr * ConvertParametr( QMParametr * parametr);
     BlockScript * ConvertActions(QMActionList actions);
     BsExpression * ConvertConditions(QMConditionList conditions);
-    QMLocation::QMLocationType ConvertLocationType(QMLocation::QMLocationType type);
+    BaseVerInfo::VerType ConvertLocationType(QMLocation::QMLocationType type);
 };
 
 #endif // QLQMINFOREADER_H

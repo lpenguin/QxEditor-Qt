@@ -13,10 +13,14 @@ QuestActionsDialog::~QuestActionsDialog()
     delete ui;
 }
 void QuestActionsDialog::ShowGraph(BaseGraph * graph){
-    ui->actionsEdit->setPlainText( graph->script() );
-    if( exec() ){
-        graph->setScript( ui->actionsEdit->toPlainText() );
+    if( qobject_cast<SimpleGraph*>( graph) ){
+        SimpleGraphInfo * info = (SimpleGraphInfo *)(graph->info());
+        ui->actionsEdit->setPlainText( info->actions() );
+        if( exec() ){
+            info->setActions( ui->actionsEdit->toPlainText() );
+        }
     }
+
 }
 
 void QuestActionsDialog::changeEvent(QEvent *e)

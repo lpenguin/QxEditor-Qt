@@ -5,15 +5,17 @@
 #include "BaseGraph.h"
 
 
-class SimpleVerInfo : public BaseInfo {
+class SimpleVerInfo : public BaseVerInfo {
+Q_OBJECT
 private:
     QString m_actions;
     QString m_text;
-    VerType m_type;
 public:
-    SimpleVerInfo( QString id, QString actions, QString text, VerType type, QObject * parent = 0 ):
-        BaseInfo(id, parent), m_actions(actions), m_text(text), m_type(type) { setId(id); }
-
+    SimpleVerInfo( QString id, QString actions, QString text, BaseVerInfo::VerType type, QObject * parent = 0 ):
+        BaseVerInfo(type, id, parent), m_actions(actions), m_text(text){ }
+    SimpleVerInfo( QString id, QObject * parent = 0 ):
+        BaseVerInfo(id, parent)
+    {}
     SimpleVerInfo(){}
     void setActions( QString actions ){
         m_actions = actions;
@@ -23,34 +25,29 @@ public:
         m_text = text;
     }
 
-    void setType( VerType type ){
-        m_type = type;
-    }
-
     QString actions() const{
         return m_actions;
     }
 
-    VerType type() const {
-        return m_type;
-    }
     QString text() const {
         return m_text;
     }
 };
 
-class SimpleEdgeInfo : public BaseInfo{
+class SimpleEdgeInfo : public BaseEdgeInfo{
 private:
+Q_OBJECT
         QString m_actions;
         QString m_conditions;
         QString m_text;
         QString m_question;
 public:
         SimpleEdgeInfo( QString id, QString actions, QString conditions, QString text, QString question, QObject * parent = 0 ):
-            BaseInfo(id, parent), m_actions(actions), m_text(text), m_conditions(conditions), m_question(question)
+            BaseEdgeInfo(id, parent), m_actions(actions), m_text(text), m_conditions(conditions), m_question(question)
             {}
         SimpleEdgeInfo(){};
-
+        SimpleEdgeInfo( QString id, QObject * parent = 0):
+            BaseEdgeInfo(id, parent){}
         void setActions( QString actions ){
             m_actions = actions;
         }
@@ -80,15 +77,15 @@ public:
         }
 };
 
-class SimpleGraphInfo : public BaseInfo{
+class SimpleGraphInfo : public BaseGraphInfo{
 private:
     QString m_actions;
-    QString m_name;
-    QString m_description;
 public:
-    SimpleGraphInfo(  QString name, QString description, QString actions, QString id = QString::null, QObject * parent =0):
-    BaseInfo(id, parent), m_name(name), m_description(description), m_actions(actions){}
-
+    SimpleGraphInfo(  QString name, QString description, QString actions, QString id = QString::null, QObject * parent = 0):
+        BaseGraphInfo(name, description, id, parent), m_actions(actions){}
+    SimpleGraphInfo( QString id , QObject * parent = 0):
+        BaseGraphInfo(id, parent)
+    {}
     QString actions() const{
         return m_actions;
     }
@@ -96,21 +93,6 @@ public:
     void setActions( QString actions ){
         m_actions = actions;
     }
-
-    void setName( QString name ){
-        m_name = name;
-    }
-    QString name() const{
-        return m_name;
-    }
-
-    void setDescription( QString description ){
-        m_description = description;
-    }
-    QString description() const{
-        return m_description;
-    }
-
 };
 
 //graph->setScript( sc.property("actions").toString());
@@ -120,20 +102,18 @@ public:
 class SimpleGraph : public BaseGraph
 {
     Q_OBJECT
+
 private:
     QString m_script;
-    QString m_name;
-    QString m_description;
 public:
     explicit SimpleGraph(QObject *parent = 0);
 
     void setScript( QString value) { m_script = value; }
-    QString name( void ){ return m_name;}
-    void setName( QString value ){ m_name = value; }
-    QString description( void ){ return m_description; }
-    void setDescription( QString value ){ m_description = value; }
+//    QString name( void ){ return m_name;}
+//    void setName( QString value ){ m_name = value; }
+//    QString description( void ){ return m_description; }
+//    void setDescription( QString value ){ m_description = value; }
     QString script() { return m_script; }
-
 };
 
 #endif // SIMPLEGRAPH_H

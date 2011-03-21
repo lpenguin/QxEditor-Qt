@@ -13,13 +13,16 @@ QuestSettingsDialog::~QuestSettingsDialog()
     delete ui;
 }
 void QuestSettingsDialog::ShowGraph(BaseGraph * graph){
-    ui->questNameEdit->setText( graph->name() );
-    ui->questDescriptionEdit->setPlainText( graph->description() );
+//    if( qobject_cast<SimpleGraph*>(graph)){
+        BaseGraphInfo * info =  graph->info();
+        ui->questNameEdit->setText( info->name() );
+        ui->questDescriptionEdit->setPlainText( info->description() );
 
-    if( exec() ){
-        graph->setName( ui->questNameEdit->text() );
-        graph->setDescription( ui->questDescriptionEdit->toPlainText() );
-    }
+        if( exec() ){
+            info->setName( ui->questNameEdit->text() );
+            info->setDescription( ui->questDescriptionEdit->toPlainText() );
+        }
+//    }
 }
 
 void QuestSettingsDialog::changeEvent(QEvent *e)

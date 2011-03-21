@@ -11,13 +11,10 @@ class BaseGraphObject;
 class BaseGraph;
 
 class BaseInfo : public QObject{
+Q_OBJECT
 protected:
     QString m_id;
 public:
-    enum VerType{
-
-    };
-
     BaseInfo(){}
     BaseInfo( QString id, QObject * parent = 0 ):
         m_id(id), QObject(parent){}
@@ -30,39 +27,113 @@ public:
     }
 };
 
-class BaseGraphObject : public QObject{
-private:
-    BaseInfo * m_info;
+class BaseVerInfo : public BaseInfo{
+    Q_OBJECT
 public:
-    BaseGraphObject( BaseInfo * info = 0, QObject * parent = 0):
-        m_info(info), QObject(parent){ m_info->setParent(this); }
-    void setInfo( BaseInfo * value) { m_info = value; m_info->setParent(this); }
-    BaseInfo * info() { return m_info; }
+    enum VerType{
+        odinary, win, fail, start
+    };
+private:
+    VerType m_verType;
+public:
+    BaseVerInfo( VerType verType, QString id, QObject * parent = 0 ):
+        BaseInfo(id, parent), m_verType(verType)
+    {}
+
+    BaseVerInfo( QString id, QObject * parent = 0 ):
+        BaseInfo(id, parent)
+    {}
+
+    BaseVerInfo():
+        BaseInfo(QString::null, 0)
+    {}
+    VerType verType() const{
+        return m_verType;
+    }
+
+    void setVerType( VerType verType ){
+        m_verType = verType;
+    }
 };
 
-class BaseVer : public BaseGraphObject{
+class BaseEdgeInfo : public BaseInfo{
+    Q_OBJECT
+public:
+    BaseEdgeInfo( QString id, QObject * parent = 0):
+        BaseInfo(id, parent)
+    {}
+
+    BaseEdgeInfo():
+        BaseInfo(QString::null, 0)
+    {}
+};
+
+class BaseGraphInfo : public BaseInfo {
+    Q_OBJECT
+private:
+    QString m_name;
+    QString m_description;
+public:
+    BaseGraphInfo( QString name, QString description, QString id = QString::null, QObject * parent = 0 ):
+        BaseInfo(id, parent ), m_name(name), m_description(description )
+    {}
+    BaseGraphInfo( QString id , QObject * parent = 0 ):
+        BaseInfo(id, parent)
+    {}
+    BaseGraphInfo():
+        BaseInfo(QString::null, 0)
+    {}
+    void setName( QString name ){
+        m_name = name;
+    }
+    QString name() const{
+        return m_name;
+    }
+
+    void setDescription( QString description ){
+        m_description = description;
+    }
+    QString description() const{
+        return m_description;
+    }
+};
+
+//class BaseGraphObject : public QObject{
+//protected:
+//    BaseInfo * m_info;
+//public:
+//    BaseGraphObject( BaseInfo * info = 0, QObject * parent = 0):
+//        m_info(info), QObject(parent){ m_info->setParent(this); }
+//    void setInfo( BaseInfo * value) { m_info = value; m_info->setParent(this); }
+//    BaseInfo * info() { return m_info; }
+//};
+
+class BaseVer : public QObject{
 private:
     QPointF m_pos;
+    BaseVerInfo * m_info;
 public:
-    BaseVer(BaseInfo * info, QPointF pos, QObject * parent = 0):
-        BaseGraphObject(info, parent), m_pos(pos){}
-    BaseVer(){};
+    BaseVer(BaseVerInfo * info, QPointF pos = QPointF(), QObject * parent = 0):
+        m_info(info), QObject(parent), m_pos(pos){}
     void setPos( QPointF value) { m_pos = value; }
     QPointF pos() { return m_pos; }
     BaseGraph * parentGraph();
+    void setInfo( BaseVerInfo * value) { m_info = value; m_info->setParent(this); }
+    BaseVerInfo * info() { return m_info; }
 };
 
-class BaseEdge: public BaseGraphObject
+class BaseEdge: public QObject
 {
     Q_OBJECT
 private:
     BaseVer * m_v0;
     BaseVer * m_v1;
+    BaseEdgeInfo * m_info;
 public:
-    BaseEdge(BaseInfo * info, BaseVer * v0, BaseVer * v1, QObject * parent = 0):
-        BaseGraphObject( info, parent ), m_v0( v0 ), m_v1 ( v1 ){}
+    BaseEdge(BaseEdgeInfo * info, BaseVer * v0, BaseVer * v1, QObject * parent = 0):
+         m_info(info), QObject(parent), m_v0( v0 ), m_v1 ( v1 ){}
     BaseEdge(BaseVer * v0, BaseVer * v1, QObject * parent = 0):
-        BaseGraphObject( 0, parent ), m_v0( v0 ), m_v1 ( v1 ){}
+        QObject( parent ), m_v0( v0 ), m_v1 ( v1 ), m_info(0){}
     int ConnectSame(BaseEdge * edge);
     QString toString() const;
 
@@ -74,15 +145,16 @@ public:
     BaseVer * v1() { return m_v1; }
     void setV0(  BaseVer * value) { m_v0 = value; }
     BaseVer * v0() { return m_v0; }
-
+    void setInfo( BaseEdgeInfo * value) { m_info = value; m_info->setParent(this); }
+    BaseEdgeInfo * info() { return m_info; }
 };
 
-class BaseGraph : public BaseGraphObject{
+class BaseGraph : public QObject{
 private:
 	Q_OBJECT
-	
         QList<BaseVer*> m_vers;
         QList<BaseEdge*> m_edges;
+        BaseGraphInfo * m_info;
 public:
         void RemoveEdge(BaseEdge * edge);
         void RemoveVer(BaseVer * ver);
@@ -100,6 +172,12 @@ public:
 
         ~BaseGraph( void );
         BaseVer * FindVer(QString id);
-        BaseGraph( QObject * object = 0 );
+        BaseGraph( QObject * parent = 0 ):
+            QObject(parent)
+        {}
+        BaseGraph( BaseGraphInfo * info, QObject * object = 0 );
+        void setInfo( BaseGraphInfo * value) { m_info = value; m_info->setParent(this); }
+        BaseGraphInfo * info() { return m_info; }
+//        BaseGraph( BaseInfo * info, QList<BaseVer*> vers, QList<BaseEdge*> edges, QObject * object = 0 );
 };
 #endif // __GRAPH_H__

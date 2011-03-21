@@ -19,8 +19,8 @@ DialogImpl::DialogImpl( QWidget * parent, Qt::WFlags f)
 
 	QObject::connect(graphView, SIGNAL( VersConnected( VerItem *, VerItem *) ),
 					 this, SLOT( VersConnected( VerItem *, VerItem *)));
-	verDialog = new VerDialogImpl( this );
-	edgeDialog= new EdgeDialogImpl( this );	
+        verDialog = new VerDialog( this );
+        edgeDialog= new EdgeDialog( this );
 
 }
 void DialogImpl::VerClicked( VerItem * ver , Qt::MouseButton ){

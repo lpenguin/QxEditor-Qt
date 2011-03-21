@@ -1,6 +1,6 @@
 #include "QMGraphReader.h"
 
-QMGraphReader::QMGraphReader( AbstractGraphReader * infoReader ):
+QMGraphReader::QMGraphReader( AbstractQMInfoReader * infoReader ):
     m_infoReader( infoReader )
 {
 }
@@ -29,14 +29,14 @@ void QMGraphReader::ReadVers()
 BaseVer * QMGraphReader::ReadVer(QMLocation *location)
 {
     QPoint pos = QPoint(location->x, location->y);
-    BaseInfo info = m_infoReader->ReadVerInfo( location );
+    BaseVerInfo * info = m_infoReader->ReadVerInfo( location );
     return new BaseVer( info, pos );
 }
 
 void QMGraphReader::ReadEdges()
 {
     foreach( QMPath * path, m_qmGraph->paths()){
-        m_graph->AddEdge( ReadPath( path ) );
+        m_graph->AddEdge( ReadEdge( path ) );
     }
 }
 
@@ -44,7 +44,7 @@ BaseEdge * QMGraphReader::ReadEdge(QMPath *path)
 {
     BaseVer * v0 = FindVer( path->ownerLoc );
     BaseVer * v1 = FindVer( path->nextLoc );
-    BaseInfo * info = m_infoReader->ReadEdgeInfo( path );
+    BaseEdgeInfo * info = m_infoReader->ReadEdgeInfo( path );
     return new BaseEdge(info, v0, v1);
 }
 

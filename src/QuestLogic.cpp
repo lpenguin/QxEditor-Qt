@@ -2,7 +2,7 @@
 
 void QlParametr::setList( QlParamStatementList & list, QlParamStatementList value ){
     list.clear();
-    foreach( BsRange * obj, value ){
+    foreach( QlParamStatement * obj, list ){
         add( list, obj);
     }
 }

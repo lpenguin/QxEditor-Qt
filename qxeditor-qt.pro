@@ -10,11 +10,15 @@ OBJECTS_DIR = build
 MOC_DIR = build
 UI_DIR = build
 FORMS = ui/dialog.ui \
-    ui/VerDialog.ui \
-    ui/EdgeDialog.ui \
     ui/MainDialog.ui \
     src/QuestActionsDialog.ui \
-    src/QuestSettingsDialog.ui
+    src/QuestSettingsDialog.ui \
+    src/SimpleVerWidget.ui \
+    src/SimpleEdgeWidget.ui \
+    src/QlVerWidget.ui \
+    src/QlEdgeWidget.ui \
+    src/VerDialog.ui \
+    src/EdgeDialog.ui
 HEADERS = \
     src/GraphView.h \
     src/VerItem.h \
@@ -42,8 +46,13 @@ HEADERS = \
     src/BaseGraph.h \
     src/QlGraph.h \
     src/QlQMInfoReader.h \
-    src/SimpleVerDialogImpl.h \
-    src/SimpleEdgeDialogImpl.h
+    src/SimpleVerWidget.h \
+    src/SimpleEdgeWidget.h \
+    src/QlVerWidget.h \
+    src/QlEdgeWidget.h \
+    src/VerDialog.h \
+    src/EdgeDialog.h \
+    src/BaseWidgets.h
 SOURCES = \
     src/main.cpp \
     src/GraphView.cpp \
@@ -72,8 +81,13 @@ SOURCES = \
     src/BaseGraph.cpp \
     src/QlGraph.cpp \
     src/QlQMInfoReader.cpp \
-    src/SimpleVerDialogImpl.cpp \
-    src/SimpleEdgeDialogImpl.cpp
+    src/SimpleVerWidget.cpp \
+    src/SimpleEdgeWidget.cpp \
+    src/QlVerWidget.cpp \
+    src/QlEdgeWidget.cpp \
+    src/VerDialog.cpp \
+    src/EdgeDialog.cpp \
+    src/BaseWidgets.cpp
 TEMPLATE = app
 INCLUDEPATH += src
 OTHER_FILES += 111.txt \

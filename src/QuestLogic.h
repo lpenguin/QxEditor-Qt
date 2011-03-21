@@ -17,7 +17,7 @@ typedef QList<QlParametr *> QlParametrList;
 
 namespace QlType{
     enum _t{
-        Constraint = BsObject::UserType + 1, Trigger, ShowVariable, BoundTrigger, ParamStatement
+        Constraint = BsObject::UserType + 1, Trigger, ShowVariable, BoundTrigger, ParamStatement, Parametr, LocationTexts
     };
 }
 
@@ -153,6 +153,10 @@ public:
         return m_expr;
     }
 
+    int type() const {
+        return QlType::LocationTexts;
+    }
+
 };
 
 class QlParametr : public BsStatement{
@@ -180,6 +184,10 @@ public:
 
     void setParamStatements( QlParamStatementList paramStatementList ){
         m_patramStatements = paramStatementList;
+    }
+
+    int type() const {
+        return QlType::Parametr;
     }
 };
 

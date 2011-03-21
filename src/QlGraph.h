@@ -4,21 +4,21 @@
 #include "QuestLogic.h"
 #include "BlockScript.h"
 
-class QlVerInfo : BaseInfo{
+class QlVerInfo : public BaseVerInfo{
+Q_OBJECT
 private:
     QlLocationTexts * m_locationTexts;
     BlockScript * m_actions;
-    VerType m_verType;
 public:
     QlVerInfo( QlLocationTexts * locationTexts, BlockScript * actions, VerType verType, QString id, QObject * parent = 0 ):
-        m_locationTexts(locationTexts), m_actions(actions), m_verType( verType), BaseInfo(id, parent){}
+        m_locationTexts(locationTexts), m_actions(actions), BaseVerInfo(verType, id, parent){}
 
     void setLocationsText(QlLocationTexts * locationTexts ){
         m_locationTexts = locationTexts;
     }
-    void setVerType(VerType verType){
-        m_verType = verType;
-    }
+//    void setVerType(VerType verType){
+//        m_verType = verType;
+//    }
     void setActions( BlockScript * actions ){
         m_actions = actions;
     }
@@ -31,12 +31,13 @@ public:
         return m_actions;
     }
 
-    VerType verType( ) const{
-        return m_verType;
-    }
+//    VerType verType( ) const{
+//        return m_verType;
+//    }
 };
 
-class QlEdgeInfo : BaseInfo{
+class QlEdgeInfo : public BaseEdgeInfo{
+Q_OBJECT
 private:
     QString m_text;
     QString m_question;
@@ -44,7 +45,7 @@ private:
     BlockScript * m_actions;
 public:
     QlEdgeInfo(QString text, QString question, BsExpression * expression, BlockScript * actions, QString id, QObject * parent = 0 )
-        :m_text(text), m_question( question ), m_expression( expression), m_actions( actions ), BaseInfo(id, parent){}
+        :m_text(text), m_question( question ), m_expression( expression), m_actions( actions ), BaseEdgeInfo(id, parent){}
 
     void setText(QString text ){
         m_text = text;
@@ -80,36 +81,18 @@ public:
     }
 };
 
-class QlGraphInfo : BaseInfo{
+class QlGraphInfo : public BaseGraphInfo{
 private:
     QlParametrList m_parametrList;
-    QString m_name;
-    QString m_description;
 public:
     QlGraphInfo( QString name, QString description, QlParametrList parametrList, QString id, QObject * parent = 0 ):
-        m_name( name ), m_description( description ), m_parametrList(parametrList), BaseInfo(id, parent ){}
+        m_parametrList(parametrList), BaseGraphInfo(name, description, id, parent ){}
 
     QlParametrList parametrList() const{
         return m_parametrList;
     }
 
-    QString name() const {
-        return m_name;
-    }
-
-    QString description() const{
-        return m_description;
-    }
-
-    void setName( QString name ){
-        m_name = name;
-    }
-
-    void setDescription( QString description ){
-        m_description = description;
-    }
-
-    void setParametrList( QlParametrList parametrList ){
+       void setParametrList( QlParametrList parametrList ){
         m_parametrList = parametrList;
     }
 };

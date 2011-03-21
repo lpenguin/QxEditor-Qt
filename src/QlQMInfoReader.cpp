@@ -1,19 +1,19 @@
 #include "QlQMInfoReader.h"
 
 
-BaseInfo * QlQMInfoReader::ReadVerInfo(QMLocation *location)
+BaseVerInfo * QlQMInfoReader::ReadVerInfo(QMLocation *location)
 {
     return new QlVerInfo(  ConvertLocationTexts( location ),
-                          ConvertLocationTexts( location ),
+                          ConvertActions(location->actions),
                          ConvertLocationType( location->type ),
                          QString("L")+QString::number(location->locNumber) );
 }
 
-BaseInfo * QlQMInfoReader::ReadEdgeInfo(QMPath *path)
+BaseEdgeInfo * QlQMInfoReader::ReadEdgeInfo(QMPath *path)
 {
     BsExpression * expr;
-    if( path->logicalCondition )
-        expr = BsCondition( BsCondition::And,
+    if( ! path->logicalCondition.isEmpty() )
+        expr = new BsCondition( BsCondition::And,
                            BsExpressionList() <<
                            new BsUserString(path->logicalCondition) <<
                            ConvertConditions(path->conditions)
@@ -25,10 +25,12 @@ BaseInfo * QlQMInfoReader::ReadEdgeInfo(QMPath *path)
                           QString("P")+QString::number(path->pathNumber) );
 }
 
-BaseInfo * QlQMInfoReader::ReadGraphInfo(QMGraph *graph)
+BaseGraphInfo * QlQMInfoReader::ReadGraphInfo(QMGraph *graph)
 {
     m_qmToBs->setQmGlobals( graph->params() );
-    return new QlGraphInfo( "[Not inplemented yet]", graph->m_stringReplaces.missionString, ConvertParametrs( graph->params()), "Main")
+    return new QlGraphInfo( "[Not inplemented yet]",
+                           graph->stringReplaces().missionString,
+                           ConvertParametrs( graph->params()), "Main");
 }
 
 QlLocationTexts * QlQMInfoReader::ConvertLocationTexts(QMLocation *location)
@@ -38,17 +40,17 @@ QlLocationTexts * QlQMInfoReader::ConvertLocationTexts(QMLocation *location)
         expr = new BsUserString(location->textFormula);
     else
         expr = new BsNull();
-    return new QlLocationTexts( location->texts, expr)
+    return new QlLocationTexts( location->texts, expr);
 }
 
 BlockScript * QlQMInfoReader::ConvertActions(QMActionList actions)
 {
-    return  m_qmToBs.ConvertQMActions(actions);
+    return  m_qmToBs->ConvertQMActions(actions);
 }
 
 BsExpression * QlQMInfoReader::ConvertConditions(QMConditionList conditions)
 {
-    BsCondition * cond = m_qmToBs.ConvertQMConditions( conditions );
+    BsCondition * cond = m_qmToBs->ConvertQMConditions( conditions );
     BsExpressionList exprs = cond->arguments();
     BsExpression * expr;
     if( exprs.count() != 1)
@@ -58,23 +60,23 @@ BsExpression * QlQMInfoReader::ConvertConditions(QMConditionList conditions)
     return expr;
 }
 
-QMLocation::QMLocationType QlQMInfoReader::ConvertLocationType(QMLocation::QMLocationType type)
+BaseVerInfo::VerType QlQMInfoReader::ConvertLocationType(QMLocation::QMLocationType type)
 {
     switch(type){
     case QMLocation::Death:
-        return fail;
+        return BaseVerInfo::fail;
     case QMLocation::Empty:
-        return odinary;
+        return BaseVerInfo::odinary;
     case QMLocation::Fail:
-        return fail;
+        return BaseVerInfo::fail;
     case QMLocation::Odinary:
-        return odinary;
+        return BaseVerInfo::odinary;
     case QMLocation::Start:
-        return start;
+        return BaseVerInfo::start;
     case QMLocation::Success:
-        return win;
+        return BaseVerInfo::win;
     }
-    return odinary;
+    return BaseVerInfo::odinary;
 
 }
 
