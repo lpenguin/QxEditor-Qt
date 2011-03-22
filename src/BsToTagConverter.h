@@ -19,6 +19,7 @@ public:
     QString ExpressionTag(BsExpression * obj)  ;
     QString VariableTag(BsVariable * variable)  ;
     QString FunctionTag(BsFunction * function)  ;
+    QString FunctionCallTag(BsFunctionCall * function)  ;
     QString VariableDefinitionTag(BsVariableDefinition * varDef)  ;
     QString UserStringTag(BsUserString * userString)  ;
     QString ValueTag(BsValue * value)  ;

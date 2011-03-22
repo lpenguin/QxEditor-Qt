@@ -194,7 +194,7 @@ QString BsToTagConverter::TriggerTag(QlTrigger *trig)
 {
     return QString("ql.trig[%1, %2]")
             .arg(VariableTag(trig->var()))
-            .arg(IfTag(trig->if_()));
+            .arg(IfTag(trig->ifStatement()));
 }
 
 QString BsToTagConverter::ShowVariableTag(QlShowVariable *sv)
@@ -227,6 +227,15 @@ QString BsToTagConverter::BoundTriggerTag(QlBoundTrigger *trig)
             .arg( type )
             .arg(ValueTag(trig->value()))
             .arg(  trig->text() );
+}
+
+QString BsToTagConverter::FunctionCallTag(BsFunctionCall *function)
+{
+    QStringList arguments;
+    foreach ( BsExpression * obj, function->arguments()) {
+        arguments<<ExpressionTag(obj);
+    }
+    return QString("func[%1,%2]").arg(function->name()).arg(arguments.join(","));
 }
 
 

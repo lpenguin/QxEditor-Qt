@@ -32,20 +32,20 @@ private:
     BsExpression * m_min;
     BsExpression * m_max;
 public:
-    QlConstraint( BsVariable * var = 0, BsExpression * min = 0, BsExpression * max = 0){
+    QlConstraint( BsVariable * var, BsExpression * min , BsExpression * max ){
         setVar( var );
         setMin( min );
         setMax( max );
     }
 
     void setVar(BsVariable * var){
-        set( (BsObjectP&)m_var, (BsObjectP)var);
+        SETPA( var );
     }
     void setMin( BsExpression * min ){
-        set( (BsObjectP&)m_min, (BsObjectP)min);
+        SETPA( min );
     }
     void setMax( BsExpression * max ){
-        set( (BsObjectP&)m_max, (BsObjectP)max);
+        SETPA( max );
     }
     BsVariable * var() const { return m_var; }
     BsExpression * min() const { return m_min; }
@@ -56,20 +56,20 @@ public:
 class QlTrigger : public BsStatement{
 private:
     BsVariable * m_var;
-    BsIf * m_if;
+    BsIf * m_ifStatement;
 public:
-    QlTrigger( BsVariable * var = 0, BsIf * if_ = 0){
+    QlTrigger( BsVariable * var , BsIf * if_){
         setVar( var );
         setIf( if_ );
     }
     void setVar(BsVariable * var){
-        set( (BsObjectP&)m_var, (BsObjectP)var);
+        SETPA( var);
     }
-    void setIf(BsIf * if_){
-        set( (BsObjectP&)m_if, (BsObjectP)if_);
+    void setIf(BsIf * ifStatement ){
+        SETPA( ifStatement );
     }
     BsVariable * var() const { return m_var; }
-    BsIf * if_() const { return m_if; }
+    BsIf * ifStatement() const { return m_ifStatement; }
     virtual int type() const{ return QlType::Trigger; }
 
 };
@@ -80,17 +80,17 @@ private:
     BsRangeList m_ranges;
     QStringList m_strings;
 public:
-    QlShowVariable( BsVariable * var = 0, BsRangeList ranges = BsRangeList(), QStringList strings = QStringList()){
+    QlShowVariable( BsVariable * var, BsRangeList ranges, QStringList strings){
         setVar( var );
         setRanges( ranges );
         setStrings( strings );
     }
 
     void setVar(BsVariable * var){
-        set( (BsObjectP&)m_var, (BsObjectP)var);
+        SETPA( var);
     }
     void setRanges( BsRangeList ranges ){
-        setList( m_ranges, ranges );
+        SETLA( ranges );
     }
     void setStrings(QStringList strings ){
         m_strings = strings;
@@ -119,9 +119,9 @@ public:
     BsVariable * var() const { return m_var; }
     void setBoundType( BoundType boundType ){ m_Boundtype = boundType;}
     void setText( QString text ){ m_text = text;}
-    void setValue( BsValue * value){ set((BsObjectP&) m_value, (BsObjectP)value); }
+    void setValue( BsValue * value){ SETPA(value); }
     void setVar(BsVariable * var){
-        set( (BsObjectP&)m_var, (BsObjectP)var);
+        SETPA( var);
     }
     virtual int type() const{ return QlType::BoundTrigger; }
 
@@ -132,8 +132,15 @@ private:
     QStringList m_texts;
     BsExpression * m_expr;
 public:
-    QlLocationTexts( QStringList texts,BsExpression * expr  ){
+    QString firstText() const{
+        if( m_texts.count() )
+            return m_texts[0];
+        else return QString("");
+    }
+    QlLocationTexts( QStringList texts = QStringList (), BsExpression * expr = new BsNull ){
         setTexts( texts );
+//        if(! expr )
+//            expr = new BsExpression();
         setExpr( expr );
     }
 
@@ -146,7 +153,7 @@ public:
     }
 
     void setExpr( BsExpression * expr ){
-        set( (BsObjectP &) m_expr, (BsObjectP ) expr);
+        SETPA( expr);
     }
 
     BsExpression * expr() const{
@@ -162,18 +169,18 @@ public:
 class QlParametr : public BsStatement{
 private:
     BsVariable * m_var;
-    QlParamStatementList m_patramStatements;
-    void setList( QlParamStatementList & list, QlParamStatementList value );
+    QlParamStatementList m_paramStatements;
+//    void setList( QlParamStatementList & list, QlParamStatementList value );
 
-    void add( QlParamStatementList & list, QlParamStatement * value);
+//    void add( QlParamStatementList & list, QlParamStatement * value);
 public:
-    QlParametr( BsVariable * var, QlParamStatementList paramStatementList = QlParamStatementList()):
+    QlParametr( BsVariable * var, QlParamStatementList paramStatements = QlParamStatementList()):
         m_var(var){
-        setList( m_patramStatements, paramStatementList );
+        setParamStatements( paramStatements );
     }
 
     QlParamStatementList paramStatements() const{
-        return m_patramStatements;
+        return m_paramStatements;
     }
 
     BsVariable * var() const { return m_var; }
@@ -182,8 +189,8 @@ public:
         m_var = var;
     }
 
-    void setParamStatements( QlParamStatementList paramStatementList ){
-        m_patramStatements = paramStatementList;
+    void setParamStatements( QlParamStatementList paramStatements ){
+        SETLA( paramStatements );
     }
 
     int type() const {

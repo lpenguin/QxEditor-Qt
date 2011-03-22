@@ -15,6 +15,7 @@ private:
     QString ConvertBsAction( BsAction * action );
     QString ConvertBsIf( BsIf * if_ );
     QString ConvertBsFunction( BsFunction * function );
+    QString ConvertBsFunctionCall( BsFunctionCall * function );
     QString ConvertBsVariableDefinition( BsVariableDefinition * varDef );
     QString ConvertBsUserString( BsUserString * userString );
     QString ConvertBsVariable( BsVariable * variable );

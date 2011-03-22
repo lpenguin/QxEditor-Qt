@@ -21,8 +21,8 @@ QString BsToESMAScriptConverter::ConvertBsStatement(BsStatement *instruction)
     switch( instruction->type()){
     case BsObject::Action:
         return ConvertBsAction( (BsAction *) instruction);
-    case BsObject::Function:
-        return ConvertBsFunction( (BsFunction * ) instruction );
+    case BsObject::FunctionCall:
+        return ConvertBsFunctionCall( (BsFunctionCall * ) instruction );
     case BsObject::VariableDefinition:
         return ConvertBsVariableDefinition( (BsVariableDefinition * ) instruction );
     case BsObject::UserString:
@@ -291,7 +291,7 @@ QString BsToESMAScriptConverter::ConvertQlTrigger(QlTrigger *trig)
 {
     QStringList result;
     result << m_tagConverter.TagStart()+m_tagConverter.TriggerTag( trig );
-    result << ConvertBsIf(trig->if_());
+    result << ConvertBsIf(trig->ifStatement());
     result<<m_tagConverter.TagEnd();
     return result.join("\n");
 }
@@ -332,6 +332,19 @@ QString BsToESMAScriptConverter::ConvertQlBoundTrigger(QlBoundTrigger *trig)
               .arg(type)
               .arg(trig->value()->value())
               .arg(trig->text());
+    result<<m_tagConverter.TagEnd();
+    return result.join("\n");
+}
+
+QString BsToESMAScriptConverter::ConvertBsFunctionCall(BsFunctionCall *function)
+{
+    QStringList arguments;
+    QStringList result;
+    result << m_tagConverter.TagStart()+m_tagConverter.FunctionCallTag( function );
+    foreach( BsExpression * obj, function->arguments()){
+        arguments<<ConvertBsExpression( obj );
+    }
+    result<<QString("%1(%2);").arg(function->name()).arg(arguments.join(","));
     result<<m_tagConverter.TagEnd();
     return result.join("\n");
 }

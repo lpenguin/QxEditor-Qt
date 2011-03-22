@@ -1,6 +1,6 @@
 #include "JSONGraphReader.h"
 
-SimpleVerInfo::VerType Str2Type( QString type ){
+BaseVerInfo::VerType Str2Type( QString type ){
         if( type == "start"	)
                 return SimpleVerInfo::start;
         if( type == "odinary"	)

@@ -21,7 +21,7 @@ void QlVerWidget::ShowVer(BaseVer *ver)
     if( info = qobject_cast<QlVerInfo *>(ver->info())){
         ui->actionsEdit->setPlainText( m_converter->ConvertBlockSript(info->actions()));
 //        ui->verIdEdit->setText( info->id() );
-        ui->textEdit->setPlainText(info->locationTexts()->texts().at(0) );
+        ui->textEdit->setPlainText(info->locationTexts()->firstText());
 //        type2radio( info->verType());
     }
 }

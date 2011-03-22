@@ -28,7 +28,11 @@ void VerDialog::buttonboxAccepted()
 
 void VerDialog::setVerWidget(BaseVerWidget *verWidget)
 {
-    delete ui->verWidget;
+    if( ui->verWidget ){
+        ui->verticalLayout->removeWidget( ui->verWidget);
+        delete ui->verWidget;
+    }
     ui->verWidget = verWidget;
+    ui->verticalLayout->insertWidget(0,  verWidget);
 //    ui->
 }

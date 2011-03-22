@@ -18,56 +18,64 @@ BsAction::BsAction(BsVariable *var, BsExpression *value, BsObject::BsOperation a
     m_actionType = actionType;
 }
 
-void BsObject::set( BsObjectP & obj, BsObjectP value ){
-    obj = value;
-    if( obj && isLocal( obj ))
-        obj->setParent( this );
-}
-void BsObject::setList( BsObjectList & list, BsObjectList value ){
-    list.clear();
-    foreach( BsObject * obj, value ){
-        add( list, obj);
-    }
-}
+//BsFunction::BsFunction(QString name, BsExpressionList arguments)
+//{
+////    :
+////            m_name(name){
+////            //SETLA( arguments )
+////        }
+//}
 
-void BsObject::setList( BsStatementList & list, BsStatementList value ){
-    list.clear();
-    foreach(  BsStatement * obj, value ){
-        add( list, obj);
-    }
-}
+//void BsObject::set( BsObjectP & obj, BsObjectP value ){
+//    obj = value;
+//    if( obj && isLocal( obj ))
+//        obj->setParent( this );
+//}
+//void BsObject::setList( BsObjectList & list, BsObjectList value ){
+//    list.clear();
+//    foreach( BsObject * obj, value ){
+//        add( list, obj);
+//    }
+//}
 
-void BsObject::setList( BsExpressionList & list, BsExpressionList value ){
-    list.clear();
-    foreach( BsExpression * obj, value ){
-        add( list, obj);
-    }
-}
-void BsObject::setList( BsRangeList & list, BsRangeList value ){
-    list.clear();
-    foreach( BsRange * obj, value ){
-        add( list, obj);
-    }
-}
+//void BsObject::setList( BsStatementList & list, BsStatementList value ){
+//    list.clear();
+//    foreach(  BsStatement * obj, value ){
+//        add( list, obj);
+//    }
+//}
 
-void BsObject::add( BsStatementList & list, BsStatement * value){
-    list.append( value );
-    if( value && isLocal((BsObjectP) value ))
-        value->setParent( this );
-}
-void BsObject::add( BsExpressionList & list, BsExpression * value){
-    list.append( value );
-    if( value && isLocal((BsObjectP) value ))
-        value->setParent( this );
-}
+//void BsObject::setList( BsExpressionList & list, BsExpressionList value ){
+//    list.clear();
+//    foreach( BsExpression * obj, value ){
+//        add( list, obj);
+//    }
+//}
+//void BsObject::setList( BsRangeList & list, BsRangeList value ){
+//    list.clear();
+//    foreach( BsRange * obj, value ){
+//        add( list, obj);
+//    }
+//}
 
-void BsObject::add( BsObjectList & list, BsObject * value){
-    list.append( value );
-    if( value && isLocal( value ))
-        value->setParent( this );
-}
-void BsObject::add( BsRangeList & list, BsRange * value){
-    list.append( value );
-    if( value && isLocal( value ))
-        value->setParent( this );
-}
+//void BsObject::add( BsStatementList & list, BsStatement * value){
+//    list.append( value );
+//    if( value && isLocal((BsObjectP) value ))
+//        value->setParent( this );
+//}
+//void BsObject::add( BsExpressionList & list, BsExpression * value){
+//    list.append( value );
+//    if( value && isLocal((BsObjectP) value ))
+//        value->setParent( this );
+//}
+
+//void BsObject::add( BsObjectList & list, BsObject * value){
+//    list.append( value );
+//    if( value && isLocal( value ))
+//        value->setParent( this );
+//}
+//void BsObject::add( BsRangeList & list, BsRange * value){
+//    list.append( value );
+//    if( value && isLocal( value ))
+//        value->setParent( this );
+//}

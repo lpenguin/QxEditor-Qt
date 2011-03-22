@@ -24,3 +24,13 @@ void EdgeDialog::buttonboxAccepted()
 {
     ui->edgeWidget->WriteEdge( m_edge );
 }
+
+void EdgeDialog::setEdgeWidget(BaseEdgeWidget *widget)
+{
+    if( ui->edgeWidget ){
+        ui->verticalLayout->removeWidget( ui->edgeWidget);
+        delete ui->edgeWidget;
+    }
+    ui->edgeWidget = widget;
+    ui->verticalLayout->insertWidget(0,  widget );
+}

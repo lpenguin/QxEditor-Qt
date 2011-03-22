@@ -20,50 +20,64 @@
 class QAction;
 class QMenu;
 class QTextEdit;
- 
+
 class MainDialogImpl : public QMainWindow, public Ui::MainDialog
 {
-Q_OBJECT
+    Q_OBJECT
 public:
-	MainDialogImpl( QWidget * parent = 0, Qt::WFlags f = 0 );
+    MainDialogImpl( QWidget * parent = 0, Qt::WFlags f = 0 );
+    enum GraphType{
+        Simple, QuestLogic
+    };
 
+    GraphType graphType() const{
+        return m_graphType;
+    }
+
+    void setGraphType(GraphType graphType);
 private:
-        //Dialogs
-        VerDialog * verDialog;
-        EdgeDialog * edgeDialog;
-        QuestActionsDialog * questActionsDialog;
-        QuestSettingsDialog * questSettingsDialog;
+    //Dialogs
+    VerDialog * verDialog;
+    EdgeDialog * edgeDialog;
+    QuestActionsDialog * questActionsDialog;
+    QuestSettingsDialog * questSettingsDialog;
+    GraphType m_graphType;
 private slots:
-	void on_actionOpen_triggered();
-	void on_actionSave_triggered();
-	void on_actionSave_as_triggered();
-        void on_actionSettings_triggered();
-        void on_actionActions_triggered();
+    void on_actionOpen_triggered();
+    void on_actionSave_triggered();
+    void on_actionSave_as_triggered();
+    void on_actionSettings_triggered();
+    void on_actionActions_triggered();
     void newFile();
     void open();
     void save();
     void saveAs();
     void openRecentFile();
     void about();
-	void VerClicked( VerItem * , Qt::MouseButton );
-	void EdgeClicked( EdgeItem *, Qt::MouseButton );
-	void AreaClicked( QPointF point, Qt::MouseButton);
-	void VersConnected( VerItem *, VerItem *);
+    void VerClicked( VerItem * , Qt::MouseButton );
+    void EdgeClicked( EdgeItem *, Qt::MouseButton );
+    void AreaClicked( QPointF point, Qt::MouseButton);
+    void VersConnected( VerItem *, VerItem *);
 
 private:
-     void createActions();
-     void createMenus();
-     void loadFile(const QString &fileName);
-     void saveFile(const QString &fileName);
-     void setCurrentFile(const QString &fileName);
-     void updateRecentFileActions();
-     QString strippedName(const QString &fullFileName);
+    BaseVer * createVer();
+    BaseEdge * createEdge( BaseVer * v0, BaseVer * v1 );
+    BaseVerWidget * verWidget() const;
+    BaseEdgeWidget * edgeWidget() const;
 
-     QString curFile;
+    void createActions();
+    void createMenus();
+    void loadFile(const QString &fileName);
+    void saveFile(const QString &fileName);
+    void setCurrentFile(const QString &fileName);
+    void updateRecentFileActions();
+    QString strippedName(const QString &fullFileName);
+
+    QString curFile;
 
 
-     enum { MaxRecentFiles = 5 };
-     QAction *recentFileActs[MaxRecentFiles];
+    enum { MaxRecentFiles = 5 };
+    QAction *recentFileActs[MaxRecentFiles];
 }; 
 #endif
 

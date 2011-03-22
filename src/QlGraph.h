@@ -11,7 +11,10 @@ private:
     BlockScript * m_actions;
 public:
     QlVerInfo(  QString id, QObject * parent = 0 ):
-        BaseVerInfo(id, parent){}
+        BaseVerInfo(id, parent){
+        m_actions = new BlockScript();
+        m_locationTexts = new QlLocationTexts();
+    }
 
     QlVerInfo( QlLocationTexts * locationTexts, BlockScript * actions, VerType verType, QString id, QObject * parent = 0 ):
         m_locationTexts(locationTexts), m_actions(actions), BaseVerInfo(verType, id, parent){}
@@ -33,6 +36,10 @@ public:
     BlockScript * actions( ) const{
         return m_actions;
     }
+    ~QlVerInfo(){
+        delete m_locationTexts;
+        delete m_actions;
+    }
 
 //    VerType verType( ) const{
 //        return m_verType;
@@ -47,11 +54,23 @@ private:
     BsExpression * m_expression;
     BlockScript * m_actions;
 public:
-    QlEdgeInfo( QString id, QObject * parent = 0 ):
-        BaseEdgeInfo(id, parent)
-    {}
+    QlEdgeInfo( QString id, QObject * parent = 0 )
+        :BaseEdgeInfo(id, parent )
+    {
+        m_expression = new BsNull();
+        m_actions = new BlockScript();
+        m_expression->setParent( this );
+        m_actions->setParent( this );
+    }
+
+
     QlEdgeInfo(QString text, QString question, BsExpression * expression, BlockScript * actions, QString id, QObject * parent = 0 )
-        :m_text(text), m_question( question ), m_expression( expression), m_actions( actions ), BaseEdgeInfo(id, parent){}
+        :m_text(text), m_question( question ),  BaseEdgeInfo(id, parent){
+        m_expression = expression;
+        m_actions = actions;
+        m_expression->setParent( this );
+        m_actions->setParent( this );
+    }
 
     void setText(QString text ){
         m_text = text;
@@ -68,7 +87,6 @@ public:
     void setActions( BlockScript * actions ){
         m_actions = actions;
     }
-
 
     BsExpression * expression() const {
         return m_expression;

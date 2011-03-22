@@ -3,6 +3,33 @@
 
 #include <QObject>
 
+#define ISLOCAL( a ) ( a->type() != BsObject::Variable )
+#define SETPARENT( a ) if( a && ISLOCAL(a)) a->setParent( this );
+#define SETP(a, b) { \
+    a = b; \
+   SETPARENT(a) \
+}
+
+#define SETPA(a) SETP( m_##a, a )
+
+#define FOR( start, size ) for( int i = start; i < size; i++)
+
+#define FORL( a ) FOR( 0, a.count())
+
+#define SETL( a, b ) {\
+    FORL(b){ \
+        SETPARENT(b[i]);\
+        a.append( b[i] );\
+    } \
+}
+
+#define SETLA( a ) SETL( m_##a, a )
+
+#define ADDL( list, a ) {\
+    list.append(a);\
+    SETPARENT( a )\
+}
+
 class BsVariable;
 class BsAction;
 class BlockScript;
@@ -23,9 +50,11 @@ typedef BsObject * BsObjectP;
 
 class BsObject : public QObject{
 public:
+//    BsObject( QObject * parent ):
+//        QObject( parent ){}
     virtual int type() const = 0;
     enum  BsType{
-        Variable, Action, Operator, Condition, Value, Range,/* List,*/ Function, If, UserString, Script, VariableDefinition, Null, UserType
+        Variable, Action, Operator, Condition, Value, Range,/* List,*/ Function,  FunctionCall, If, UserString, Script, VariableDefinition, Null, UserType
     };
     enum  BsOperation{
            Addition, Substraction, Multiplication, Division, Show, Hide, None, Mov
@@ -37,37 +66,69 @@ public:
         return obj->type() != BsObject::Variable;
     }
 
-    void set( BsObjectP & obj, BsObjectP value );
-    void setList( BsObjectList & list, BsObjectList value );
-    void setList( BsExpressionList & list, BsExpressionList value );
-    void setList( BsStatementList & list, BsStatementList value );
-    void setList( BsConditionList & list, BsConditionList value );
-    void setList( BsRangeList & list, BsRangeList value );
-    void add( BsExpressionList & list, BsExpression * value);
-    void add( BsObjectList & list, BsObject * value);
-    void add( BsStatementList & list, BsStatement * value);
-    void add( BsRangeList & list, BsRange * value);
+//    void set( BsObjectP & obj, BsObjectP value );
+//    void setList( BsObjectList & list, BsObjectList value );
+//    void setList( BsExpressionList & list, BsExpressionList value );
+//    void setList( BsStatementList & list, BsStatementList value );
+//    void setList( BsConditionList & list, BsConditionList value );
+//    void setList( BsRangeList & list, BsRangeList value );
+//    void add( BsExpressionList & list, BsExpression * value);
+//    void add( BsObjectList & list, BsObject * value);
+//    void add( BsStatementList & list, BsStatement * value);
+//    void add( BsRangeList & list, BsRange * value);
 };
 
 class BsStatement : public BsObject {
-
+//public:
+//    BsStatement(){}
 };
 
 class BsExpression : public BsObject {
-
+//    BsExpression(){}
 };
 
-class BsFunction : public BsExpression, public BsStatement{
+class BsFunction : public BsExpression{
 private:
     QString m_name;
     BsExpressionList m_arguments;
 public:
-    BsFunction(QString name, BsExpressionList arguments):
-        m_name(name){
-            BsExpression::setList( m_arguments ,  arguments  );}
+    //BsFunction(QString name, BsExpressionList arguments);
+    BsFunction(QString name, BsExpressionList arguments){
+        setName( name );
+        setArguments( arguments );
+    }
     QString name() const { return m_name; }
     BsExpressionList arguments() const { return m_arguments; }
     virtual int type() const { return BsObject::Function; }
+    void setName( QString name ) {
+        m_name = name;
+    }
+    void setArguments( BsExpressionList arguments ){
+        SETLA( arguments )
+    }
+};
+
+class BsFunctionCall : public BsStatement{
+private:
+    QString m_name;
+    BsExpressionList m_arguments;
+public:
+    BsFunctionCall(QString name, BsExpressionList arguments){
+        setName( name );
+        setArguments( arguments );
+    }
+
+    QString name() const { return m_name; }
+    BsExpressionList arguments() const { return m_arguments; }
+    void setName( QString name ) {
+        m_name = name;
+    }
+    void setArguments( BsExpressionList arguments ){
+        SETLA( arguments )
+    }
+    virtual int type() const {
+        return BsObject::FunctionCall;
+    }
 };
 
 class BsOperator : public BsExpression{
@@ -78,14 +139,14 @@ public:
     BsOperator(BsObject::BsOperation operation = None, BsExpressionList arguments = BsExpressionList()):
         m_operation(operation)
     {
-        setList( m_arguments, arguments );
+        SETLA( arguments );
     }
 
     BsObject::BsOperation operation() const { return m_operation; }
     BsExpressionList arguments() const { return m_arguments; }
     virtual int type() const { return BsObject::Operator; }
     void setOperation( BsObject::BsOperation value){ m_operation = value; }
-    void addArgument( BsExpression * object ){ add( m_arguments, object );}
+    void addArgument( BsExpression * object ){ ADDL( m_arguments, object );}
     void clearArguments() { m_arguments.clear(); }
 };
 
@@ -117,13 +178,13 @@ public:
     BsCondition(BsCondition::BsConditionType condition = Equals, BsExpressionList arguments = BsExpressionList()):
         m_condition(condition)
     {
-        setList( m_arguments, arguments );
+        SETLA( arguments );
     }
 
     BsCondition::BsConditionType condition() const { return m_condition; }
     BsExpressionList arguments() const { return m_arguments; }
     void setCondition( BsCondition::BsConditionType value){ m_condition = value; }
-    void addArgument( BsExpression * object ){ add( m_arguments, object );}
+    void addArgument( BsExpression * object ){ ADDL( m_arguments, object );}
     void clearArguments() { m_arguments.clear(); }
     virtual int type() const { return BsObject::Condition; }
     static BsExpressionList ConditionsToExpressions(BsConditionList list){
@@ -181,10 +242,11 @@ public:
     BsExpression * min() { return m_min; }
     BsExpression * max() { return m_max; }
     void setMin( BsExpression * min ){
-        set( (BsObjectP&)m_min, (BsObjectP)min);
+        SETPA( min )
+//        set( (BsObjectP&)m_min, (BsObjectP)min);
     }
     void setMax( BsExpression * max ){
-        set( (BsObjectP&)m_max, (BsObjectP)max);
+        SETPA( max );
     }
 };
 
@@ -196,10 +258,10 @@ public:
     BsVariableDefinition( BsVariable * var, BsExpression * value );
     BsVariable * var() { return m_var; }
     void setVar( BsVariable * var ){
-        set( (BsObjectP&)m_var, (BsObjectP)var);
+        SETPA( var )
     }
     BsExpression * value() { return m_value; }
-    void setValue( BsExpression * value ){ set( (BsObjectP&)m_value, (BsObjectP)value); }
+    void setValue( BsExpression * value ){ SETPA(value) }
     virtual int type() const { return BsObject::VariableDefinition; }
 };
 
@@ -220,8 +282,8 @@ public:
     BsExpression * value(){ return m_value; }
     BsObject::BsOperation actionType() const { return m_actionType; }
     void setActionType( BsObject::BsOperation value ){ m_actionType = value; }
-    void setValue( BsExpression * value ){ set( (BsObjectP&)m_value, (BsObjectP)value); }
-    void setVar( BsVariable * var ){ set( (BsObjectP &)m_var , var); }
+    void setValue( BsExpression * value ){ SETPA( value ) }
+    void setVar( BsVariable * var ){  SETPA( var ) }
 };
 
 class BsIf : public BsStatement{
@@ -235,10 +297,10 @@ public:
     }
 
     void setExpression( BsExpression * expression ){
-        set( (BsObjectP &)m_expression, expression );
+        SETPA( expression )
     }
     void setStatements( BsStatementList statements){
-        setList(m_statements, statements);
+        SETLA( statements )
     }
     BsStatementList staements() const { return m_statements; }
     BsExpression * expression() const { return m_expression; }
@@ -253,10 +315,10 @@ private:
 public:
     BlockScript( BsStatementList statements = BsStatementList() );
     BsStatementList statements(){ return m_statements; }
-    void AddStatement( BsStatement * statement ){ add( m_statements , statement); }
+    void AddStatement( BsStatement * statement ){ ADDL( m_statements , statement); }
     void AddStatements( BsStatementList statements ){
         foreach( BsStatement * statement, statements){
-            add( m_statements , statement);
+            ADDL( m_statements , statement);
         }
     }
     void ClearStatements() { m_statements.clear(); };

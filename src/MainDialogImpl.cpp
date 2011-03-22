@@ -34,9 +34,10 @@ MainDialogImpl::MainDialogImpl( QWidget * parent, Qt::WFlags f)
     edgeDialog= new EdgeDialog( this );
     questActionsDialog = new QuestActionsDialog( this );
     questSettingsDialog = new QuestSettingsDialog( this );
+    setGraphType( QuestLogic );
 
     setCentralWidget( graphView );
-    verDialog->setVerWidget( new QlVerWidget( verDialog ));
+
     if( qApp->argc() > 1 )
         loadFile(QString(qApp->argv()[1]) );
 }
@@ -249,11 +250,11 @@ void MainDialogImpl::EdgeClicked( EdgeItem * edge, Qt::MouseButton button ){
 }
 
 void MainDialogImpl::AreaClicked( QPointF point, Qt::MouseButton){
-//    SimpleVerInfo * info = new SimpleVerInfo;
-//    info->setId( graphView->graph()->GetNewVerId() );
+    //    SimpleVerInfo * info = new SimpleVerInfo;
+    //    info->setId( graphView->graph()->GetNewVerId() );
     //BaseVer * ver = new BaseVer( new SimpleVerInfo( graphView->graph()->GetNewVerId() ) );
-    BaseVer * ver = new BaseVer( new QlVerInfo( graphView->graph()->GetNewVerId() ) );
-//    ver->setInfo( new SimpleVerInfo(graphView->graph()->GetNewVerId()));
+    BaseVer * ver = createVer();
+    //    ver->setInfo( new SimpleVerInfo(graphView->graph()->GetNewVerId()));
     //        if( graphView->graph()->vers().count())
     //            ver->info()->setType( odinary );
     //        else
@@ -270,9 +271,7 @@ void MainDialogImpl::AreaClicked( QPointF point, Qt::MouseButton){
 }
 
 void MainDialogImpl::VersConnected( VerItem * ver1, VerItem * ver2){
-    BaseEdge * edge = new BaseEdge( ver1->ver(), ver2->ver() );
-    //edge->setInfo( new SimpleEdgeInfo(graphView->graph()->GetNewEdgeId()));
-     edge->setInfo( new QlEdgeInfo(graphView->graph()->GetNewEdgeId()));
+    BaseEdge * edge = createEdge( ver1->ver(), ver2->ver() );
     QSettings settings;
     if( settings.value("openNewDialog").toBool() ){
         if( edgeDialog->ShowEdge( edge ) == QDialog::Accepted )
@@ -281,6 +280,63 @@ void MainDialogImpl::VersConnected( VerItem * ver1, VerItem * ver2){
             delete edge;
     }else
         graphView->AddEdge( edge, ver1->pos(), ver2->pos() );
+}
+
+void MainDialogImpl::setGraphType(MainDialogImpl::GraphType graphType)
+{
+    m_graphType = graphType;
+    verDialog->setVerWidget( verWidget() );
+    edgeDialog->setEdgeWidget( edgeWidget() );
+    graphView->CleanGraph();
+}
+
+BaseVer * MainDialogImpl::createVer()
+{
+    BaseVer * ver;
+    if( m_graphType == Simple )
+        ver = new BaseVer( new SimpleVerInfo( graphView->graph()->GetNewVerId() ) );
+    else if(m_graphType == QuestLogic )
+        ver = new BaseVer( new QlVerInfo( graphView->graph()->GetNewVerId() ) );
+    else
+     return 0;
+
+    if( graphView->graph()->vers().count())
+        ver->info()->setVerType( BaseVerInfo::odinary );
+    else
+        ver->info()->setVerType( BaseVerInfo::start );
+
+    return ver;
+}
+
+BaseEdge * MainDialogImpl::createEdge( BaseVer * v0, BaseVer * v1)
+{
+    if( m_graphType == Simple )
+        return new BaseEdge( new SimpleEdgeInfo( graphView->graph()->GetNewEdgeId() ), v0, v1  );
+    else  if(m_graphType == QuestLogic )
+        return new BaseEdge( new QlEdgeInfo( graphView->graph()->GetNewEdgeId() ), v0, v1  );
+    else
+        return 0;
+}
+
+BaseVerWidget * MainDialogImpl::verWidget() const
+{
+    if( m_graphType == Simple ){
+        return new SimpleVerWidget( verDialog );
+    }else if(m_graphType == QuestLogic ){
+        return new QlVerWidget( verDialog );
+    } else
+        return 0;
+
+}
+
+BaseEdgeWidget * MainDialogImpl::edgeWidget() const
+{
+    if( m_graphType == Simple ){
+        return new SimpleEdgeWidget( edgeDialog );
+    }else if(m_graphType == QuestLogic ){
+        return new QlEdgeWidget( edgeDialog );
+    } else
+        return 0;
 }
 
 

@@ -3,6 +3,7 @@
 
 #include <QDialog>
 #include "BaseGraph.h"
+#include "BaseWidgets.h"
 
 namespace Ui {
     class EdgeDialog;
@@ -16,6 +17,7 @@ public:
     explicit EdgeDialog(QWidget *parent = 0);
     ~EdgeDialog();
     int ShowEdge(BaseEdge * edge);
+    void setEdgeWidget( BaseEdgeWidget * widget );
 private:
     Ui::EdgeDialog *ui;
     BaseEdge * m_edge;

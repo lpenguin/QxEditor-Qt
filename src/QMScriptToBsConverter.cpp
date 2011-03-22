@@ -49,7 +49,12 @@ BsStatementList QMScriptToBsConverter::ConvertQMAction(QMAction * qmAction)
      case QMAction::Procent:
         action->setActionType(BsObject::Mov);
         QString str = QString::number(qmAction->addNumber);
-        BsValue * val = new BsValue(str);
+        BsValue * val = new BsValue(str);/*{
+            BsFunction * f = new BsFunction;
+            f->setName( QString("prc") );
+            f->setArguments( BsExpressionList() << var << val );
+            action->setValue( f );
+        }*/
         action->setValue(new BsFunction( QString("prc"), BsExpressionList() << var << val));
         list<<action;
         break;

@@ -4,7 +4,7 @@
 BaseVerInfo * QlQMInfoReader::ReadVerInfo(QMLocation *location)
 {
     return new QlVerInfo(  ConvertLocationTexts( location ),
-                          ConvertActions(location->actions),
+                         ConvertActions(location->actions),
                          ConvertLocationType( location->type ),
                          QString("L")+QString::number(location->locNumber) );
 }
@@ -14,10 +14,13 @@ BaseEdgeInfo * QlQMInfoReader::ReadEdgeInfo(QMPath *path)
     BsExpression * expr;
     if( ! path->logicalCondition.isEmpty() )
         expr = new BsCondition( BsCondition::And,
-                           BsExpressionList() <<
-                           new BsUserString(path->logicalCondition) <<
-                           ConvertConditions(path->conditions)
-                           );
+                               BsExpressionList() <<
+                               new BsUserString(path->logicalCondition) <<
+                               ConvertConditions(path->conditions)
+                               );
+    else
+        expr = ConvertConditions(path->conditions);
+
     return new QlEdgeInfo( path->text,
                           path->question,
                           expr,
