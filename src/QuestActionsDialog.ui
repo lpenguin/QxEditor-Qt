@@ -15,30 +15,7 @@
   </property>
   <layout class="QVBoxLayout" name="verticalLayout_2">
    <item>
-    <layout class="QVBoxLayout" name="verticalLayout">
-     <item>
-      <widget class="QLabel" name="label">
-       <property name="text">
-        <string>Actions</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="ScriptEdit" name="actionsEdit">
-       <property name="font">
-        <font>
-         <family>Courier New</family>
-        </font>
-       </property>
-       <property name="lineWrapMode">
-        <enum>QTextEdit::NoWrap</enum>
-       </property>
-       <property name="tabStopWidth">
-        <number>40</number>
-       </property>
-      </widget>
-     </item>
-    </layout>
+    <widget class="BaseGraphWidget" name="graphWidget" native="true"/>
    </item>
    <item>
     <widget class="QDialogButtonBox" name="buttonBox">
@@ -54,9 +31,10 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>ScriptEdit</class>
-   <extends>QTextEdit</extends>
-   <header>ScriptEdit.h</header>
+   <class>BaseGraphWidget</class>
+   <extends>QWidget</extends>
+   <header>BaseWidgets.h</header>
+   <container>1</container>
   </customwidget>
  </customwidgets>
  <resources/>

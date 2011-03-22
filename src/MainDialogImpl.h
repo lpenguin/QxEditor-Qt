@@ -13,6 +13,8 @@
 #include "SimpleVerWidget.h"
 #include "QlVerWidget.h"
 #include "QlEdgeWidget.h"
+#include "SimpleGraphWidget.h"
+#include "QlGraphWidget.h"
 
 #include "QuestActionsDialog.h"
 #include "QuestSettingsDialog.h"
@@ -39,7 +41,7 @@ private:
     //Dialogs
     VerDialog * verDialog;
     EdgeDialog * edgeDialog;
-    QuestActionsDialog * questActionsDialog;
+    GraphDialog * graphDialog;
     QuestSettingsDialog * questSettingsDialog;
     GraphType m_graphType;
 private slots:
@@ -64,7 +66,7 @@ private:
     BaseEdge * createEdge( BaseVer * v0, BaseVer * v1 );
     BaseVerWidget * verWidget() const;
     BaseEdgeWidget * edgeWidget() const;
-
+    BaseGraphWidget * graphWidget() const;
     void createActions();
     void createMenus();
     void loadFile(const QString &fileName);

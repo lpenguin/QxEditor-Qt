@@ -18,7 +18,9 @@ FORMS = ui/dialog.ui \
     src/QlVerWidget.ui \
     src/QlEdgeWidget.ui \
     src/VerDialog.ui \
-    src/EdgeDialog.ui
+    src/EdgeDialog.ui \
+    src/QlGraphWidget.ui \
+    src/SimpleGraphWidget.ui
 HEADERS = \
     src/GraphView.h \
     src/VerItem.h \
@@ -52,7 +54,9 @@ HEADERS = \
     src/QlEdgeWidget.h \
     src/VerDialog.h \
     src/EdgeDialog.h \
-    src/BaseWidgets.h
+    src/BaseWidgets.h \
+    src/QlGraphWidget.h \
+    src/SimpleGraphWidget.h
 SOURCES = \
     src/main.cpp \
     src/GraphView.cpp \
@@ -87,7 +91,9 @@ SOURCES = \
     src/QlEdgeWidget.cpp \
     src/VerDialog.cpp \
     src/EdgeDialog.cpp \
-    src/BaseWidgets.cpp
+    src/BaseWidgets.cpp \
+    src/QlGraphWidget.cpp \
+    src/SimpleGraphWidget.cpp
 TEMPLATE = app
 INCLUDEPATH += src
 OTHER_FILES += 111.txt \

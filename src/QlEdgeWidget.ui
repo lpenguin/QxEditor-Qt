@@ -17,7 +17,7 @@
    <item>
     <widget class="QTabWidget" name="tabWidget">
      <property name="currentIndex">
-      <number>0</number>
+      <number>2</number>
      </property>
      <widget class="QWidget" name="mainTab">
       <attribute name="title">
@@ -62,7 +62,7 @@
       </attribute>
       <layout class="QVBoxLayout" name="verticalLayout_4">
        <item>
-        <widget class="QPlainTextEdit" name="actionsEdit"/>
+        <widget class="ScriptEdit" name="actionsEdit"/>
        </item>
       </layout>
      </widget>
@@ -72,7 +72,7 @@
       </attribute>
       <layout class="QVBoxLayout" name="verticalLayout_5">
        <item>
-        <widget class="QPlainTextEdit" name="conditionsEdit"/>
+        <widget class="ScriptEdit" name="conditionsEdit"/>
        </item>
       </layout>
      </widget>
@@ -80,6 +80,13 @@
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>ScriptEdit</class>
+   <extends>QTextEdit</extends>
+   <header>ScriptEdit.h</header>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>

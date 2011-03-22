@@ -238,6 +238,11 @@ QString BsToTagConverter::FunctionCallTag(BsFunctionCall *function)
     return QString("func[%1,%2]").arg(function->name()).arg(arguments.join(","));
 }
 
+QString BsToTagConverter::ParametrTag(QlParametr *par)
+{
+    return QString("ql.param[%1]").arg(VariableTag(par->var()));
+}
+
 
 
 

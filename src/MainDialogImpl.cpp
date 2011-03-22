@@ -32,7 +32,7 @@ MainDialogImpl::MainDialogImpl( QWidget * parent, Qt::WFlags f)
 
     verDialog = new VerDialog( this );
     edgeDialog= new EdgeDialog( this );
-    questActionsDialog = new QuestActionsDialog( this );
+    graphDialog = new GraphDialog( this );
     questSettingsDialog = new QuestSettingsDialog( this );
     setGraphType( QuestLogic );
 
@@ -47,7 +47,7 @@ void MainDialogImpl::on_actionSettings_triggered(){
 }
 
 void MainDialogImpl::on_actionActions_triggered(){
-    questActionsDialog->ShowGraph( graphView->graph() );
+    graphDialog->ShowGraph( graphView->graph() );
 }
 
 
@@ -287,7 +287,9 @@ void MainDialogImpl::setGraphType(MainDialogImpl::GraphType graphType)
     m_graphType = graphType;
     verDialog->setVerWidget( verWidget() );
     edgeDialog->setEdgeWidget( edgeWidget() );
+    graphDialog->setGraphWidget( graphWidget() );
     graphView->CleanGraph();
+
 }
 
 BaseVer * MainDialogImpl::createVer()
@@ -335,6 +337,16 @@ BaseEdgeWidget * MainDialogImpl::edgeWidget() const
         return new SimpleEdgeWidget( edgeDialog );
     }else if(m_graphType == QuestLogic ){
         return new QlEdgeWidget( edgeDialog );
+    } else
+        return 0;
+}
+
+BaseGraphWidget * MainDialogImpl::graphWidget() const
+{
+    if( m_graphType == Simple ){
+        return new SimpleGraphWidget( graphDialog );
+    }else if(m_graphType == QuestLogic ){
+        return new QlGraphWidget( graphDialog );
     } else
         return 0;
 }

@@ -9,6 +9,8 @@ public:
     BsToESMAScriptConverter();
     QString ConvertBlockSript( BlockScript * script);
     QString ConvertBsConditionStatement( BsExpression *object );
+    QString ConvertQlParametr(QlParametr * parametr);
+    QString ConvertQlParametrList(QlParametrList list);
 private:
     QString ConvertBsStatements( BsStatementList instructions);
     QString ConvertBsStatement( BsStatement * instruction );
@@ -29,6 +31,7 @@ private:
     QString ConvertQlTrigger( QlTrigger * trig);
     QString ConvertQlBoundTrigger( QlBoundTrigger * trig);
     QString ConvertQlShowVariable( QlShowVariable * sv);
+//    QString ConvertQlParametrStatement(QlParamStatement * statement );
 
     QString ExpressionTypeToString(BsObject::BsOperation operation );
     QString ActionTypeToString(BsObject::BsOperation operation );

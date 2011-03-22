@@ -32,7 +32,7 @@ public:
     QString TriggerTag( QlTrigger * trig);
     QString BoundTriggerTag( QlBoundTrigger * trig);
     QString ShowVariableTag( QlShowVariable * sv);
-
+    QString ParametrTag(QlParametr * par);
     QString ExpressionTypeToString(BsObject::BsOperation operation );
     QString ActionTypeToString(BsObject::BsOperation operation );
     QString ConditionTypeToString(BsCondition::BsConditionType condition );

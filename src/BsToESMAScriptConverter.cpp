@@ -349,6 +349,34 @@ QString BsToESMAScriptConverter::ConvertBsFunctionCall(BsFunctionCall *function)
     return result.join("\n");
 }
 
+QString BsToESMAScriptConverter::ConvertQlParametr(QlParametr *parametr)
+{
+    QStringList result;
+    result << m_tagConverter.TagStart() + m_tagConverter.ParametrTag(parametr);
+    foreach (QlParamStatement * statement, parametr->paramStatements()) {
+        result << ConvertBsStatement( statement );
+    }
+    result << m_tagConverter.TagEnd();
+    return result.join("\n");
+}
+
+QString BsToESMAScriptConverter::ConvertQlParametrList(QlParametrList list)
+{
+    QStringList result;
+    foreach( QlParametr * par, list){
+        result << ConvertQlParametr( par );
+    }
+    return result.join("\n");
+}
+
+//QString BsToESMAScriptConverter::ConvertQlParametrStatement(QlParamStatement *statement)
+//{
+//    switch(statement->type()){
+//        case QlType::Constraint:
+
+//    }
+//}
+
 //QStringList BsToESMAScriptConverter::ConvertBsObjectList(BsObjectList list)
 //{
 

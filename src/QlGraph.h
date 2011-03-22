@@ -106,6 +106,7 @@ public:
 };
 
 class QlGraphInfo : public BaseGraphInfo{
+    Q_OBJECT
 private:
     QlParametrList m_parametrList;
 public:

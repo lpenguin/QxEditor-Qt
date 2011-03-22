@@ -1,29 +1,25 @@
 #include "QuestActionsDialog.h"
 #include "ui_QuestActionsDialog.h"
 
-QuestActionsDialog::QuestActionsDialog(QWidget *parent) :
+GraphDialog::GraphDialog(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::QuestActionsDialog)
 {
     ui->setupUi(this);
+    connect( ui->buttonBox, SIGNAL(accepted()), this, SLOT(buttonBoxTriggered()));
 }
 
-QuestActionsDialog::~QuestActionsDialog()
+GraphDialog::~GraphDialog()
 {
     delete ui;
 }
-void QuestActionsDialog::ShowGraph(BaseGraph * graph){
-    if( qobject_cast<SimpleGraph*>( graph) ){
-        SimpleGraphInfo * info = (SimpleGraphInfo *)(graph->info());
-        ui->actionsEdit->setPlainText( info->actions() );
-        if( exec() ){
-            info->setActions( ui->actionsEdit->toPlainText() );
-        }
-    }
-
+int GraphDialog::ShowGraph(BaseGraph * graph){
+    m_graph = graph;
+    ui->graphWidget->ShowGraph(graph);
+    return exec();
 }
 
-void QuestActionsDialog::changeEvent(QEvent *e)
+void GraphDialog::changeEvent(QEvent *e)
 {
     QDialog::changeEvent(e);
     switch (e->type()) {
@@ -33,4 +29,19 @@ void QuestActionsDialog::changeEvent(QEvent *e)
     default:
         break;
     }
+}
+
+void GraphDialog::setGraphWidget(BaseGraphWidget *widget)
+{
+    if( ui->graphWidget ){
+        ui->verticalLayout_2->removeWidget( ui->graphWidget  );
+        delete ui->graphWidget;
+    }
+    ui->graphWidget = widget;
+    ui->verticalLayout_2->insertWidget(0, widget );
+}
+
+void GraphDialog::buttonBoxTriggered()
+{
+    ui->graphWidget->WriteGraph( m_graph );
 }

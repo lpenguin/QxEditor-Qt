@@ -30,4 +30,17 @@ public slots:
 
 };
 
+class BaseGraphWidget : public QWidget
+{
+    Q_OBJECT
+public:
+    explicit BaseGraphWidget(QWidget *parent = 0):QWidget(parent){}
+    virtual void ShowGraph( BaseGraph * graph ){}
+    virtual void WriteGraph( BaseGraph * graph ){}
+signals:
+
+public slots:
+
+};
+
 #endif // BASEWIDGETS_H
