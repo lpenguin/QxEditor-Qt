@@ -3,6 +3,7 @@
 
 #include <QDialog>
 #include "BaseGraph.h"
+#include "BaseWidgets.h"
 
 namespace Ui {
     class VerDialog;
@@ -16,6 +17,7 @@ public:
     explicit VerDialog(QWidget *parent = 0);
     ~VerDialog();
     int ShowVer(BaseVer * ver);
+    void setVerWidget( BaseVerWidget * verWidget );
 private:
     Ui::VerDialog *ui;
     BaseVer * m_ver;

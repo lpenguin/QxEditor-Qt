@@ -25,3 +25,10 @@ void VerDialog::buttonboxAccepted()
 {
     ui->verWidget->WriteVer( m_ver );
 }
+
+void VerDialog::setVerWidget(BaseVerWidget *verWidget)
+{
+    delete ui->verWidget;
+    ui->verWidget = verWidget;
+//    ui->
+}

@@ -27,7 +27,7 @@ BaseEdgeInfo * QlQMInfoReader::ReadEdgeInfo(QMPath *path)
 
 BaseGraphInfo * QlQMInfoReader::ReadGraphInfo(QMGraph *graph)
 {
-    m_qmToBs->setQmGlobals( graph->params() );
+    m_qmToBs.setQmGlobals( graph->params() );
     return new QlGraphInfo( "[Not inplemented yet]",
                            graph->stringReplaces().missionString,
                            ConvertParametrs( graph->params()), "Main");
@@ -45,12 +45,12 @@ QlLocationTexts * QlQMInfoReader::ConvertLocationTexts(QMLocation *location)
 
 BlockScript * QlQMInfoReader::ConvertActions(QMActionList actions)
 {
-    return  m_qmToBs->ConvertQMActions(actions);
+    return  m_qmToBs.ConvertQMActions(actions);
 }
 
 BsExpression * QlQMInfoReader::ConvertConditions(QMConditionList conditions)
 {
-    BsCondition * cond = m_qmToBs->ConvertQMConditions( conditions );
+    BsCondition * cond = m_qmToBs.ConvertQMConditions( conditions );
     BsExpressionList exprs = cond->arguments();
     BsExpression * expr;
     if( exprs.count() != 1)
@@ -82,7 +82,7 @@ BaseVerInfo::VerType QlQMInfoReader::ConvertLocationType(QMLocation::QMLocationT
 
 QlParametr * QlQMInfoReader::ConvertParametr(QMParametr *parametr)
 {
-    return m_qmToBs->ConvertQMParametr( parametr );
+    return m_qmToBs.ConvertQMParametr( parametr );
 }
 
 QlParametrList QlQMInfoReader::ConvertParametrs(QMParametrList params)

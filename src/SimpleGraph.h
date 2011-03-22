@@ -78,6 +78,7 @@ public:
 };
 
 class SimpleGraphInfo : public BaseGraphInfo{
+    Q_OBJECT
 private:
     QString m_actions;
 public:
@@ -102,18 +103,17 @@ public:
 class SimpleGraph : public BaseGraph
 {
     Q_OBJECT
-
-private:
-    QString m_script;
+//private:
+//    QString m_script;
 public:
     explicit SimpleGraph(QObject *parent = 0);
 
-    void setScript( QString value) { m_script = value; }
+//    void setScript( QString value) { m_script = value; }
 //    QString name( void ){ return m_name;}
 //    void setName( QString value ){ m_name = value; }
 //    QString description( void ){ return m_description; }
 //    void setDescription( QString value ){ m_description = value; }
-    QString script() { return m_script; }
+//    QString script() { return m_script; }
 };
 
 #endif // SIMPLEGRAPH_H

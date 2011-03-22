@@ -8,6 +8,11 @@
 #include "BaseGraph.h"
 #include "VerDialog.h"
 #include "EdgeDialog.h"
+#include "BaseWidgets.h"
+#include "SimpleEdgeWidget.h"
+#include "SimpleVerWidget.h"
+#include "QlVerWidget.h"
+#include "QlEdgeWidget.h"
 
 #include "QuestActionsDialog.h"
 #include "QuestSettingsDialog.h"

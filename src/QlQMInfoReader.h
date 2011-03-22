@@ -10,7 +10,7 @@
 
 class QlQMInfoReader : public AbstractQMInfoReader{
 private:
-    QMScriptToBsConverter * m_qmToBs;
+    QMScriptToBsConverter m_qmToBs;
 public:
     BaseVerInfo * ReadVerInfo( QMLocation * location );
     virtual BaseEdgeInfo * ReadEdgeInfo( QMPath * path );

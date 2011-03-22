@@ -10,6 +10,9 @@ private:
     QlLocationTexts * m_locationTexts;
     BlockScript * m_actions;
 public:
+    QlVerInfo(  QString id, QObject * parent = 0 ):
+        BaseVerInfo(id, parent){}
+
     QlVerInfo( QlLocationTexts * locationTexts, BlockScript * actions, VerType verType, QString id, QObject * parent = 0 ):
         m_locationTexts(locationTexts), m_actions(actions), BaseVerInfo(verType, id, parent){}
 
@@ -44,6 +47,9 @@ private:
     BsExpression * m_expression;
     BlockScript * m_actions;
 public:
+    QlEdgeInfo( QString id, QObject * parent = 0 ):
+        BaseEdgeInfo(id, parent)
+    {}
     QlEdgeInfo(QString text, QString question, BsExpression * expression, BlockScript * actions, QString id, QObject * parent = 0 )
         :m_text(text), m_question( question ), m_expression( expression), m_actions( actions ), BaseEdgeInfo(id, parent){}
 

@@ -18,6 +18,7 @@ int EdgeDialog::ShowEdge(BaseEdge *edge)
 {
     m_edge = edge;
     ui->edgeWidget->ShowEdge( edge );
+    exec();
 }
 void EdgeDialog::buttonboxAccepted()
 {

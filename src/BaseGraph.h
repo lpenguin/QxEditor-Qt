@@ -5,6 +5,7 @@
 //#include "Edge.h"
 //#include "Ver.h"
 
+
 class BaseInfo;
 class BaseVer;
 class BaseGraphObject;

@@ -3,6 +3,7 @@
 QMGraphReader::QMGraphReader( AbstractQMInfoReader * infoReader ):
     m_infoReader( infoReader )
 {
+
 }
 
 BaseGraph * QMGraphReader::ReadGraph(const QString & filename, BaseGraph * graph ){
@@ -14,9 +15,10 @@ BaseGraph * QMGraphReader::ReadGraph(const QString & filename, BaseGraph * graph
         qDebug()<<QObject::tr("Error in loading graph: %1").arg(reader.errorString());
         return 0;
     }
+    ReadGraphInfo();
     ReadVers();
     ReadEdges();
-    ReadGraphInfo();
+    return m_graph;
 }
 
 void QMGraphReader::ReadVers()

@@ -79,6 +79,7 @@ BsUserString * QMScriptToBsConverter::ConvertQMEquation(QString equation)
 void QMScriptToBsConverter::setQmGlobals(QMParametrList qmGlobals)
 {
     BsVariable * var;
+    m_qmGlobals = qmGlobals;
     foreach( QMParametr * par, qmGlobals){
         var = ConvertQMParametrToVariable( par );
         m_globals.append( var);
