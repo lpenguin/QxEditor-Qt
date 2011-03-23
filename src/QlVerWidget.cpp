@@ -22,6 +22,7 @@ void QlVerWidget::ShowVer(BaseVer *ver)
         ui->actionsEdit->setPlainText( m_converter->ConvertBlockSript(info->actions()));
 //        ui->verIdEdit->setText( info->id() );
         ui->textEdit->setPlainText(info->locationTexts()->firstText());
+        ui->initEdit->setPlainText( m_converter->ConvertQlLocationTexts( info->locationTexts() ) );
 //        type2radio( info->verType());
     }
 }

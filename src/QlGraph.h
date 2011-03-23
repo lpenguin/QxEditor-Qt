@@ -17,16 +17,19 @@ public:
     }
 
     QlVerInfo( QlLocationTexts * locationTexts, BlockScript * actions, VerType verType, QString id, QObject * parent = 0 ):
-        m_locationTexts(locationTexts), m_actions(actions), BaseVerInfo(verType, id, parent){}
+         BaseVerInfo(verType, id, parent){
+        setLocationsText( locationTexts );
+        setActions( actions );
+    }
 
     void setLocationsText(QlLocationTexts * locationTexts ){
-        m_locationTexts = locationTexts;
+        SETPA( locationTexts )
     }
 //    void setVerType(VerType verType){
 //        m_verType = verType;
 //    }
     void setActions( BlockScript * actions ){
-        m_actions = actions;
+        SETPA( actions )
     }
 
     QlLocationTexts * locationTexts( ) const{
@@ -36,10 +39,10 @@ public:
     BlockScript * actions( ) const{
         return m_actions;
     }
-    ~QlVerInfo(){
-        delete m_locationTexts;
-        delete m_actions;
-    }
+//    ~QlVerInfo(){
+//        delete m_locationTexts;
+//        delete m_actions;
+//    }
 
 //    VerType verType( ) const{
 //        return m_verType;
@@ -53,23 +56,21 @@ private:
     QString m_question;
     BsExpression * m_expression;
     BlockScript * m_actions;
+    QlPathStatementList m_pathStatements;
 public:
     QlEdgeInfo( QString id, QObject * parent = 0 )
         :BaseEdgeInfo(id, parent )
     {
-        m_expression = new BsNull();
-        m_actions = new BlockScript();
-        m_expression->setParent( this );
-        m_actions->setParent( this );
+        setExpression( new BsNull );
+        setActions( new BlockScript );
     }
 
 
-    QlEdgeInfo(QString text, QString question, BsExpression * expression, BlockScript * actions, QString id, QObject * parent = 0 )
-        :m_text(text), m_question( question ),  BaseEdgeInfo(id, parent){
-        m_expression = expression;
-        m_actions = actions;
-        m_expression->setParent( this );
-        m_actions->setParent( this );
+    QlEdgeInfo(QString text, QString question, BsExpression * expression, BlockScript * actions, QlPathStatementList pathStatements, QString id, QObject * parent = 0 )
+        :m_text(text), m_question( question ), BaseEdgeInfo(id, parent){
+        setExpression( expression );
+        setActions( actions );
+        setPathStatements( pathStatements );
     }
 
     void setText(QString text ){
@@ -81,11 +82,11 @@ public:
     }
 
     void setExpression( BsExpression * expression ){
-        m_expression = expression;
+        SETPA( expression )
     }
 
     void setActions( BlockScript * actions ){
-        m_actions = actions;
+        SETPA( actions )
     }
 
     BsExpression * expression() const {
@@ -102,6 +103,14 @@ public:
 
     BlockScript * actions( ) const{
         return m_actions;
+    }
+
+    QlPathStatementList pathStatements() const{
+        return m_pathStatements;
+    }
+
+    void setPathStatements( QlPathStatementList pathStatements){
+        SETLA( pathStatements )
     }
 };
 

@@ -25,6 +25,7 @@ BaseEdgeInfo * QlQMInfoReader::ReadEdgeInfo(QMPath *path)
                           path->question,
                           expr,
                           ConvertActions( path->actions ),
+                          ConvertPathStatements( path ),
                           QString("P")+QString::number(path->pathNumber) );
 }
 
@@ -43,7 +44,7 @@ QlLocationTexts * QlQMInfoReader::ConvertLocationTexts(QMLocation *location)
         expr = new BsUserString(location->textFormula);
     else
         expr = new BsNull();
-    return new QlLocationTexts( location->texts, expr);
+    return new QlLocationTexts(QString("L%1").arg(location->locNumber), location->texts, expr);
 }
 
 BlockScript * QlQMInfoReader::ConvertActions(QMActionList actions)
@@ -96,3 +97,18 @@ QlParametrList QlQMInfoReader::ConvertParametrs(QMParametrList params)
     }
     return res;
 }
+
+QlPathStatementList QlQMInfoReader::ConvertPathStatements(QMPath *path)
+{
+    QlPathStatementList result;
+    QString id = QString("P%1").arg(path->pathNumber);
+    result << new QlPathPriority( id, path->priority)
+           << new QlPathShowOrder(id, path->showOrder)
+           << new QlPathPassability(id, path->prohodimost );
+    return result;
+}
+
+//QString QlQMInfoReader::pathId(QMPath *path)
+//{
+//    return QString("P%1").arg(path->pathNumber);
+//}

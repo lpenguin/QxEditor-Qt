@@ -18,11 +18,13 @@ public:
 private:
     QlLocationTexts * ConvertLocationTexts(QMLocation * location);
 
+    QlPathStatementList ConvertPathStatements( QMPath * path );
     QlParametrList ConvertParametrs(QMParametrList params );
     QlParametr * ConvertParametr( QMParametr * parametr);
     BlockScript * ConvertActions(QMActionList actions);
     BsExpression * ConvertConditions(QMConditionList conditions);
     BaseVerInfo::VerType ConvertLocationType(QMLocation::QMLocationType type);
+//    QString pathId( QMPath * path );
 };
 
 #endif // QLQMINFOREADER_H

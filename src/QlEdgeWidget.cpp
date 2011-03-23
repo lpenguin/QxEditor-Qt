@@ -23,7 +23,7 @@ void QlEdgeWidget::ShowEdge(BaseEdge *edge)
         ui->conditionsEdit->setPlainText( m_converter->ConvertBsConditionStatement(info->expression()));
         ui->textEdit->setPlainText( info->text());
         ui->questionEdit->setPlainText( info->question());
-
+        ui->initEdit->setPlainText( m_converter->ConvertQlPathStatementList( info->pathStatements() ) );
 //        ui->edgeIdEdit->setText(info->id());
     }
 }

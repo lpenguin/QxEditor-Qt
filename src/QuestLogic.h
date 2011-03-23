@@ -11,13 +11,15 @@ class QlShowVariable;
 class QlLocationTexts;
 class QlParamStatement;
 class QlParametr;
+class QlPathStatement;
 
 typedef QList<QlParamStatement *> QlParamStatementList;
 typedef QList<QlParametr *> QlParametrList;
+typedef QList<QlPathStatement * > QlPathStatementList;
 
 namespace QlType{
     enum _t{
-        Constraint = BsObject::UserType + 1, Trigger, ShowVariable, BoundTrigger, ParamStatement, Parametr, LocationTexts
+        Constraint = BsObject::UserType + 1, Trigger, ShowVariable, BoundTrigger, ParamStatement, Parametr, LocationTexts, PathPriority, PathPassability, PathShowOrder
     };
 }
 
@@ -131,13 +133,23 @@ class QlLocationTexts : public BsStatement{
 private:
     QStringList m_texts;
     BsExpression * m_expr;
+    QString m_locationId;
 public:
+    QString locationId() const {
+        return m_locationId;
+    }
+
+    void setLocationId( QString locationId ) {
+        m_locationId = locationId;
+    }
+
     QString firstText() const{
         if( m_texts.count() )
             return m_texts[0];
         else return QString("");
     }
-    QlLocationTexts( QStringList texts = QStringList (), BsExpression * expr = new BsNull ){
+    QlLocationTexts( QString locationId = QString(), QStringList texts = QStringList (), BsExpression * expr = new BsNull ){
+        setLocationId( locationId );
         setTexts( texts );
 //        if(! expr )
 //            expr = new BsExpression();
@@ -195,6 +207,78 @@ public:
 
     int type() const {
         return QlType::Parametr;
+    }
+};
+
+class QlPathStatement : public BsStatement{
+private:
+    QString m_pathId;
+public:
+    QlPathStatement( QString pathId = QString() ):
+        m_pathId(pathId){}
+    QString pathId() const{
+        return m_pathId;
+    }
+
+    void setPathId( QString pathId ){
+        m_pathId = pathId;
+    }
+};
+
+class QlPathPriority : public QlPathStatement{
+private:
+    qreal m_priority;
+public:
+    QlPathPriority( QString pathId  = QString(), qreal priority = 0):
+        QlPathStatement( pathId ), m_priority( priority ){}
+
+    qreal priority() const{
+        return m_priority;
+    }
+
+    void setPriority( qreal priority ){
+        m_priority = priority;
+    }
+    virtual int type() const{
+        return QlType::PathPriority;
+    }
+};
+
+class QlPathShowOrder : public QlPathStatement{
+private:
+    qint32 m_showOrder;
+public:
+    QlPathShowOrder( QString pathId  = QString(),  qint32 showOrder = 0):
+        QlPathStatement( pathId ), m_showOrder( showOrder ){}
+
+    qint32 showOrder() const{
+        return m_showOrder;
+    }
+
+    void setShowOrder( qreal showOrder ){
+        m_showOrder = showOrder;
+    }
+    virtual int type() const{
+        return QlType::PathShowOrder;
+    }
+};
+
+class QlPathPassability : public QlPathStatement{
+private:
+    qint32 m_passability;
+public:
+    QlPathPassability( QString pathId,  qint32 passability = 0):
+        QlPathStatement( pathId ), m_passability( passability ){}
+
+    qint32 passability() const{
+        return m_passability;
+    }
+
+    void setPassability( qreal passability ){
+        m_passability = passability;
+    }
+    virtual int type() const{
+        return QlType::PathPassability;
     }
 };
 

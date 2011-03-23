@@ -243,6 +243,35 @@ QString BsToTagConverter::ParametrTag(QlParametr *par)
     return QString("ql.param[%1]").arg(VariableTag(par->var()));
 }
 
+QString BsToTagConverter::LocationTextsTag(QlLocationTexts *texts)
+{
+    return QString("ql.texts['%1', %2, ['%3']]")
+            .arg(texts->locationId())
+            .arg(ExpressionTag( texts->expr()))
+            .arg(texts->texts().join("','"));
+}
+
+QString BsToTagConverter::PathPriorityTag(QlPathPriority *prior)
+{
+    return QString("ql.prior['%1', %2]")
+            .arg(prior->pathId())
+            .arg(prior->priority());
+}
+
+QString BsToTagConverter::PathPassabilityTag(QlPathPassability *pass)
+{
+    return QString("ql.pass['%1', %2]")
+            .arg(pass->pathId())
+            .arg(pass->passability());
+}
+
+QString BsToTagConverter::PathShowOrderTag(QlPathShowOrder *order)
+{
+    return QString("ql.showord['%1', %2]")
+            .arg(order->pathId())
+            .arg(order->showOrder());
+}
+
 
 
 

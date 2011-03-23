@@ -214,30 +214,30 @@ void GraphView::AddEdge( BaseEdge * edge, QPointF pos, QPointF endPoint ){
 	AppendEdge( edge, pos, endPoint );
 	m_graph->AddEdge( edge );
 }
-void GraphView::Load( const QString & filename, int type  ){
+void GraphView::Load( const QString & filename, AbstractGraphReader * reader  ){
         CleanGraph();
         m_graph->Clean();
         //m_graph->Load( xml );
-        if( type == JSONGraphReaderType ){
-            JSONGraphReader reader;
-            m_graph = reader.ReadGraph(filename);
-        }else if( type == QMGraphReaderType ){
-            QMGraphReader reader;
-//            if( QMessageBox::question(this, tr("Select params count"), tr("Choose params count"), QString("48"), QString("24") ))
-//                reader.setParamsCount(48);
-//            else
-//                reader.setParamsCount(24);
-            QlQMInfoReader * infoReader =  new QlQMInfoReader();
-            reader.setReader( infoReader );
-            m_graph = reader.ReadGraph(filename);
-        }
+        m_graph = reader->ReadGraph(filename);
+//        if( type == JSONGraphReaderType ){
+//            JSONGraphReader reader;
+//            m_graph = reader.ReadGraph(filename);
+//        }else if( type == QMGraphReaderType ){
+//            QMGraphReader reader;
+////            if( QMessageBox::question(this, tr("Select params count"), tr("Choose params count"), QString("48"), QString("24") ))
+////                reader.setParamsCount(48);
+////            else
+////                reader.setParamsCount(24);
+//            QlQMInfoReader * infoReader =  new QlQMInfoReader();
+//            reader.setReader( infoReader );
+//            m_graph = reader.ReadGraph(filename);
+//        }
         if( m_graph )
             LoadGraph( m_graph );
 }
     
-void GraphView::Save(const QString & filename){
-    JSONGraphWriter writer( new SimpleJSONIngoWriter );
-    writer.WriteGraph(m_graph, filename);
+void GraphView::Save(const QString & filename, AbstractGraphWriter * writer){
+    writer->WriteGraph(m_graph, filename);
 }
 
 int GraphView::Curvature(EdgeItem * edge)

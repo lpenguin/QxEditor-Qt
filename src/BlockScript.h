@@ -3,7 +3,7 @@
 
 #include <QObject>
 
-#define ISLOCAL( a ) ( a->type() != BsObject::Variable )
+#define ISLOCAL( a ) ( /*a->type() != BsObject::Variable*/ 1 )
 #define SETPARENT( a ) if( a && ISLOCAL(a)) a->setParent( this );
 #define SETP(a, b) { \
     a = b; \
@@ -54,7 +54,7 @@ public:
 //        QObject( parent ){}
     virtual int type() const = 0;
     enum  BsType{
-        Variable, Action, Operator, Condition, Value, Range,/* List,*/ Function,  FunctionCall, If, UserString, Script, VariableDefinition, Null, UserType
+        Default, Variable, Action, Operator, Condition, Value, Range,/* List,*/ Function,  FunctionCall, If, UserString, Script, VariableDefinition, Null, UserType
     };
     enum  BsOperation{
            Addition, Substraction, Multiplication, Division, Show, Hide, None, Mov
@@ -63,7 +63,8 @@ public:
         return QString("'%1'").arg(text);
     }
     bool isLocal( BsObjectP obj ){
-        return obj->type() != BsObject::Variable;
+        return 1;
+//        return obj->type() != BsObject::Variable;
     }
 
 //    void set( BsObjectP & obj, BsObjectP value );

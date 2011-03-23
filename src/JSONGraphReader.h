@@ -35,6 +35,7 @@ public:
     JSONGraphReader( AbstractJSONInfoReader * infoReader = 0);
     virtual BaseGraph * ReadGraph(const QString & filename, BaseGraph * graph = 0);
     virtual int type() const { return JSONGraphReaderType; };
+    void setInfoReader( AbstractJSONInfoReader * infoReader );
 private:
     BaseVer * LoadVer( QScriptValue value );
     void LoadVers( BaseGraph * graph, QScriptValue value );

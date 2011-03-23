@@ -33,6 +33,11 @@ public:
     QString BoundTriggerTag( QlBoundTrigger * trig);
     QString ShowVariableTag( QlShowVariable * sv);
     QString ParametrTag(QlParametr * par);
+    QString LocationTextsTag( QlLocationTexts * texts );
+    QString PathPriorityTag( QlPathPriority * prior);
+    QString PathPassabilityTag( QlPathPassability * pass);
+    QString PathShowOrderTag( QlPathShowOrder * order);
+
     QString ExpressionTypeToString(BsObject::BsOperation operation );
     QString ActionTypeToString(BsObject::BsOperation operation );
     QString ConditionTypeToString(BsCondition::BsConditionType condition );

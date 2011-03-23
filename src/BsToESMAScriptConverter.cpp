@@ -37,6 +37,13 @@ QString BsToESMAScriptConverter::ConvertBsStatement(BsStatement *instruction)
         return ConvertQlShowVariable( (QlShowVariable * ) instruction );
     case QlType::BoundTrigger:
         return ConvertQlBoundTrigger( (QlBoundTrigger *) instruction );
+    case QlType::PathPassability:
+        return ConvertQlPathPassability( (QlPathPassability*) instruction);
+    case QlType::PathPriority:
+        return ConvertQlPathPriority( (QlPathPriority*) instruction);
+    case QlType::PathShowOrder:
+        return ConvertQlPathShowOrder( (QlPathShowOrder*) instruction);
+
     default:
         return QString("[ERROR]");
     }
@@ -123,6 +130,8 @@ QString BsToESMAScriptConverter::ConvertBsExpression(BsExpression *obj)
         return ConvertBsRange(( BsRange * )obj );
     case BsObject::UserString:
         return ConvertBsUserString( (BsUserString*)obj);
+    case BsObject::Null:
+        return QString();
     default:
         return QString("[ERROR]");
     }
@@ -368,6 +377,61 @@ QString BsToESMAScriptConverter::ConvertQlParametrList(QlParametrList list)
     }
     return result.join("\n");
 }
+
+QString BsToESMAScriptConverter::ConvertQlLocationTexts(QlLocationTexts *texts)
+{
+    QStringList result;
+    result << m_tagConverter.TagStart() + m_tagConverter.LocationTextsTag( texts );
+    result << QString("AddLocationTexts( '%1', function(){ return %2; }, ['%3'] );")
+              .arg( texts->locationId() )
+              .arg(ConvertBsExpression( texts->expr()))
+              .arg( texts->texts().join("\",\""));
+    result << m_tagConverter.TagEnd();
+    return result.join("\n");
+}
+
+QString BsToESMAScriptConverter::ConvertQlPathPriority(QlPathPriority *priority)
+{
+    QStringList result;
+    result << m_tagConverter.TagStart() + m_tagConverter.PathPriorityTag( priority );
+    result << QString("SetPathPriority( '%1', %2 );")
+              .arg( priority->pathId() )
+              .arg( priority->priority() );
+    result << m_tagConverter.TagEnd();
+    return result.join("\n");
+}
+
+QString BsToESMAScriptConverter::ConvertQlPathShowOrder(QlPathShowOrder *order)
+{
+    QStringList result;
+    result << m_tagConverter.TagStart() + m_tagConverter.PathShowOrderTag( order );
+    result << QString("SetPathShowOrder( '%1', %2 );")
+              .arg( order->pathId() )
+              .arg( order->showOrder() );
+    result << m_tagConverter.TagEnd();
+    return result.join("\n");
+}
+
+QString BsToESMAScriptConverter::ConvertQlPathPassability(QlPathPassability *pass)
+{
+    QStringList result;
+    result << m_tagConverter.TagStart() + m_tagConverter.PathPassabilityTag( pass );
+    result << QString("SetPathPassability( '%1', %2 );")
+              .arg( pass->pathId() )
+              .arg( pass->passability() );
+    result << m_tagConverter.TagEnd();
+    return result.join("\n");
+}
+
+QString BsToESMAScriptConverter::ConvertQlPathStatementList(QlPathStatementList list)
+{
+    QStringList result;
+    foreach( QlPathStatement * stat, list){
+        result << ConvertBsStatement( stat );
+    }
+    return result.join("\n");
+}
+
 
 //QString BsToESMAScriptConverter::ConvertQlParametrStatement(QlParamStatement *statement)
 //{

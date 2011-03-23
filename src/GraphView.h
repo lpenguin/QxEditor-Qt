@@ -40,8 +40,8 @@ public:
     ~GraphView();
     void CleanGraph();
     void LoadGraph(BaseGraph * graph);
-    void Load(const QString & filename, int type = JSONGraphReaderType);
-    void Save(const QString & filename);
+    void Load(const QString & filename, AbstractGraphReader * reader);
+    void Save(const QString & filename, AbstractGraphWriter * writer);
     BaseGraph * graph() { return m_graph; }
     GraphView( QWidget * parent = 0  );
     void AddVer( BaseVer * ver, QPointF pos);

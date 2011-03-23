@@ -56,7 +56,11 @@ HEADERS = \
     src/EdgeDialog.h \
     src/BaseWidgets.h \
     src/QlGraphWidget.h \
-    src/SimpleGraphWidget.h
+    src/SimpleGraphWidget.h \
+    src/QlGraphWidget.h \
+    src/SimpleGraphWidget.h \
+    src/QlJSONInfoWriter.h \
+    src/ECMAScriptToBsConverter.h
 SOURCES = \
     src/main.cpp \
     src/GraphView.cpp \
@@ -93,7 +97,9 @@ SOURCES = \
     src/EdgeDialog.cpp \
     src/BaseWidgets.cpp \
     src/QlGraphWidget.cpp \
-    src/SimpleGraphWidget.cpp
+    src/SimpleGraphWidget.cpp \
+    src/QlJSONInfoWriter.cpp \
+    src/ECMAScriptToBsConverter.cpp
 TEMPLATE = app
 INCLUDEPATH += src
 OTHER_FILES += 111.txt \

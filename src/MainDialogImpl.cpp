@@ -153,9 +153,16 @@ void MainDialogImpl::loadFile(const QString &fileName)
 
     //graphView->Load(in);
     if( fileName.endsWith(".json")){
-        graphView->Load( fileName, JSONGraphReaderType );
+        JSONGraphReader * reader = new JSONGraphReader;
+        if( m_graphType == Simple )
+            reader->setInfoReader( new SimpleJSONInfoReader );
+//        else if( m_graphType == QuestLogic )
+//            jsonReader->setInfoReader( new SimpleJSONInfoReader );
+        graphView->Load( fileName, reader );
     }else if(fileName.endsWith(".qm")){
-        graphView->Load( fileName, QMGraphReaderType );
+        QMGraphReader * reader = new QMGraphReader;
+        reader->setReader( new QlQMInfoReader );
+        graphView->Load( fileName, reader );
     }else{
         QApplication::restoreOverrideCursor();
         statusBar()->showMessage(tr("Unknown extention"), 2000);
@@ -181,8 +188,14 @@ void MainDialogImpl::saveFile(const QString &fileName)
 
     QTextStream out(&file);
     QApplication::setOverrideCursor(Qt::WaitCursor);
+    JSONGraphWriter * writer = new JSONGraphWriter;
 
-    graphView->Save(fileName);
+    if( m_graphType == Simple )
+        writer->setInfoWriter( new SimpleJSONInfoWriter );
+    else if( m_graphType == QuestLogic )
+        writer->setInfoWriter( new QlJSONInfoWriter );
+
+    graphView->Save(fileName, writer);
     //out << textEdit->toPlainText();
     QApplication::restoreOverrideCursor();
 

@@ -11,9 +11,13 @@ public:
     QString ConvertBsConditionStatement( BsExpression *object );
     QString ConvertQlParametr(QlParametr * parametr);
     QString ConvertQlParametrList(QlParametrList list);
+    QString ConvertQlLocationTexts( QlLocationTexts * texts );
+    QString ConvertQlPathStatementList( QlPathStatementList list );
 private:
-    QString ConvertBsStatements( BsStatementList instructions);
-    QString ConvertBsStatement( BsStatement * instruction );
+    QString ConvertBsExpression(BsExpression *obj);
+    QString ConvertBsStatements(BsStatementList instructions);
+    QString ConvertBsStatement(BsStatement *instruction);
+
     QString ConvertBsAction( BsAction * action );
     QString ConvertBsIf( BsIf * if_ );
     QString ConvertBsFunction( BsFunction * function );
@@ -23,7 +27,6 @@ private:
     QString ConvertBsVariable( BsVariable * variable );
     QString ConvertBsValue( BsValue * value );
     QString ConvertBsOperator( BsOperator * expression );
-    QString ConvertBsExpression( BsExpression * obj );
     QString ConvertBsRange( BsRange * range );
     QString ConvertBsCondition( BsCondition * condition );
 
@@ -31,6 +34,11 @@ private:
     QString ConvertQlTrigger( QlTrigger * trig);
     QString ConvertQlBoundTrigger( QlBoundTrigger * trig);
     QString ConvertQlShowVariable( QlShowVariable * sv);
+
+    QString ConvertQlPathPriority( QlPathPriority * priority );
+    QString ConvertQlPathShowOrder( QlPathShowOrder * order );
+    QString ConvertQlPathPassability( QlPathPassability * pass );
+
 //    QString ConvertQlParametrStatement(QlParamStatement * statement );
 
     QString ExpressionTypeToString(BsObject::BsOperation operation );

@@ -123,3 +123,8 @@ BaseGraphInfo * SimpleJSONInfoReader::ReadGraphInfo(QScriptValue value)
                                                  );
     return info;
 }
+
+void JSONGraphReader::setInfoReader(AbstractJSONInfoReader *infoReader)
+{
+    m_infoReader = infoReader;
+}

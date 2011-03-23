@@ -56,7 +56,7 @@ QString JSONGraphWriter::Ver2JSON(BaseVer * ver){
     return "{"+props.join(",\n   ")+"}";
 }
 
-QStringList SimpleJSONIngoWriter::VerInfo2JSON(BaseInfo *info)
+QStringList SimpleJSONInfoWriter::VerInfo2JSON(BaseVerInfo *info)
 {
     QStringList props;
     SimpleVerInfo * simpleInfo = (SimpleVerInfo *)info;
@@ -67,7 +67,7 @@ QStringList SimpleJSONIngoWriter::VerInfo2JSON(BaseInfo *info)
     return props;
 }
 
-QStringList SimpleJSONIngoWriter::EdgeInfo2JSON(BaseInfo *info)
+QStringList SimpleJSONInfoWriter::EdgeInfo2JSON(BaseEdgeInfo *info)
 {
     QStringList props;
     SimpleEdgeInfo * simpleInfo = (SimpleEdgeInfo *)info;
@@ -80,7 +80,7 @@ QStringList SimpleJSONIngoWriter::EdgeInfo2JSON(BaseInfo *info)
     return props;
 }
 
-QStringList SimpleJSONIngoWriter::GraphInfo2JSON(BaseInfo *info)
+QStringList SimpleJSONInfoWriter::GraphInfo2JSON(BaseGraphInfo *info)
 {
     QStringList props;
     SimpleGraphInfo * simpleInfo = (SimpleGraphInfo *)info;
