@@ -36,7 +36,11 @@ BaseGraph * JSONGraphReader::ReadGraph(const QString & filename, BaseGraph * gra
 
         LoadVers(graph, sc);
         LoadEdges(graph, sc);
-        graph->setInfo( m_infoReader->ReadGraphInfo( sc ));
+        try{
+            graph->setInfo( m_infoReader->ReadGraphInfo( sc ));
+        }catch(ReaderError & e){
+            qDebug()<<e.message();
+        }
         file.close();
 
         return graph;
@@ -53,8 +57,12 @@ void JSONGraphReader::LoadVers(  BaseGraph * graph, QScriptValue value ){
         it.next();
         if( ! it.value().isObject() )
             continue;
-        BaseVer * ver = LoadVer(it.value());
-        graph->AddVer(ver);
+        try{
+            BaseVer * ver = LoadVer(it.value());
+            graph->AddVer(ver);
+        }catch(ReaderError & e){
+            qDebug()<<e.message();
+        }
     }
 }
 
@@ -85,8 +93,12 @@ void JSONGraphReader::LoadEdges( BaseGraph * graph, QScriptValue value ){
             edgeIt.next();
             if( !edgeIt.value().isObject() )
                 continue;
-            BaseEdge * edge = LoadEdge( graph, edgeIt.value(),v);
-            graph->AddEdge(edge);
+            try{
+                BaseEdge * edge = LoadEdge( graph, edgeIt.value(),v);
+                graph->AddEdge(edge);
+            }catch(ReaderError & e){
+                qDebug()<<e.message();
+            }
         }
     }
 }

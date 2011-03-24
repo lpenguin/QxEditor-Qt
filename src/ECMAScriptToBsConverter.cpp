@@ -4,9 +4,13 @@ ECMAScriptToBsConverter::ECMAScriptToBsConverter()
 {
     tagStart = "//!bs:";
     tagEnd = "//!bs:end";
+    expTagStart = "/*!bs:";
+    expTagEnd = ":!bs*/";
+
     FillOperatorTypes();
     FillActionTypes();
     FillConditionTypes();
+    FillCharMap();
 }
 
 BlockScript * ECMAScriptToBsConverter::ConvertScript(const QStringList & list) throw( ParseError )
@@ -16,6 +20,62 @@ BlockScript * ECMAScriptToBsConverter::ConvertScript(const QStringList & list) t
     script->AddStatements( statements );
     return script;
 }
+
+BsExpression * ECMAScriptToBsConverter::ConvertExpressionStatement(const QString &str) throw( ParseError )
+{
+    qint32 startPos = str.indexOf( expTagStart );
+    if( startPos == -1 )
+        throw ParseError(QString("Missing tag start: %1").arg(str), ParseError::MissingExpressionTagStart);
+    startPos += expTagStart.count();
+    qint32 endPos = str.indexOf( expTagEnd );
+
+    if( endPos == -1 )
+        throw ParseError(QString("Missing tag end: %1").arg(str), ParseError::MissingExpressionTagEnd);
+    QString tag = str.mid( startPos, endPos - startPos );
+    return ConvertExpression( tag );
+}
+
+
+QlLocationStatementList ECMAScriptToBsConverter::ConvertLocationStatements(const QStringList &list)  throw( ParseError )
+{
+    QlLocationStatementList result;
+    BsStatementList statements = ConvertStatements( list, 0, list.count() );
+    foreach( BsStatement * st, statements ){
+        if( st->type() == QlType::LocationTexts )
+            result << ( QlLocationStatement * )st;
+    }
+
+    return result;
+}
+
+QlPathStatementList ECMAScriptToBsConverter::ConvertPathStatementList(const QStringList &list) throw( ParseError )
+{
+    QlPathStatementList result;
+    BsStatementList statements = ConvertStatements( list, 0, list.count() );
+    foreach( BsStatement * st, statements ){
+        if( st->type() == QlType::PathPassability )
+            result << ( QlPathPassability * )st;
+        else if( st->type() == QlType::PathPriority )
+            result << ( QlPathPriority * )st;
+        else if( st->type() == QlType::PathShowOrder )
+            result << ( QlPathShowOrder * )st;
+    }
+
+    return result;
+}
+
+QlParametrList ECMAScriptToBsConverter::ConvertParametrList(const QStringList &list) throw( ParseError )
+{
+    QlParametrList result;
+    BsStatementList statements = ConvertStatements( list, 0, list.count() );
+    foreach( BsStatement * st, statements ){
+        if( st->type() == QlType::Parametr )
+            result << ( QlParametr * )st;
+    }
+
+    return result;
+}
+
 
 BsStatementList ECMAScriptToBsConverter::ConvertStatements(const QStringList &list, qint32 startIndex, qint32 endIndex)  throw( ParseError )
 {
@@ -39,7 +99,7 @@ BsStatementList ECMAScriptToBsConverter::ConvertStatements(const QStringList &li
 //    return "//!bs:end";
 //}
 
-qint32 ECMAScriptToBsConverter::FindTagEnd(const QStringList & list, qint32 startIndex) throw( ParseError )
+qint32 ECMAScriptToBsConverter::FindTagEnd(const QStringList & list, qint32 startIndex) const throw( ParseError )
 {
     qint32 tagCounter = 1, i;
     for( i = startIndex + 1; i < list.count() && tagCounter; i++ ){
@@ -62,7 +122,7 @@ qint32 ECMAScriptToBsConverter::tagType(QString tag)
 
 QString ECMAScriptToBsConverter::tagName(QString tag)
 {
-    return tag.replace( QRegExp("\(.*"), "");
+    return tag.replace( QRegExp("\\(.*"), "");
 }
 
 BsStatement * ECMAScriptToBsConverter::ConvertStatement(const QStringList &list, qint32 &startIndex) throw( ParseError )
@@ -70,6 +130,9 @@ BsStatement * ECMAScriptToBsConverter::ConvertStatement(const QStringList &list,
 //    BsStatement *
     QString line = list[startIndex];
     if( ! line.startsWith( tagStart ))
+        return 0;
+
+    if( line.startsWith( tagEnd ))
         return 0;
 
     line.replace(QRegExp(QString("^") + tagStart ), "");
@@ -132,14 +195,7 @@ QStringList ECMAScriptToBsConverter::tagArguments(const QString &tag)
     QString argStr = tag;
     argStr = argStr.replace( QRegExp("^[^\(]*"), "" );
     argStr = argStr.mid( 1 , argStr.count() - 2);
-    QStringList result;
-    int pos = 0, prev = 0 ;
-    while( (pos = FindNextComma( argStr, pos )) != -1 ){
-        result << argStr.mid( pos, pos - prev);
-        prev = pos;
-    }
-    return result;
-
+    return splitSmart( argStr );
 }
 
 BsExpression * ECMAScriptToBsConverter::ConvertExpression(const QString &tag)
@@ -259,6 +315,20 @@ void ECMAScriptToBsConverter::FillConditionTypes()
 
 }
 
+void ECMAScriptToBsConverter::FillCharMap()
+{
+    m_charMap.insert( "&comm;", ","  );
+    m_charMap.insert( "&lb;", "(");
+    m_charMap.insert( "&rb;", ")");
+    m_charMap.insert( "&lsb;", "[");
+    m_charMap.insert( "&rsb;", "]");
+    m_charMap.insert( "&nl;", "\n");
+    m_charMap.insert( "&rl;", "\r");
+    m_charMap.insert( "&tb;", "\t");
+    m_charMap.insert( "&sq;", "\'");
+    m_charMap.insert( "&dq;", "\"");
+}
+
 BsFunctionCall * ECMAScriptToBsConverter::ConvertFunctionCall( QStringList tags )
 {
     QString functionName = tags.takeFirst();
@@ -327,7 +397,8 @@ QlLocationTexts * ECMAScriptToBsConverter::ConvertLocationTexts( QStringList tag
     QString locationId = ConvertString( tags.takeFirst() );
     BsExpression * ex = ConvertExpression( tags.takeFirst() );
     QStringList texts, tagTextsContents;
-    tagTextsContents = tagArguments( tags.takeFirst() );
+    QString mid = midStr( tags.takeFirst(), 1, 1 );
+    tagTextsContents = splitSmart( mid );
     foreach( QString str, tagTextsContents )
         texts << ConvertString( str );
     return new QlLocationTexts( locationId, texts, ex );
@@ -349,7 +420,7 @@ QlShowVariable * ECMAScriptToBsConverter::ConvertShowVariable( QStringList tags 
 
 QlPathPassability * ECMAScriptToBsConverter::ConvertPathPassability(  QStringList tags )
 {
-    QString pathId = ConvertScript( tags.takeFirst() );
+    QString pathId = ConvertString( tags.takeFirst() );
     qint32 passability = tags.takeFirst().toInt();
     return new QlPathPassability(pathId, passability );
 }
@@ -357,14 +428,14 @@ QlPathPassability * ECMAScriptToBsConverter::ConvertPathPassability(  QStringLis
 
 QlPathPriority * ECMAScriptToBsConverter::ConvertPathPriority( QStringList tags )
 {
-    QString pathId = ConvertScript( tags.takeFirst() );
+    QString pathId = ConvertString( tags.takeFirst() );
     qreal priority = tags.takeFirst().toDouble();
     return new QlPathPriority(pathId, priority );
 }
 
 QlPathShowOrder * ECMAScriptToBsConverter::ConvertPathShowOrder( QStringList tags )
 {
-    QString pathId = ConvertScript( tags.takeFirst() );
+    QString pathId = ConvertString( tags.takeFirst() );
     qint32 showOrder = tags.takeFirst().toInt();
     return new QlPathShowOrder(pathId, showOrder );
 }
@@ -376,11 +447,12 @@ BsVariable * ECMAScriptToBsConverter::ConvertVariable(const QString &tag)
 
 BsValue * ECMAScriptToBsConverter::ConvertValue(const QString &tag)
 {
-    return new BsValue( tagArguments( tag ).takeFirst() )
+    return new BsValue( tagArguments( tag ).takeFirst() );
 }
 
 QString ECMAScriptToBsConverter::ConvertString(QString value)
 {
+    value = unpackSpecialChars( value );
     return value.replace(QRegExp("^\'"),"").replace(QRegExp("\'$"),"");
 }
 
@@ -414,41 +486,69 @@ QlParametr * ECMAScriptToBsConverter::ConvertParametr(QStringList tags, BsStatem
 //    sc
 //}
 
-qint32 ECMAScriptToBsConverter::FindQuoteEnd(const QString &str, qint32 startIndex) throw( ParseError )
+qint32 ECMAScriptToBsConverter::FindQuoteEnd(const QString &str, qint32 startIndex) const throw( ParseError )
 {
     for(qint32 i = startIndex + 1; i < str.count(); i++){
-        if( str[i] == "'" )
+        if( str[i] == '\'' )
             return i;
     }
-    throw( ParseError(QString("Missing quote end in %1").arg(str), ParseError::MissingQuoteEnd));
+    throw( ParseError(QString("Missing quote end in: %1 ( ==> %2 )").arg(str).arg(str.right( str.count() - startIndex )), ParseError::MissingQuoteEnd));
 }
 
-qint32 ECMAScriptToBsConverter::FindBracketEnd(const QString &str, qint32 startIndex) throw( ParseError )
+qint32 ECMAScriptToBsConverter::FindBracketEnd(const QString &str, qint32 startIndex) const throw( ParseError )
 {
     qint32 bracketCounter = 1, i;
     for(i = startIndex + 1; i < str.count() ; i++){
-        if( str[i] == "(" )
+        if( str[i] == '(' )
             bracketCounter++;
-        else if( str[i] == ")")
+        else if( str[i] == ')')
             bracketCounter--;
         if(!bracketCounter)
             return i;
     }
-    if( bracketCounter ) throw( ParseError(QString("Missing bracket end in %1").arg(str), ParseError::MissingBracketEnd));
+//    ParseError(QString("Missing quote end in: %1 ( ==> %2 )").arg(str).arg(str.truncate( startIndex ))
+    if( bracketCounter ) throw( ParseError(QString("Missing bracket end in %1 ( ==> %2 )").arg(str).arg(str.right( str.count() - startIndex )), ParseError::MissingBracketEnd));
 }
 
-qint32 ECMAScriptToBsConverter::FindNextComma(const QString &str, qint32 startIndex)
+qint32 ECMAScriptToBsConverter::FindNextComma(const QString &str, qint32 startIndex) const throw( ParseError )
 {
     for(qint32 i = startIndex; i < str.count(); i++){
-        if( str[i] == "," )
+        if( str[i] == ',' )
             return i;
-        else if( str[i]=="(" )
+        else if( str[i]== '(' )
             i = FindBracketEnd( str, i );
-        else if( str[i] == "'")
+        else if( str[i] == '\'')
             i = FindQuoteEnd( str, i );
     }
     return -1;
 }
 
+QString ECMAScriptToBsConverter::unpackSpecialChars(const QString &str) const
+{
+    QMapIterator<QString, QString> i(m_charMap);
+    QString s = str;
+    while(i.hasNext()){
+        i.next();
+        s = s.replace(i.key(), i.value());
+    }
+    return s;
+}
 
+QStringList ECMAScriptToBsConverter::splitSmart(const QString &str) const
+{
+    QStringList result;
+    int pos = 0, prev = 0 ;
+    while( (pos = FindNextComma( str, prev )) != -1 ){
+        result << str.mid( prev, pos - prev).trimmed();
+        prev = pos + 1;
+//        pos++;
+    }
+    result << str.mid( prev, str.count() - prev).trimmed();
+    return result;
+}
+
+QString ECMAScriptToBsConverter::midStr(const QString &str, qint32 left, qint32 right) const
+{
+    return str.mid( left, str.count() - right - 1);
+}
 

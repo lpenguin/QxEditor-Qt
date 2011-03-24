@@ -9,10 +9,12 @@ QStringList QlJSONInfoWriter::VerInfo2JSON(BaseVerInfo *info)
 {
     QStringList props;
     QlVerInfo * qlInfo = (QlVerInfo *)info;
+    QString text = qlInfo->firstText();
+    QString jText = Property2JSON("text", text);
     props<<Property2JSON("id", qlInfo->id())
             <<Property2JSON("actions", m_converter.ConvertBlockSript( qlInfo->actions() ))
-            <<Property2JSON("init", m_converter.ConvertQlLocationTexts( qlInfo->locationTexts() ))
-            <<Property2JSON("text", qlInfo->locationTexts()->firstText())
+            <<Property2JSON("init", m_converter.ConvertQlLocationStatementList( qlInfo->locationStatements() ))
+            <<Property2JSON("text", text)
             <<Property2JSON("type", Type2Str(qlInfo->verType()));
     return props;
 }

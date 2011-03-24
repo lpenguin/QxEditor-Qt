@@ -7,7 +7,8 @@
 class ParseError : std::exception {
 public:
     enum ErrorType{
-        Odinary, MissingStatementEnd, UnknownTag, InvalidStatement, MissingQuoteEnd, MissingBracketEnd
+        Odinary, MissingStatementEnd, UnknownTag, InvalidStatement, MissingQuoteEnd, MissingBracketEnd,
+        MissingExpressionTagStart, MissingExpressionTagEnd
     };
 
     ParseError( QString message = QString(), ErrorType errorType = Odinary ):
@@ -40,10 +41,15 @@ class ECMAScriptToBsConverter
 public:
     ECMAScriptToBsConverter();
     BlockScript * ConvertScript( const QStringList & list ) throw( ParseError );
-
+    QlLocationStatementList ConvertLocationStatements( const QStringList & list ) throw( ParseError );
+    QlPathStatementList ConvertPathStatementList( const QStringList & list ) throw( ParseError );
+    QlParametrList  ConvertParametrList( const QStringList & list ) throw( ParseError );
+    BsExpression *  ConvertExpressionStatement( const QString & str ) throw( ParseError );
 private:
     QString tagStart;
     QString tagEnd;
+    QString expTagStart;
+    QString expTagEnd;
 
     BsStatementList ConvertStatements( const QStringList & list, qint32 startIndex, qint32 endIndex ) throw( ParseError );
     BsStatement * ConvertStatement( const QStringList & list, qint32 & startIndex ) throw( ParseError );
@@ -72,10 +78,10 @@ private:
     BsValue * ConvertValue( const QString &tag );
 
     QString ConvertString(QString value );
-    qint32 FindTagEnd( const QStringList & list, qint32 startIndex = 0) throw( ParseError );
-    qint32 FindBracketEnd( const QString & str, qint32 startIndex = 0 ) throw (ParseError);
-    qint32 FindQuoteEnd( const QString & str, qint32 startIndex = 0 ) throw (ParseError);
-    qint32 FindNextComma( const QString & str, qint32 startIndex = 0 ) throw (ParseError);
+    qint32 FindTagEnd( const QStringList & list, qint32 startIndex = 0) const throw( ParseError );
+    qint32 FindBracketEnd( const QString & str, qint32 startIndex = 0 ) const throw (ParseError);
+    qint32 FindQuoteEnd( const QString & str, qint32 startIndex = 0 ) const throw (ParseError);
+    qint32 FindNextComma( const QString & str, qint32 startIndex = 0 ) const throw (ParseError);
 
     qint32 tagType( QString tag );
     QString tagName( QString tag );
@@ -83,16 +89,20 @@ private:
     BsObject::BsOperation ConvertActionOperation( const QString & operation );
     BsCondition::BsConditionType ConvertConditionType( const QString & condition );
     BsOperator::BsOperation ConvertOperationType( const QString & operation );
+    QString unpackSpecialChars( const QString & str ) const;
+    QStringList splitSmart( const QString & str ) const;
+    QString midStr( const QString & str, qint32 left, qint32 right = 0) const;
 
     QScriptValue parseTag( QString tag );
     void FillOperatorTypes();
     void FillActionTypes();
     void FillConditionTypes();
+    void FillCharMap();
 
     QMap<QString, BsObject::BsOperation> m_operatorTypes;
     QMap<QString, BsCondition::BsConditionType> m_conditionTypes;
     QMap<QString, BsObject::BsOperation> m_actionTypes;
-
+    QMap<QString, QString> m_charMap;
 
 };
 

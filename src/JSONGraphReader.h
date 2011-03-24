@@ -9,6 +9,8 @@
 #include <QtScript>
 #include <QMessageBox>
 
+BaseVerInfo::VerType Str2Type( QString type );
+
 enum eJSONGraphReaderType {
     JSONGraphReaderType = 1
 };

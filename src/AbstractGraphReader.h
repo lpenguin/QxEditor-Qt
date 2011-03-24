@@ -7,6 +7,25 @@
 
 class AbstractGraphReader;
 
+class ReaderError  {
+public:
+
+    ReaderError( QString message = QString() ):
+        m_message(message){}
+
+//    ~ParseError() throw() {}
+
+    QString message() const {
+        return m_message;
+    }
+
+    void setMessage( QString message ){
+        m_message = message;
+    }
+private:
+    QString m_message;
+};
+
 
 class AbstractGraphReader
 {

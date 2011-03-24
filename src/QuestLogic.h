@@ -12,10 +12,12 @@ class QlLocationTexts;
 class QlParamStatement;
 class QlParametr;
 class QlPathStatement;
+class QlLocationStatement ;
 
 typedef QList<QlParamStatement *> QlParamStatementList;
 typedef QList<QlParametr *> QlParametrList;
 typedef QList<QlPathStatement * > QlPathStatementList;
+typedef QList<QlLocationStatement * > QlLocationStatementList;
 
 namespace QlType{
     enum _t{
@@ -114,16 +116,25 @@ public:
     };
 private:
     BsVariable * m_var;
-    BoundType m_Boundtype;
+    BoundType m_boundtype;
     BsValue * m_value;
     QString m_text;
 public:
-    QlBoundTrigger( BsVariable * var, BsValue * value, )
-    BoundType boundType() const{ return m_Boundtype; }
+    QlBoundTrigger( BsVariable * var, BsValue * value, BoundType boundtype, QString text){
+        setVar( var );
+        setValue( value );
+        setBoundType( boundtype );
+        setText( text );
+    }
+    QlBoundTrigger(){
+
+    }
+
+    BoundType boundType() const{ return m_boundtype; }
     BsValue * value() const {return m_value;}
     QString text()const {return m_text;}
     BsVariable * var() const { return m_var; }
-    void setBoundType( BoundType boundType ){ m_Boundtype = boundType;}
+    void setBoundType( BoundType boundType ){ m_boundtype = boundType;}
     void setText( QString text ){ m_text = text;}
     void setValue( BsValue * value){ SETPA(value); }
     void setVar(BsVariable * var){
@@ -133,31 +144,41 @@ public:
 
 };
 
-class QlLocationTexts : public BsStatement{
+class QlLocationStatement : public BsStatement {
 private:
-    QStringList m_texts;
-    BsExpression * m_expr;
     QString m_locationId;
 public:
-    QString locationId() const {
+    QlLocationStatement( QString locationId = QString() ):
+        m_locationId(locationId){}
+    QString locationId() const{
         return m_locationId;
     }
 
-    void setLocationId( QString locationId ) {
+    void setLocationId( QString locationId ){
         m_locationId = locationId;
+    }
+};
+
+class QlLocationTexts : public QlLocationStatement{
+private:
+    QStringList m_texts;
+    BsExpression * m_expr;
+public:
+
+
+    QlLocationTexts( QString locationId = QString(), QStringList texts = QStringList (), BsExpression * expr = new BsNull ):
+        QlLocationStatement( locationId )
+    {
+        setTexts( texts );
+//        if(! expr )
+//            expr = new BsExpression();
+        setExpr( expr );
     }
 
     QString firstText() const{
         if( m_texts.count() )
             return m_texts[0];
         else return QString("");
-    }
-    QlLocationTexts( QString locationId = QString(), QStringList texts = QStringList (), BsExpression * expr = new BsNull ){
-        setLocationId( locationId );
-        setTexts( texts );
-//        if(! expr )
-//            expr = new BsExpression();
-        setExpr( expr );
     }
 
     void setTexts( QStringList texts){

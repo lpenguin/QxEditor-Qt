@@ -60,7 +60,8 @@ HEADERS = \
     src/QlGraphWidget.h \
     src/SimpleGraphWidget.h \
     src/QlJSONInfoWriter.h \
-    src/ECMAScriptToBsConverter.h
+    src/ECMAScriptToBsConverter.h \
+    src/QlJSONInfoReader.h
 SOURCES = \
     src/main.cpp \
     src/GraphView.cpp \
@@ -99,7 +100,8 @@ SOURCES = \
     src/QlGraphWidget.cpp \
     src/SimpleGraphWidget.cpp \
     src/QlJSONInfoWriter.cpp \
-    src/ECMAScriptToBsConverter.cpp
+    src/ECMAScriptToBsConverter.cpp \
+    src/QlJSONInfoReader.cpp
 TEMPLATE = app
 INCLUDEPATH += src
 OTHER_FILES += 111.txt \

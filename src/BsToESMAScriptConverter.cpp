@@ -43,7 +43,8 @@ QString BsToESMAScriptConverter::ConvertBsStatement(BsStatement *instruction)
         return ConvertQlPathPriority( (QlPathPriority*) instruction);
     case QlType::PathShowOrder:
         return ConvertQlPathShowOrder( (QlPathShowOrder*) instruction);
-
+    case QlType::LocationTexts:
+        return ConvertQlLocationTexts( (QlLocationTexts*) instruction );
     default:
         return QString("[ERROR]");
     }
@@ -427,6 +428,15 @@ QString BsToESMAScriptConverter::ConvertQlPathStatementList(QlPathStatementList 
 {
     QStringList result;
     foreach( QlPathStatement * stat, list){
+        result << ConvertBsStatement( stat );
+    }
+    return result.join("\n");
+}
+
+QString BsToESMAScriptConverter::ConvertQlLocationStatementList(QlLocationStatementList list)
+{
+    QStringList result;
+    foreach( QlLocationStatement * stat, list){
         result << ConvertBsStatement( stat );
     }
     return result.join("\n");

@@ -156,8 +156,8 @@ void MainDialogImpl::loadFile(const QString &fileName)
         JSONGraphReader * reader = new JSONGraphReader;
         if( m_graphType == Simple )
             reader->setInfoReader( new SimpleJSONInfoReader );
-//        else if( m_graphType == QuestLogic )
-//            jsonReader->setInfoReader( new SimpleJSONInfoReader );
+        else if( m_graphType == QuestLogic )
+            reader->setInfoReader( new QlJSONInfoReader );
         graphView->Load( fileName, reader );
     }else if(fileName.endsWith(".qm")){
         QMGraphReader * reader = new QMGraphReader;

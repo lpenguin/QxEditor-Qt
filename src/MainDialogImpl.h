@@ -17,6 +17,7 @@
 #include "QlGraphWidget.h"
 
 #include "QlJSONInfoWriter.h"
+#include "QlJSONInfoReader.h"
 
 #include "QuestActionsDialog.h"
 #include "QuestSettingsDialog.h"

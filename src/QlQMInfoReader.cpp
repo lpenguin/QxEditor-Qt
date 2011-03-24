@@ -3,7 +3,7 @@
 
 BaseVerInfo * QlQMInfoReader::ReadVerInfo(QMLocation *location)
 {
-    return new QlVerInfo(  ConvertLocationTexts( location ),
+    return new QlVerInfo(  QlLocationStatementList() << ConvertLocationTexts( location ),
                          ConvertActions(location->actions),
                          ConvertLocationType( location->type ),
                          QString("L")+QString::number(location->locNumber) );
@@ -34,6 +34,7 @@ BaseGraphInfo * QlQMInfoReader::ReadGraphInfo(QMGraph *graph)
     m_qmToBs.setQmGlobals( graph->params() );
     return new QlGraphInfo( "[Not inplemented yet]",
                            graph->stringReplaces().missionString,
+                           new BlockScript(),
                            ConvertParametrs( graph->params()), "Main");
 }
 

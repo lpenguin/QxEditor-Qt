@@ -13,7 +13,7 @@ QString Type2Str( SimpleVerInfo::VerType type ){
 }
 
 QString Property2JSON(QString name, QString value){
-    return "\""+name+"\""+":\""+value.replace("\"","\\\"").replace("\n", "\\n").replace("\t","\\t")+"\"";
+    return "\""+name+"\""+":\""+value.replace("\"","\\\"").replace("\r\n", "\\n").replace("\n", "\\n").replace("\t","\\t")+"\"";
 }
 
 void JSONGraphWriter::WriteGraph( BaseGraph * graph, const QString & filename ){
@@ -53,6 +53,8 @@ QString JSONGraphWriter::Ver2JSON(BaseVer * ver){
         }
     }
     props<<"\"edges\":[\n   "+edgesStrings.join(",\n   ")+"]";
+    props<<Property2JSON("x", QString::number(ver->pos().x()));
+    props<<Property2JSON("y", QString::number(ver->pos().y()));
     return "{"+props.join(",\n   ")+"}";
 }
 

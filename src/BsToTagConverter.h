@@ -13,6 +13,7 @@ public:
     QString TagEnd() const ;
     QString ConditionTagStart() const ;
     QString ConditionTagEnd() const ;
+    QString packSpecialChars( QString ) const;
 
     QString ConditionTag( BsCondition * condition );
     QString ActionTag( BsAction * action );
@@ -45,10 +46,11 @@ private:
     QMap<BsObject::BsOperation, QString> m_operatorTypes;
     QMap<BsCondition::BsConditionType, QString> m_conditionTypes;
     QMap<BsObject::BsOperation, QString> m_actionTypes;
+    QMap<QString, QString> m_charMap;
     void FillOperatorTypes();
     void FillActionTypes();
     void FillConditionTypes();
-
+    void FillCharMap();
 };
 
 #endif // BSTOESMASCRIPTCONVERTER_H

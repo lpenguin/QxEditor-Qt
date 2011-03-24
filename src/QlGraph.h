@@ -7,23 +7,32 @@
 class QlVerInfo : public BaseVerInfo{
 Q_OBJECT
 private:
-    QlLocationTexts * m_locationTexts;
+    QlLocationStatementList m_locationStatements;
     BlockScript * m_actions;
 public:
-    QlVerInfo(  QString id, QObject * parent = 0 ):
+    QlVerInfo(  QString id = QString(), QObject * parent = 0 ):
         BaseVerInfo(id, parent){
         m_actions = new BlockScript();
-        m_locationTexts = new QlLocationTexts();
     }
 
-    QlVerInfo( QlLocationTexts * locationTexts, BlockScript * actions, VerType verType, QString id, QObject * parent = 0 ):
+    QlVerInfo( QlLocationStatementList locationStatements, BlockScript * actions, VerType verType, QString id, QObject * parent = 0 ):
          BaseVerInfo(verType, id, parent){
-        setLocationsText( locationTexts );
+        setLocationStatements( locationStatements );
         setActions( actions );
     }
 
-    void setLocationsText(QlLocationTexts * locationTexts ){
-        SETPA( locationTexts )
+    QString firstText() {
+        foreach( QlLocationStatement * st, m_locationStatements ){
+            if( st->type() == QlType::LocationTexts ){
+                QlLocationTexts * texts = (QlLocationTexts*) st;
+                return texts->firstText();
+            }
+            return QString();
+        }
+    }
+
+    void setLocationStatements( QlLocationStatementList locationStatements ){
+        SETLA( locationStatements )
     }
 //    void setVerType(VerType verType){
 //        m_verType = verType;
@@ -32,8 +41,8 @@ public:
         SETPA( actions )
     }
 
-    QlLocationTexts * locationTexts( ) const{
-        return m_locationTexts;
+    QlLocationStatementList locationStatements( ) const{
+        return m_locationStatements;
     }
 
     BlockScript * actions( ) const{
@@ -58,7 +67,7 @@ private:
     BlockScript * m_actions;
     QlPathStatementList m_pathStatements;
 public:
-    QlEdgeInfo( QString id, QObject * parent = 0 )
+    QlEdgeInfo( QString id = QString(), QObject * parent = 0 )
         :BaseEdgeInfo(id, parent )
     {
         setExpression( new BsNull );
@@ -118,16 +127,29 @@ class QlGraphInfo : public BaseGraphInfo{
     Q_OBJECT
 private:
     QlParametrList m_parametrList;
+    BlockScript * m_actions;
 public:
-    QlGraphInfo( QString name, QString description, QlParametrList parametrList, QString id, QObject * parent = 0 ):
-        m_parametrList(parametrList), BaseGraphInfo(name, description, id, parent ){}
+    QlGraphInfo( QString name = QString(), QString description = QString(), QString id = QString(), QObject * parent = 0 ):
+        BaseGraphInfo(name, description, id, parent ){}
+    QlGraphInfo( QString name, QString description, BlockScript * actions, QlParametrList parametrList, QString id, QObject * parent = 0 ):
+        BaseGraphInfo(name, description, id, parent ){
+        setParametrList( parametrList );
+        setActions( actions );
+    }
 
     QlParametrList parametrList() const{
         return m_parametrList;
     }
 
-       void setParametrList( QlParametrList parametrList ){
-        m_parametrList = parametrList;
+    void setParametrList( QlParametrList parametrList ){
+        SETLA( parametrList );
+    }
+
+    BlockScript * actions() const{
+        return m_actions;
+    }
+    void setActions( BlockScript * actions ){
+        SETPA( actions )
     }
 };
 

@@ -1,0 +1,20 @@
+#ifndef QLJSONINFOREADER_H
+#define QLJSONINFOREADER_H
+
+#include "JSONGraphReader.h"
+#include "QlGraph.h"
+#include "BaseGraph.h"
+#include "ECMAScriptToBsConverter.h"
+
+class QlJSONInfoReader : public AbstractJSONInfoReader
+{
+public:
+    QlJSONInfoReader();
+    BaseVerInfo* ReadVerInfo(QScriptValue value);
+    BaseEdgeInfo* ReadEdgeInfo(QScriptValue value);
+    BaseGraphInfo* ReadGraphInfo(QScriptValue value);
+private:
+    ECMAScriptToBsConverter m_converter;
+};
+
+#endif // QLJSONINFOREADER_H

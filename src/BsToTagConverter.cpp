@@ -5,6 +5,7 @@ BsToTagConverter::BsToTagConverter()
     FillOperatorTypes();
     FillActionTypes();
     FillConditionTypes();
+    FillCharMap();
 }
 
 QString BsToTagConverter::TagStart() const
@@ -34,7 +35,7 @@ QString BsToTagConverter::FunctionTag(BsFunction * function)
 
 QString BsToTagConverter::VariableDefinitionTag(BsVariableDefinition * varDef)
 {
-    return QString("vdef(%1,%2)").arg( VariableTag(varDef->var())).arg(ExpressionTag(varDef->value()));
+    return QString("vdef(%1,%2)").arg( varDef->var()->name() ).arg(ExpressionTag(varDef->value()));
 }
 
 QString BsToTagConverter::UserStringTag(BsUserString * userString)
@@ -126,6 +127,20 @@ void BsToTagConverter::FillConditionTypes()
 
 }
 
+void BsToTagConverter::FillCharMap()
+{
+    m_charMap.insert(",",  "&comm;");
+    m_charMap.insert("(",  "&lb;");
+    m_charMap.insert(")",  "&rb;");
+    m_charMap.insert("[",  "&lsb;");
+    m_charMap.insert("]",  "&rsb;");
+    m_charMap.insert("\n",  "&nl;");
+    m_charMap.insert("\r",  "&rl;");
+    m_charMap.insert("\t",  "&tb;");
+    m_charMap.insert("\'",  "&sq;");
+    m_charMap.insert("\"",  "&dq;");
+}
+
 QString BsToTagConverter::ConditionTypeToString(BsCondition::BsConditionType condition)
 {
      return m_conditionTypes[ condition ];
@@ -137,7 +152,7 @@ QString BsToTagConverter::ActionTag(BsAction *action)
 {
     return QString("act(%1,%2,%3)")
             .arg(ActionTypeToString(action->actionType()))
-            .arg(VariableTag(action->var()))
+            .arg(action->var()->name())
             .arg(ExpressionTag(action->value()));
 }
 
@@ -207,7 +222,7 @@ QString BsToTagConverter::ShowVariableTag(QlShowVariable *sv)
         ranges<< RangeTag( ran );
     }
     foreach( QString str, sv->strings()){
-        texts << QString("'%1'").arg(str);
+        texts << QString("'%1'").arg( packSpecialChars(str) );
     }
 
     return QString("ql.show(%1, [%2], [%3] )")
@@ -228,7 +243,7 @@ QString BsToTagConverter::BoundTriggerTag(QlBoundTrigger *trig)
             .arg(VariableTag(trig->var()))
             .arg( type )
             .arg(ValueTag(trig->value()))
-            .arg(  trig->text() );
+            .arg(  packSpecialChars(trig->text()) );
 }
 
 QString BsToTagConverter::FunctionCallTag(BsFunctionCall *function)
@@ -247,32 +262,49 @@ QString BsToTagConverter::ParametrTag(QlParametr *par)
 
 QString BsToTagConverter::LocationTextsTag(QlLocationTexts *texts)
 {
-    return QString("ql.texts('%1', %2, ['%3'])")
-            .arg(texts->locationId())
+    QStringList strs;
+    foreach( QString str, texts->texts() ){
+        strs << QString("'%1'").arg( packSpecialChars( str ) );
+    }
+
+    return QString("ql.texts('%1', %2, [%3])")
+            .arg( packSpecialChars(texts->locationId()) )
             .arg(ExpressionTag( texts->expr()))
-            .arg(texts->texts().join("','"));
+            .arg(strs.join(","));
 }
 
 QString BsToTagConverter::PathPriorityTag(QlPathPriority *prior)
 {
     return QString("ql.prior('%1', %2)")
-            .arg(prior->pathId())
+            .arg( packSpecialChars(prior->pathId()) )
             .arg(prior->priority());
 }
 
 QString BsToTagConverter::PathPassabilityTag(QlPathPassability *pass)
 {
     return QString("ql.pass('%1', %2)")
-            .arg(pass->pathId())
+            .arg( packSpecialChars(pass->pathId()) )
             .arg(pass->passability());
 }
 
 QString BsToTagConverter::PathShowOrderTag(QlPathShowOrder *order)
 {
     return QString("ql.showord('%1', %2)")
-            .arg(order->pathId())
+            .arg( packSpecialChars( order->pathId() ))
             .arg(order->showOrder());
 }
+
+QString BsToTagConverter::packSpecialChars(QString str) const
+{
+    QMapIterator<QString, QString> i(m_charMap);
+    while(i.hasNext()){
+        i.next();
+        str = str.replace(i.key(), i.value());
+    }
+    return str;
+}
+
+
 
 
 
