@@ -20,7 +20,7 @@ QString BsToTagConverter::TagEnd() const
 
 QString BsToTagConverter::VariableTag(BsVariable * variable)
 {
-    return QString("var[%1]").arg( variable->name());
+    return QString("var(%1)").arg( variable->name());
 }
 
 QString BsToTagConverter::FunctionTag(BsFunction * function)
@@ -29,22 +29,22 @@ QString BsToTagConverter::FunctionTag(BsFunction * function)
     foreach ( BsExpression * obj, function->arguments()) {
         arguments<<ExpressionTag(obj);
     }
-    return QString("func[%1,%2]").arg(function->name()).arg(arguments.join(","));
+    return QString("func(%1,%2)").arg(function->name()).arg(arguments.join(","));
 }
 
 QString BsToTagConverter::VariableDefinitionTag(BsVariableDefinition * varDef)
 {
-    return QString("vdef[%1,%2]").arg( VariableTag(varDef->var())).arg(ExpressionTag(varDef->value()));
+    return QString("vdef(%1,%2)").arg( VariableTag(varDef->var())).arg(ExpressionTag(varDef->value()));
 }
 
 QString BsToTagConverter::UserStringTag(BsUserString * userString)
 {
-    return QString("user[%1]").arg( userString->string() );
+    return QString("user(%1)").arg( userString->string() );
 }
 
 QString BsToTagConverter::ValueTag(BsValue * value)
 {
-    return QString("val[%1]").arg( value->value());
+    return QString("val(%1)").arg( value->value());
 }
 
 QString BsToTagConverter::OperatorTag( BsOperator * expression)
@@ -53,7 +53,7 @@ QString BsToTagConverter::OperatorTag( BsOperator * expression)
     foreach (BsExpression * obj, expression->arguments()) {
         args<<ExpressionTag( obj );
     }
-    return QString("expr[%1,%2]")
+    return QString("expr(%1,%2)")
             .arg(ExpressionTypeToString( expression->operation()))
             .arg( args.join(QString(",")));
 }
@@ -78,7 +78,7 @@ QString BsToTagConverter::ExpressionTag(BsExpression *obj)
     case BsObject::UserString:
         return UserStringTag(( BsUserString * )obj);
     default:
-        return QString("[ERROR]");
+        return QString("(ERROR)");
     }
 }
 
@@ -135,7 +135,7 @@ QString BsToTagConverter::ConditionTypeToString(BsCondition::BsConditionType con
 
 QString BsToTagConverter::ActionTag(BsAction *action)
 {
-    return QString("act[%1,%2,%3]")
+    return QString("act(%1,%2,%3)")
             .arg(ActionTypeToString(action->actionType()))
             .arg(VariableTag(action->var()))
             .arg(ExpressionTag(action->value()));
@@ -162,7 +162,7 @@ QString BsToTagConverter::ConditionTag(BsCondition *condition)
     foreach (BsExpression * obj, condition->arguments()) {
         args<<ExpressionTag( obj );
     }
-    return QString("cond[%1,%2]")
+    return QString("cond(%1,%2)")
             .arg(ConditionTypeToString( condition->condition()))
             .arg( args.join(QString(",")));
 
@@ -171,20 +171,20 @@ QString BsToTagConverter::ConditionTag(BsCondition *condition)
 
 QString BsToTagConverter::RangeTag(BsRange *range)
 {
-    return QString("ran[%1,%2]")
+    return QString("ran(%1,%2)")
             .arg(ExpressionTag( range->min() ))
             .arg(ExpressionTag( range->max() ));
 }
 
 QString BsToTagConverter::IfTag(BsIf *if_)
 {
-    return QString("if[%1]")
+    return QString("if(%1)")
             .arg(ExpressionTag(if_->expression()));
 }
 
 QString BsToTagConverter::ConstraintTag(QlConstraint *con)
 {
-    return QString("ql.cons[%1, %2, %3]")
+    return QString("ql.cons(%1, %2, %3)")
             .arg(VariableTag(con->var()))
             .arg(ExpressionTag(con->min()))
             .arg(ExpressionTag(con->max()));
@@ -192,9 +192,11 @@ QString BsToTagConverter::ConstraintTag(QlConstraint *con)
 
 QString BsToTagConverter::TriggerTag(QlTrigger *trig)
 {
-    return QString("ql.trig[%1, %2]")
-            .arg(VariableTag(trig->var()))
-            .arg(IfTag(trig->ifStatement()));
+//    return QString("ql.trig[%1, %2]")
+//            .arg(VariableTag(trig->var()))
+//            .arg(IfTag(trig->ifStatement()));
+    return QString("ql.trig(%1)")
+            .arg(ExpressionTag(trig->expression()));
 }
 
 QString BsToTagConverter::ShowVariableTag(QlShowVariable *sv)
@@ -205,10 +207,10 @@ QString BsToTagConverter::ShowVariableTag(QlShowVariable *sv)
         ranges<< RangeTag( ran );
     }
     foreach( QString str, sv->strings()){
-        texts<<QString("'%1'").arg(str);
+        texts << QString("'%1'").arg(str);
     }
 
-    return QString("ql.show[%1, [%2], [%3] ]")
+    return QString("ql.show(%1, [%2], [%3] )")
             .arg( VariableTag(sv->var()))
             .arg( ranges.join(", ") )
             .arg( texts.join(", ") );
@@ -222,7 +224,7 @@ QString BsToTagConverter::BoundTriggerTag(QlBoundTrigger *trig)
     }else{
         type = "max";
     }
-    return QString("ql.bound[%1, %2, %3, '%4']")
+    return QString("ql.bound(%1, %2, %3, '%4')")
             .arg(VariableTag(trig->var()))
             .arg( type )
             .arg(ValueTag(trig->value()))
@@ -235,17 +237,17 @@ QString BsToTagConverter::FunctionCallTag(BsFunctionCall *function)
     foreach ( BsExpression * obj, function->arguments()) {
         arguments<<ExpressionTag(obj);
     }
-    return QString("func[%1,%2]").arg(function->name()).arg(arguments.join(","));
+    return QString("func(%1,%2)").arg(function->name()).arg(arguments.join(","));
 }
 
 QString BsToTagConverter::ParametrTag(QlParametr *par)
 {
-    return QString("ql.param[%1]").arg(VariableTag(par->var()));
+    return QString("ql.param(%1)").arg(VariableTag(par->var()));
 }
 
 QString BsToTagConverter::LocationTextsTag(QlLocationTexts *texts)
 {
-    return QString("ql.texts['%1', %2, ['%3']]")
+    return QString("ql.texts('%1', %2, ['%3'])")
             .arg(texts->locationId())
             .arg(ExpressionTag( texts->expr()))
             .arg(texts->texts().join("','"));
@@ -253,21 +255,21 @@ QString BsToTagConverter::LocationTextsTag(QlLocationTexts *texts)
 
 QString BsToTagConverter::PathPriorityTag(QlPathPriority *prior)
 {
-    return QString("ql.prior['%1', %2]")
+    return QString("ql.prior('%1', %2)")
             .arg(prior->pathId())
             .arg(prior->priority());
 }
 
 QString BsToTagConverter::PathPassabilityTag(QlPathPassability *pass)
 {
-    return QString("ql.pass['%1', %2]")
+    return QString("ql.pass('%1', %2)")
             .arg(pass->pathId())
             .arg(pass->passability());
 }
 
 QString BsToTagConverter::PathShowOrderTag(QlPathShowOrder *order)
 {
-    return QString("ql.showord['%1', %2]")
+    return QString("ql.showord('%1', %2)")
             .arg(order->pathId())
             .arg(order->showOrder());
 }

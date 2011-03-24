@@ -2,11 +2,12 @@
 #define ECMASCRIPTTOBSCONVERTER_H
 #include "BlockScript.h"
 #include "QuestLogic.h"
+#include <QtScript>
 
 class ParseError : std::exception {
 public:
     enum ErrorType{
-        Odinary, MissingStatementEnd, UnknownTag
+        Odinary, MissingStatementEnd, UnknownTag, InvalidStatement, MissingQuoteEnd, MissingBracketEnd
     };
 
     ParseError( QString message = QString(), ErrorType errorType = Odinary ):
@@ -45,10 +46,21 @@ private:
     QString tagEnd;
 
     BsStatementList ConvertStatements( const QStringList & list, qint32 startIndex, qint32 endIndex ) throw( ParseError );
-
-    BsAction * ConvertAction(const QStringList &list, qint32 &startIndex, const QString &line) throw( ParseError );
-    BsIf * ConvertIf(const QStringList &list, qint32 &startIndex, const QString &line);
     BsStatement * ConvertStatement( const QStringList & list, qint32 & startIndex ) throw( ParseError );
+
+    BsAction * ConvertAction( QStringList tags );
+    BsIf * ConvertIf(QStringList tags, BsStatementList statements );
+    BsFunctionCall * ConvertFunctionCall(QStringList tags );
+    BsVariableDefinition * ConvertVariableDefinition(QStringList tags );
+    QlTrigger * ConvertTrigger(QStringList tags, BsStatementList statements);
+    QlBoundTrigger * ConvertBoundTrigger(QStringList tags, BsStatementList statements);
+    QlConstraint * ConvertConstraint(QStringList tags );
+    QlLocationTexts * ConvertLocationTexts(QStringList tags );
+    QlShowVariable * ConvertShowVariable(QStringList tags );
+    QlPathPassability * ConvertPathPassability(QStringList tags );
+    QlPathPriority * ConvertPathPriority(QStringList tags );
+    QlParametr * ConvertParametr(QStringList tags, BsStatementList statements);
+    QlPathShowOrder * ConvertPathShowOrder(QStringList tags );
 
     BsExpression * ConvertExpression( const QString & tag );
     BsOperator * ConvertOperator(const QString &tag);
@@ -56,15 +68,23 @@ private:
     BsRange * ConvertRange( const QString &tag );
     BsUserString * ConvertUserString( const QString &tag );
     BsFunction * ConvertFunction( const QString &tag );
+    BsVariable * ConvertVariable( const QString &tag );
+    BsValue * ConvertValue( const QString &tag );
 
+    QString ConvertString(QString value );
     qint32 FindTagEnd( const QStringList & list, qint32 startIndex = 0) throw( ParseError );
+    qint32 FindBracketEnd( const QString & str, qint32 startIndex = 0 ) throw (ParseError);
+    qint32 FindQuoteEnd( const QString & str, qint32 startIndex = 0 ) throw (ParseError);
+    qint32 FindNextComma( const QString & str, qint32 startIndex = 0 ) throw (ParseError);
+
     qint32 tagType( QString tag );
     QString tagName( QString tag );
-    QStringList tagContents( const QString & tag );
+    QStringList tagArguments( const QString & tag );
     BsObject::BsOperation ConvertActionOperation( const QString & operation );
     BsCondition::BsConditionType ConvertConditionType( const QString & condition );
     BsOperator::BsOperation ConvertOperationType( const QString & operation );
 
+    QScriptValue parseTag( QString tag );
     void FillOperatorTypes();
     void FillActionTypes();
     void FillConditionTypes();

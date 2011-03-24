@@ -55,23 +55,26 @@ public:
     virtual int type() const{ return QlType::Constraint; }
 };
 
-class QlTrigger : public BsStatement{
-private:
-    BsVariable * m_var;
-    BsIf * m_ifStatement;
+class QlTrigger : public BsIf{
+//private:
+//    BsVariable * m_var;
+//    BsIf * m_ifStatement;
+//public:
+//    QlTrigger( BsVariable * var , BsIf * if_){
+//        setVar( var );
+//        setIf( if_ );
+//    }
+//    void setVar(BsVariable * var){
+//        SETPA( var);
+//    }
+//    void setIf(BsIf * ifStatement ){
+//        SETPA( ifStatement );
+//    }
+//    BsVariable * var() const { return m_var; }
+//    BsIf * ifStatement() const { return m_ifStatement; }
 public:
-    QlTrigger( BsVariable * var , BsIf * if_){
-        setVar( var );
-        setIf( if_ );
-    }
-    void setVar(BsVariable * var){
-        SETPA( var);
-    }
-    void setIf(BsIf * ifStatement ){
-        SETPA( ifStatement );
-    }
-    BsVariable * var() const { return m_var; }
-    BsIf * ifStatement() const { return m_ifStatement; }
+    QlTrigger( BsExpression * expression, BsStatementList statements):
+        BsIf(expression, statements){}
     virtual int type() const{ return QlType::Trigger; }
 
 };
@@ -115,6 +118,7 @@ private:
     BsValue * m_value;
     QString m_text;
 public:
+    QlBoundTrigger( BsVariable * var, BsValue * value, )
     BoundType boundType() const{ return m_Boundtype; }
     BsValue * value() const {return m_value;}
     QString text()const {return m_text;}

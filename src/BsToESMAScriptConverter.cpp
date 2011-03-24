@@ -300,7 +300,7 @@ QString BsToESMAScriptConverter::ConvertQlTrigger(QlTrigger *trig)
 {
     QStringList result;
     result << m_tagConverter.TagStart()+m_tagConverter.TriggerTag( trig );
-    result << ConvertBsIf(trig->ifStatement());
+    result << ConvertBsIf( trig );
     result<<m_tagConverter.TagEnd();
     return result.join("\n");
 }
