@@ -9,7 +9,7 @@ GraphView::GraphView(   QWidget * parent   )
 	setScene( new QGraphicsScene() );
 	setMouseTracking( true );
 	setRenderHint( QPainter::Antialiasing );
-	setSceneRect( this->rect());
+        //setSceneRect( this->rect());
 	markedVer = 0;
 	movingVer = 0;
         m_graph = new BaseGraph(this);

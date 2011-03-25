@@ -216,7 +216,7 @@ class BsValue : public BsExpression{
 private:
     QString m_value;
 public:
-    BsValue(QString value):m_value(value){}
+    BsValue(QString value = QString()):m_value(value){}
     QString value() const { return m_value; }
     virtual int type() const { return BsObject::Value; }
 };
@@ -225,7 +225,7 @@ class BsVariable : public BsExpression{
 private:
     QString m_name;
 public:
-    BsVariable(QString name):m_name(name){}
+    BsVariable(QString name = QString()):m_name(name){}
     QString name() const { return m_name; }
     virtual int type() const { return BsObject::Variable; }
 };
@@ -277,7 +277,7 @@ private:
     BsObject::BsOperation m_actionType;
 public:
 
-    BsAction( BsVariable * var = 0, BsExpression * value = 0, BsObject::BsOperation actionType = None);
+    BsAction( BsVariable * var = new BsVariable(), BsExpression * value = new BsValue(), BsObject::BsOperation actionType = None);
     virtual int type() const { return BsObject::Action; }
     BsVariable * var() { return m_var; }
     BsExpression * value(){ return m_value; }

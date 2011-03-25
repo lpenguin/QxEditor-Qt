@@ -4,26 +4,14 @@
 #include "BaseGraph.h"
 #include <QtCore>
 #include <QtScript>
+#include "Exception.h"
 
 class AbstractGraphReader;
 
-class ReaderError  {
+class ReaderError : public Exception {
 public:
-
-    ReaderError( QString message = QString() ):
-        m_message(message){}
-
-//    ~ParseError() throw() {}
-
-    QString message() const {
-        return m_message;
-    }
-
-    void setMessage( QString message ){
-        m_message = message;
-    }
-private:
-    QString m_message;
+    ReaderError( const QString & message):
+        Exception( message ){}
 };
 
 

@@ -46,6 +46,9 @@ public:
     GraphView( QWidget * parent = 0  );
     void AddVer( BaseVer * ver, QPointF pos);
     void AddEdge( BaseEdge * edge, QPointF pos, QPointF endPoint );
+
+
+
 protected:
     void mouseMoveEvent ( QMouseEvent * e );
     void mousePressEvent ( QMouseEvent * e );
@@ -55,7 +58,6 @@ signals:
     void EdgeClicked( EdgeItem *, Qt::MouseButton );
     void AreaClicked( QPointF , Qt::MouseButton);
     void VersConnected( VerItem *, VerItem *);
-
 };
 
 

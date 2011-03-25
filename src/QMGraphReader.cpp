@@ -15,9 +15,16 @@ BaseGraph * QMGraphReader::ReadGraph(const QString & filename, BaseGraph * graph
         qDebug()<<QObject::tr("Error in loading graph: %1").arg(reader.errorString());
         return 0;
     }
-    ReadGraphInfo();
-    ReadVers();
-    ReadEdges();
+    try{
+        ReadGraphInfo();
+        ReadVers();
+        ReadEdges();
+    }
+    catch(Exception & e){
+        qDebug()<<e.message();
+        return 0;
+    }
+
     return m_graph;
 }
 

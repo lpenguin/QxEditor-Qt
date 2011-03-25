@@ -24,6 +24,7 @@ void QlEdgeWidget::ShowEdge(BaseEdge *edge)
         ui->textEdit->setPlainText( info->text());
         ui->questionEdit->setPlainText( info->question());
         ui->initEdit->setPlainText( m_converter->ConvertQlPathStatementList( info->pathStatements() ) );
+        ui->edgeId->setText( info->id() );
 //        ui->edgeIdEdit->setText(info->id());
     }
 }

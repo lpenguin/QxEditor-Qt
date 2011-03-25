@@ -4,6 +4,7 @@
 #include "QuestLogic.h"
 #include "QMReader.h"
 #include "Transliter.h"
+#include "Exception.h"
 
 #include <QtCore>
 

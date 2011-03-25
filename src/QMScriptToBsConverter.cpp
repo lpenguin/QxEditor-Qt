@@ -23,6 +23,9 @@ BsVariable * QMScriptToBsConverter::ConvertQMParametrToVariable(QMParametr * qmP
 BsStatementList QMScriptToBsConverter::ConvertQMAction(QMAction * qmAction)
 {
     BsVariable * var = m_varMap[qmAction->param];
+    qDebug()<<QString("Variable %1 (%2)").arg(qmAction->param->name).arg(qmAction->param->parNumber) ;
+    if( !var )
+        throw( Exception(QString("Variable %1 (%2) not found").arg(qmAction->param->name).arg(qmAction->param->parNumber)) );
     BsAction *  action = new BsAction( var );
     BsStatementList list;
     switch(qmAction->type){
