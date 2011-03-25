@@ -9,26 +9,37 @@ Q_OBJECT
 private:
     QlLocationStatementList m_locationStatements;
     BlockScript * m_actions;
+    QString m_text;
 public:
     QlVerInfo(  QString id = QString(), QObject * parent = 0 ):
         BaseVerInfo(id, parent){
         m_actions = new BlockScript();
+        m_text = QString();
     }
 
-    QlVerInfo( QlLocationStatementList locationStatements, BlockScript * actions, VerType verType, QString id, QObject * parent = 0 ):
+    QlVerInfo(QString text, QlLocationStatementList locationStatements, BlockScript * actions, VerType verType, QString id, QObject * parent = 0 ):
+         m_text(text),
          BaseVerInfo(verType, id, parent){
         setLocationStatements( locationStatements );
         setActions( actions );
     }
 
-    QString firstText() {
-        foreach( QlLocationStatement * st, m_locationStatements ){
-            if( st->type() == QlType::LocationTexts ){
-                QlLocationTexts * texts = (QlLocationTexts*) st;
-                return texts->firstText();
-            }
-            return QString();
-        }
+//    QString firstText() {
+//        foreach( QlLocationStatement * st, m_locationStatements ){
+//            if( st->type() == QlType::LocationTexts ){
+//                QlLocationTexts * texts = (QlLocationTexts*) st;
+//                return texts->firstText();
+//            }
+//            return QString();
+//        }
+//    }
+
+    QString text() const{
+        return m_text;
+    }
+
+    void setText( QString text ){
+        m_text = text;
     }
 
     void setLocationStatements( QlLocationStatementList locationStatements ){

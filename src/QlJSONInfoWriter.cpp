@@ -9,7 +9,7 @@ QStringList QlJSONInfoWriter::VerInfo2JSON(BaseVerInfo *info)
 {
     QStringList props;
     QlVerInfo * qlInfo = (QlVerInfo *)info;
-    QString text = qlInfo->firstText();
+    QString text = qlInfo->text();
     QString jText = Property2JSON("text", text);
     props<<Property2JSON("id", qlInfo->id())
             <<Property2JSON("actions", m_converter.ConvertBlockSript( qlInfo->actions() ))
@@ -37,7 +37,8 @@ QStringList QlJSONInfoWriter::GraphInfo2JSON(BaseGraphInfo *info)
 {
     QStringList props;
     QlGraphInfo * qlInfo = (QlGraphInfo *)info;
-    props<<Property2JSON("actions",m_converter.ConvertQlParametrList( qlInfo->parametrList() ))
+    props<<Property2JSON("init",m_converter.ConvertQlParametrList( qlInfo->parametrList() ))
+            <<Property2JSON("actions",m_converter.ConvertBlockSript( qlInfo->actions() ))
             <<Property2JSON("name", qlInfo->name())
             <<Property2JSON("description", qlInfo->description());
     return props;

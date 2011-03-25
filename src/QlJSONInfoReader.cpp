@@ -3,6 +3,16 @@
 QlJSONInfoReader::QlJSONInfoReader()
 {
 }
+QlLocationTexts * QlJSONInfoReader::getLocationTexts( QlLocationStatementList statements  ){
+
+    foreach( QlLocationStatement * st, statements ){
+        if( st->type() == QlType::LocationTexts ){
+            QlLocationTexts * texts = (QlLocationTexts*) st;
+            return texts;
+        }
+    }
+    return 0;
+}
 
 BaseVerInfo * QlJSONInfoReader::ReadVerInfo(QScriptValue value)
 {
@@ -10,7 +20,17 @@ BaseVerInfo * QlJSONInfoReader::ReadVerInfo(QScriptValue value)
     try{
         BlockScript * actions = m_converter.ConvertScript( value.property("actions").toString().split("\n") );
         QlLocationStatementList sts = m_converter.ConvertLocationStatements( value.property("init").toString().split("\n") );
+        QString text;
+        QlLocationTexts * texts = getLocationTexts( sts );
+        if( texts ){
+//        QlLocationStatementList statements;
+            if( texts->texts().count() == 1 )
+                sts.clear();
+            text = texts->firstText();
+        }else
+            text = value.property("text").toString();
         info->setActions( actions );
+        info->setText( text );
         info->setLocationStatements( sts );
         info->setId( value.property("id").toString() );
         info->setVerType( Str2Type( value.property("type").toString() ) );

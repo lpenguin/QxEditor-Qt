@@ -218,6 +218,7 @@ void GraphView::Load( const QString & filename, AbstractGraphReader * reader  ){
         CleanGraph();
         m_graph->Clean();
         //m_graph->Load( xml );
+        try{
         m_graph = reader->ReadGraph(filename);
 //        if( type == JSONGraphReaderType ){
 //            JSONGraphReader reader;
@@ -232,6 +233,12 @@ void GraphView::Load( const QString & filename, AbstractGraphReader * reader  ){
 //            reader.setReader( infoReader );
 //            m_graph = reader.ReadGraph(filename);
 //        }
+
+        }catch(ReaderError & e){
+            qDebug()<<e.message();
+            m_graph = new BaseGraph;
+            return;
+        }
         if( m_graph )
             LoadGraph( m_graph );
 }

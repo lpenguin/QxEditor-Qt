@@ -15,6 +15,7 @@ public:
     BaseGraphInfo* ReadGraphInfo(QScriptValue value);
 private:
     ECMAScriptToBsConverter m_converter;
+    QlLocationTexts * getLocationTexts(QlLocationStatementList statements);
 };
 
 #endif // QLJSONINFOREADER_H

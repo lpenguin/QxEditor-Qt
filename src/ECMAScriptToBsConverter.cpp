@@ -137,7 +137,10 @@ BsStatement * ECMAScriptToBsConverter::ConvertStatement(const QStringList &list,
 
     line.replace(QRegExp(QString("^") + tagStart ), "");
     QString tag = tagName( line );
-
+int a;
+    if( tag == "ql.show"){
+         a = 0;
+    }
     qint32 endIndex = FindTagEnd(list, startIndex );
     QStringList tags = tagArguments( line );
     BsStatementList statements = ConvertStatements( list, startIndex + 1, endIndex );
@@ -191,7 +194,6 @@ BsAction * ECMAScriptToBsConverter::ConvertAction(QStringList tags ) {
 
 QStringList ECMAScriptToBsConverter::tagArguments(const QString &tag)
 {
-//    / \( (?> [^)(]+ | (?R) )+ \) /x
     QString argStr = tag;
     argStr = argStr.replace( QRegExp("^[^\(]*"), "" );
     argStr = argStr.mid( 1 , argStr.count() - 2);
@@ -381,7 +383,7 @@ QlBoundTrigger * ECMAScriptToBsConverter::ConvertBoundTrigger( QStringList tags,
         type = QlBoundTrigger::Max;
     BsValue * val = ConvertValue( tags.takeFirst() );
     QString text = ConvertString( tags.takeFirst() );
-    return new QlBoundTrigger(  );
+    return new QlBoundTrigger( var, val, type,text );
 }
 
 QlConstraint * ECMAScriptToBsConverter::ConvertConstraint( QStringList tags )
@@ -397,8 +399,7 @@ QlLocationTexts * ECMAScriptToBsConverter::ConvertLocationTexts( QStringList tag
     QString locationId = ConvertString( tags.takeFirst() );
     BsExpression * ex = ConvertExpression( tags.takeFirst() );
     QStringList texts, tagTextsContents;
-    QString mid = midStr( tags.takeFirst(), 1, 1 );
-    tagTextsContents = splitSmart( mid );
+    tagTextsContents = parseList( tags.takeFirst() );
     foreach( QString str, tagTextsContents )
         texts << ConvertString( str );
     return new QlLocationTexts( locationId, texts, ex );
@@ -407,7 +408,7 @@ QlLocationTexts * ECMAScriptToBsConverter::ConvertLocationTexts( QStringList tag
 QlShowVariable * ECMAScriptToBsConverter::ConvertShowVariable( QStringList tags )
 {
     BsVariable * var = ConvertVariable( tags.takeFirst() );
-    QStringList rangesTags = tagArguments( tags.takeFirst() );
+    QStringList rangesTags = parseList( tags.takeFirst() );
     BsRangeList ranges;
     foreach (QString str, rangesTags) {
         ranges << ConvertRange( str );
@@ -447,7 +448,8 @@ BsVariable * ECMAScriptToBsConverter::ConvertVariable(const QString &tag)
 
 BsValue * ECMAScriptToBsConverter::ConvertValue(const QString &tag)
 {
-    return new BsValue( tagArguments( tag ).takeFirst() );
+    QString v = tagArguments( tag ).takeFirst();
+    return new BsValue( v );
 }
 
 QString ECMAScriptToBsConverter::ConvertString(QString value)
@@ -495,13 +497,16 @@ qint32 ECMAScriptToBsConverter::FindQuoteEnd(const QString &str, qint32 startInd
     throw( ParseError(QString("Missing quote end in: %1 ( ==> %2 )").arg(str).arg(str.right( str.count() - startIndex )), ParseError::MissingQuoteEnd));
 }
 
-qint32 ECMAScriptToBsConverter::FindBracketEnd(const QString &str, qint32 startIndex) const throw( ParseError )
+qint32 ECMAScriptToBsConverter::FindBracketEnd(const QString &str, qint32 startIndex,
+                                               const QChar & openBracket,
+                                               const QChar & closeBracket ) const throw( ParseError )
 {
     qint32 bracketCounter = 1, i;
     for(i = startIndex + 1; i < str.count() ; i++){
-        if( str[i] == '(' )
+        QChar ch = str[i];
+        if( str[i] == openBracket )
             bracketCounter++;
-        else if( str[i] == ')')
+        else if( str[i] == closeBracket)
             bracketCounter--;
         if(!bracketCounter)
             return i;
@@ -519,6 +524,8 @@ qint32 ECMAScriptToBsConverter::FindNextComma(const QString &str, qint32 startIn
             i = FindBracketEnd( str, i );
         else if( str[i] == '\'')
             i = FindQuoteEnd( str, i );
+        else if( str[i] == '[')
+            i = FindBracketEnd( str, i, QChar('['), QChar(']') );
     }
     return -1;
 }
@@ -541,7 +548,6 @@ QStringList ECMAScriptToBsConverter::splitSmart(const QString &str) const
     while( (pos = FindNextComma( str, prev )) != -1 ){
         result << str.mid( prev, pos - prev).trimmed();
         prev = pos + 1;
-//        pos++;
     }
     result << str.mid( prev, str.count() - prev).trimmed();
     return result;
@@ -550,5 +556,11 @@ QStringList ECMAScriptToBsConverter::splitSmart(const QString &str) const
 QString ECMAScriptToBsConverter::midStr(const QString &str, qint32 left, qint32 right) const
 {
     return str.mid( left, str.count() - right - 1);
+}
+
+QStringList ECMAScriptToBsConverter::parseList(const QString &str) const
+{
+    QString mid = midStr( str, 1, 1 );
+    return splitSmart( mid );
 }
 

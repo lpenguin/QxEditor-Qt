@@ -22,7 +22,7 @@ QMGraph * QMReader::ReadGraph(const QString &filename)
         m_locations = ReadLocations(br);
         m_paths = ReadPaths(br);
 
-    }catch(std::exception& e){
+    }catch(QMException& e){
         m_errorString = QObject::tr("Error in reading file: %1").arg(e.what());
         return 0;
     }
@@ -43,8 +43,8 @@ QMAction * QMReader::ReadActionFromLocaion(BinaryReader &br, qint32 paramNumber)
     QString ts = br.ReadString();
     if( m_params.count() > paramNumber)
         action->param = m_params[paramNumber];
-    else
-        throw( QMException(QObject::tr("Parametr with number %1 does not exists").arg(paramNumber)) );
+//    else
+//        throw( QMException(QObject::tr("Parametr with number %1 does not exists").arg(paramNumber)) );
 
     return action;
 }
@@ -88,8 +88,8 @@ QMAction * QMReader::ReadActionFromPath(BinaryReader &br, qint32 paramNumber )
     action->equation = br.ReadString();
     if( m_params.count() > paramNumber)
         action->param = m_params[paramNumber];
-    else
-        throw( QMException(QObject::tr("Parametr with number %1 does not exists").arg(paramNumber)));
+//    else
+//        throw( QMException(QObject::tr("Parametr with number %1 does not exists").arg(paramNumber)));
 
     return action;
 }
@@ -115,7 +115,8 @@ QMCondition * QMReader::ReadCondition(BinaryReader &br, qint32 paramNumber)
     if( m_params.count() > paramNumber)
         condition->param = m_params[paramNumber];
     else
-        throw( QMException(QObject::tr("Parametr with number %1 does not exists").arg(paramNumber)) );
+        condition->param = 0;
+//        throw( QMException(QObject::tr("Parametr with number %1 does not exists").arg(paramNumber)) );
     return condition;
 }
 
@@ -131,7 +132,7 @@ QMLocation * QMReader::ReadLocation(BinaryReader &br)
     QString temp;
     QMAction * tAction;
 
-    for (int i = 0; i < paramsCount; i++)
+    for (int i = 0; i < paramsCount /*&& i < m_params.count()*/; i++)
     {
         tAction = ReadActionFromLocaion( br, i );
         if(tAction->notEmpty())
@@ -350,7 +351,7 @@ QMParametrList QMReader::ReadParametrs(BinaryReader & br)
 //            QMParametr * par = ;
 ////                par.parNumber = i;
             QMParametr * p = ReadParametr(br);
-//            if( p->active )
+            if( p->active )
                 params.append(p);
         }
     }

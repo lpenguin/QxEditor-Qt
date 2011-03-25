@@ -79,7 +79,9 @@ private:
 
     QString ConvertString(QString value );
     qint32 FindTagEnd( const QStringList & list, qint32 startIndex = 0) const throw( ParseError );
-    qint32 FindBracketEnd( const QString & str, qint32 startIndex = 0 ) const throw (ParseError);
+    qint32 FindBracketEnd( const QString & str, qint32 startIndex = 0,
+                          const QChar & openBracket = QChar('('),
+                          const QChar & closeBracket = QChar(')')) const throw (ParseError);
     qint32 FindQuoteEnd( const QString & str, qint32 startIndex = 0 ) const throw (ParseError);
     qint32 FindNextComma( const QString & str, qint32 startIndex = 0 ) const throw (ParseError);
 
@@ -92,7 +94,7 @@ private:
     QString unpackSpecialChars( const QString & str ) const;
     QStringList splitSmart( const QString & str ) const;
     QString midStr( const QString & str, qint32 left, qint32 right = 0) const;
-
+    QStringList parseList( const QString & str ) const;
     QScriptValue parseTag( QString tag );
     void FillOperatorTypes();
     void FillActionTypes();

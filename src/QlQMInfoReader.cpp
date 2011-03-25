@@ -3,7 +3,11 @@
 
 BaseVerInfo * QlQMInfoReader::ReadVerInfo(QMLocation *location)
 {
-    return new QlVerInfo(  QlLocationStatementList() << ConvertLocationTexts( location ),
+    QlLocationTexts * texts = ConvertLocationTexts( location );
+    QlLocationStatementList statements;
+    if( texts->texts().count() > 1 )
+        statements << texts;
+    return new QlVerInfo(  texts->firstText(), statements,
                          ConvertActions(location->actions),
                          ConvertLocationType( location->type ),
                          QString("L")+QString::number(location->locNumber) );

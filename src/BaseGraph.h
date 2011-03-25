@@ -78,12 +78,10 @@ public:
     BaseGraphInfo( QString name, QString description, QString id = QString::null, QObject * parent = 0 ):
         BaseInfo(id, parent ), m_name(name), m_description(description )
     {}
-    BaseGraphInfo( QString id , QObject * parent = 0 ):
+    BaseGraphInfo( QString id = QString(), QObject * parent = 0 ):
         BaseInfo(id, parent)
     {}
-    BaseGraphInfo():
-        BaseInfo(QString::null, 0)
-    {}
+
     void setName( QString name ){
         m_name = name;
     }
