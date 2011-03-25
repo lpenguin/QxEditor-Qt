@@ -1,13 +1,13 @@
 #include "BaseGraph.h"
-
-BaseGraph::BaseGraph( BaseGraphInfo * info, QObject * object ):
+namespace Graphs {
+Graph::Graph( GraphInfo * info, QObject * object ):
     m_info( info ), QObject( object ){
 
 }
 
-BaseVer * BaseGraph::FindVer(QString id)
+Ver * Graph::FindVer(QString id)
 {
-        BaseVer * v;
+        Ver * v;
 	foreach(v, m_vers){
                 if( v->info()->id() == id )
 			return v;
@@ -15,14 +15,14 @@ BaseVer * BaseGraph::FindVer(QString id)
  	return 0;
 }
 
-QString BaseGraph::GetNewVerId(  ){
+QString Graph::GetNewVerId(  ){
     QString prefix = "L";
     QString intString;
     int maxId = 0;
     int id;
 
     bool ok;
-    foreach(BaseVer * ver, m_vers){
+    foreach(Ver * ver, m_vers){
         intString = ver->info()->id();
         intString.replace(QRegExp("^"+prefix),"");
         id = intString.toInt( &ok );
@@ -34,14 +34,14 @@ QString BaseGraph::GetNewVerId(  ){
     return prefix+QString::number(++maxId);
 }
 
-QString BaseGraph::GetNewEdgeId(  ){
+QString Graph::GetNewEdgeId(  ){
     QString prefix = "P";
     QString intString;
     int maxId = 0;
     int id;
 
     bool ok;
-    foreach(BaseEdge * edge, m_edges){
+    foreach(Edge * edge, m_edges){
         intString = edge->info()->id();
         intString.replace(QRegExp("^"+prefix),"");
         id = intString.toInt( &ok );
@@ -54,21 +54,21 @@ QString BaseGraph::GetNewEdgeId(  ){
 
 
 
-BaseGraph::~BaseGraph()
+Graph::~Graph()
 {
 	qDebug()<<"graph desturctor";
 }
 
 
 
-void BaseGraph::AddVer(BaseVer * ver)
+void Graph::AddVer(Ver * ver)
 {
 	ver->setParent(this);
 	m_vers.append( ver );
 }
 
 
-void BaseGraph::AddEdge(BaseEdge * edge)
+void Graph::AddEdge(Edge * edge)
 {
 	qDebug()<<"Add edge";
 	edge->setParent(this);
@@ -76,7 +76,7 @@ void BaseGraph::AddEdge(BaseEdge * edge)
 }
 
 
-void BaseGraph::Clean()
+void Graph::Clean()
 {
 	qDebug()<<"Graph::Clean";
 	qDebug()<<"Graph:: Deleting vers";
@@ -88,9 +88,9 @@ void BaseGraph::Clean()
 	qDebug()<<"Graph:: deleted all";
 }
 
-void BaseGraph::RemoveVer(BaseVer * ver)
+void Graph::RemoveVer(Ver * ver)
 {
-        BaseEdge * e;
+        Edge * e;
 	foreach( e, m_edges ){
 		if( e->Have( ver ) ){
 			m_edges.removeOne( e );
@@ -109,20 +109,20 @@ void BaseGraph::RemoveVer(BaseVer * ver)
 //
 }
 
-void BaseGraph::RemoveEdge(BaseEdge * edge)
+void Graph::RemoveEdge(Edge * edge)
 {
 	m_edges.removeOne( edge );
 	delete edge;
 }
 
-BaseGraph * BaseEdge::parentGraph()
+Graph * Edge::parentGraph()
 {
     if( ! parent())
         return 0;
-    return qobject_cast<BaseGraph*>(parent());
+    return qobject_cast<Graph*>(parent());
 }
 
-int BaseEdge::ConnectSame(BaseEdge *edge)
+int Edge::ConnectSame(Edge *edge)
 {
     if( m_v0 == edge->m_v0 && m_v1 == edge->m_v1 )
         return 1;
@@ -131,7 +131,7 @@ int BaseEdge::ConnectSame(BaseEdge *edge)
     return 0;
 }
 
-bool BaseEdge::Have(BaseVer *v0, BaseVer *v1)
+bool Edge::Have(Ver *v0, Ver *v1)
 {
     if( v1 )
         return m_v0 == v0 && m_v1 == v1;
@@ -139,7 +139,7 @@ bool BaseEdge::Have(BaseVer *v0, BaseVer *v1)
         return m_v0 == v0 || m_v1 == v0;
 }
 
-QString BaseEdge::toString() const
+QString Edge::toString() const
 {
     return QString("Edge( id: %1, v0: %2, v1: %3, this: %4)")
             .arg( m_info->id())
@@ -148,10 +148,11 @@ QString BaseEdge::toString() const
             .arg( (int)this );
 }
 
-BaseGraph * BaseVer::parentGraph()
+Graph * Ver::parentGraph()
 {
     if( ! parent())
         return 0;
-    return qobject_cast<BaseGraph*>(parent());
+    return qobject_cast<Graph*>(parent());
 
+}
 }

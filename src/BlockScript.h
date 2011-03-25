@@ -7,8 +7,8 @@
 #define SETPARENT( a ) if( a && ISLOCAL(a)) a->setParent( this );
 #define SETP(a, b) { \
     a = b; \
-   SETPARENT(a) \
-}
+    SETPARENT(a) \
+    }
 
 #define SETPA(a) SETP( m_##a, a )
 
@@ -18,21 +18,23 @@
 
 #define SETL( a, b ) {\
     FORL(b){ \
-        SETPARENT(b[i]);\
-        a.append( b[i] );\
+    SETPARENT(b[i]);\
+    a.append( b[i] );\
     } \
-}
+    }
 
 #define SETLA( a ) SETL( m_##a, a )
 
 #define ADDL( list, a ) {\
     list.append(a);\
     SETPARENT( a )\
-}
+    }
+
+namespace BlockScript{
 
 class BsVariable;
 class BsAction;
-class BlockScript;
+class BsScript;
 class BsObject;
 class BsStatement;
 class BsVariableDefinition;
@@ -48,44 +50,45 @@ typedef QList<BsExpression * > BsExpressionList;
 typedef QList<BsRange * > BsRangeList;
 typedef BsObject * BsObjectP;
 
+
 class BsObject : public QObject{
 public:
-//    BsObject( QObject * parent ):
-//        QObject( parent ){}
+    //    BsObject( QObject * parent ):
+    //        QObject( parent ){}
     virtual int type() const = 0;
     enum  BsType{
         Default, Variable, Action, Operator, Condition, Value, Range,/* List,*/ Function,  FunctionCall, If, UserString, Script, VariableDefinition, Null, UserType
     };
     enum  BsOperation{
-           Addition, Substraction, Multiplication, Division, Show, Hide, None, Mov
+        Addition, Substraction, Multiplication, Division, Show, Hide, None, Mov
     };
     static QString addQuotes(QString text){
         return QString("'%1'").arg(text);
     }
     bool isLocal( BsObjectP obj ){
         return 1;
-//        return obj->type() != BsObject::Variable;
+        //        return obj->type() != BsObject::Variable;
     }
 
-//    void set( BsObjectP & obj, BsObjectP value );
-//    void setList( BsObjectList & list, BsObjectList value );
-//    void setList( BsExpressionList & list, BsExpressionList value );
-//    void setList( BsStatementList & list, BsStatementList value );
-//    void setList( BsConditionList & list, BsConditionList value );
-//    void setList( BsRangeList & list, BsRangeList value );
-//    void add( BsExpressionList & list, BsExpression * value);
-//    void add( BsObjectList & list, BsObject * value);
-//    void add( BsStatementList & list, BsStatement * value);
-//    void add( BsRangeList & list, BsRange * value);
+    //    void set( BsObjectP & obj, BsObjectP value );
+    //    void setList( BsObjectList & list, BsObjectList value );
+    //    void setList( BsExpressionList & list, BsExpressionList value );
+    //    void setList( BsStatementList & list, BsStatementList value );
+    //    void setList( BsConditionList & list, BsConditionList value );
+    //    void setList( BsRangeList & list, BsRangeList value );
+    //    void add( BsExpressionList & list, BsExpression * value);
+    //    void add( BsObjectList & list, BsObject * value);
+    //    void add( BsStatementList & list, BsStatement * value);
+    //    void add( BsRangeList & list, BsRange * value);
 };
 
 class BsStatement : public BsObject {
-//public:
-//    BsStatement(){}
+    //public:
+    //    BsStatement(){}
 };
 
 class BsExpression : public BsObject {
-//    BsExpression(){}
+    //    BsExpression(){}
 };
 
 class BsFunction : public BsExpression{
@@ -244,7 +247,7 @@ public:
     BsExpression * max() { return m_max; }
     void setMin( BsExpression * min ){
         SETPA( min )
-//        set( (BsObjectP&)m_min, (BsObjectP)min);
+                //        set( (BsObjectP&)m_min, (BsObjectP)min);
     }
     void setMax( BsExpression * max ){
         SETPA( max );
@@ -268,9 +271,9 @@ public:
 
 class BsAction : public BsStatement{
 public:
-//    enum  BsActionType{
-//            Addition, Substraction, Multiplication, Division, Show, Hide, None, UserString
-//    };
+    //    enum  BsActionType{
+    //            Addition, Substraction, Multiplication, Division, Show, Hide, None, UserString
+    //    };
 private:
     BsVariable * m_var;
     BsExpression * m_value;
@@ -309,12 +312,12 @@ public:
 
 };
 
-class BlockScript : public BsObject
+class BsScript : public BsObject
 {
 private:
     BsStatementList m_statements;
 public:
-    BlockScript( BsStatementList statements = BsStatementList() );
+    BsScript( BsStatementList statements = BsStatementList() );
     BsStatementList statements(){ return m_statements; }
     void AddStatement( BsStatement * statement ){ ADDL( m_statements , statement); }
     void AddStatements( BsStatementList statements ){
@@ -325,5 +328,5 @@ public:
     void ClearStatements() { m_statements.clear(); };
     virtual int type() const { return BsObject::Script; }
 };
-
+}
 #endif // BSSCRIPT_H

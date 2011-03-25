@@ -4,22 +4,24 @@
 #include "QuestLogic.h"
 #include "BlockScript.h"
 
-class QlVerInfo : public BaseVerInfo{
+using namespace BlockScript;
+namespace Graphs {
+class QlVerInfo : public VerInfo{
 Q_OBJECT
 private:
     QlLocationStatementList m_locationStatements;
-    BlockScript * m_actions;
+    BsScript * m_actions;
     QString m_text;
 public:
     QlVerInfo(  QString id = QString(), QObject * parent = 0 ):
-        BaseVerInfo(id, parent){
-        m_actions = new BlockScript();
+        VerInfo(id, parent){
+        m_actions = new BsScript();
         m_text = QString();
     }
 
-    QlVerInfo(QString text, QlLocationStatementList locationStatements, BlockScript * actions, VerType verType, QString id, QObject * parent = 0 ):
+    QlVerInfo(QString text, QlLocationStatementList locationStatements, BsScript * actions, VerType verType, QString id, QObject * parent = 0 ):
          m_text(text),
-         BaseVerInfo(verType, id, parent){
+         VerInfo(verType, id, parent){
         setLocationStatements( locationStatements );
         setActions( actions );
     }
@@ -48,7 +50,7 @@ public:
 //    void setVerType(VerType verType){
 //        m_verType = verType;
 //    }
-    void setActions( BlockScript * actions ){
+    void setActions( BsScript * actions ){
         SETPA( actions )
     }
 
@@ -56,7 +58,7 @@ public:
         return m_locationStatements;
     }
 
-    BlockScript * actions( ) const{
+    BsScript * actions( ) const{
         return m_actions;
     }
 //    ~QlVerInfo(){
@@ -69,25 +71,25 @@ public:
 //    }
 };
 
-class QlEdgeInfo : public BaseEdgeInfo{
+class QlEdgeInfo : public EdgeInfo{
 Q_OBJECT
 private:
     QString m_text;
     QString m_question;
     BsExpression * m_expression;
-    BlockScript * m_actions;
+    BsScript * m_actions;
     QlPathStatementList m_pathStatements;
 public:
     QlEdgeInfo( QString id = QString(), QObject * parent = 0 )
-        :BaseEdgeInfo(id, parent )
+        :EdgeInfo(id, parent )
     {
         setExpression( new BsNull );
-        setActions( new BlockScript );
+        setActions( new BsScript );
     }
 
 
-    QlEdgeInfo(QString text, QString question, BsExpression * expression, BlockScript * actions, QlPathStatementList pathStatements, QString id, QObject * parent = 0 )
-        :m_text(text), m_question( question ), BaseEdgeInfo(id, parent){
+    QlEdgeInfo(QString text, QString question, BsExpression * expression, BsScript * actions, QlPathStatementList pathStatements, QString id, QObject * parent = 0 )
+        :m_text(text), m_question( question ), EdgeInfo(id, parent){
         setExpression( expression );
         setActions( actions );
         setPathStatements( pathStatements );
@@ -105,7 +107,7 @@ public:
         SETPA( expression )
     }
 
-    void setActions( BlockScript * actions ){
+    void setActions( BsScript * actions ){
         SETPA( actions )
     }
 
@@ -121,7 +123,7 @@ public:
         return m_text;
     }
 
-    BlockScript * actions( ) const{
+    BsScript * actions( ) const{
         return m_actions;
     }
 
@@ -134,16 +136,16 @@ public:
     }
 };
 
-class QlGraphInfo : public BaseGraphInfo{
+class QlGraphInfo : public GraphInfo{
     Q_OBJECT
 private:
     QlParametrList m_parametrList;
-    BlockScript * m_actions;
+    BsScript * m_actions;
 public:
     QlGraphInfo( QString name = QString(), QString description = QString(), QString id = QString(), QObject * parent = 0 ):
-        BaseGraphInfo(name, description, id, parent ){}
-    QlGraphInfo( QString name, QString description, BlockScript * actions, QlParametrList parametrList, QString id, QObject * parent = 0 ):
-        BaseGraphInfo(name, description, id, parent ){
+        GraphInfo(name, description, id, parent ){}
+    QlGraphInfo( QString name, QString description, BsScript * actions, QlParametrList parametrList, QString id, QObject * parent = 0 ):
+        GraphInfo(name, description, id, parent ){
         setParametrList( parametrList );
         setActions( actions );
     }
@@ -156,18 +158,19 @@ public:
         SETLA( parametrList );
     }
 
-    BlockScript * actions() const{
+    BsScript * actions() const{
         return m_actions;
     }
-    void setActions( BlockScript * actions ){
+    void setActions( BsScript * actions ){
         SETPA( actions )
     }
 };
 
-class QlGraph : public BaseGraph
+class QlGraph : public Graph
 {
 public:
     QlGraph();
 };
 
+}
 #endif // QLGRAPH_H

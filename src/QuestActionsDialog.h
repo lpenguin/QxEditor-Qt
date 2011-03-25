@@ -8,13 +8,14 @@
 namespace Ui {
     class QuestActionsDialog;
 }
+using namespace Graphs;
 
 class GraphDialog : public QDialog {
     Q_OBJECT
 public:
     GraphDialog(QWidget *parent = 0);
     ~GraphDialog();
-    int ShowGraph(BaseGraph * graph);
+    int ShowGraph(Graph * graph);
     void setGraphWidget( BaseGraphWidget * widget);
 protected:
     void changeEvent(QEvent *e);
@@ -22,7 +23,7 @@ protected:
 private:
     Ui::QuestActionsDialog *ui;
 
-    BaseGraph * m_graph;
+    Graph * m_graph;
 public slots:
     void buttonBoxTriggered();
 };

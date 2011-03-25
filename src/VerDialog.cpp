@@ -14,7 +14,7 @@ VerDialog::~VerDialog()
     delete ui;
 }
 
-int VerDialog::ShowVer(BaseVer * ver)
+int VerDialog::ShowVer(Ver * ver)
 {
     m_ver = ver;
     ui->verWidget->ShowVer( ver );

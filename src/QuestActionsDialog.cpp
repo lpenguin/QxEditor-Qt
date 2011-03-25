@@ -13,7 +13,7 @@ GraphDialog::~GraphDialog()
 {
     delete ui;
 }
-int GraphDialog::ShowGraph(BaseGraph * graph){
+int GraphDialog::ShowGraph(Graph * graph){
     m_graph = graph;
     ui->graphWidget->ShowGraph(graph);
     return exec();

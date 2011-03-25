@@ -3,6 +3,7 @@
 
 #include <QtCore>
 
+namespace QMScript{
 class QMException;
 struct QMAction;
 struct QMLocation;
@@ -41,7 +42,7 @@ public:
 
 struct QMLocation{
     enum QMLocationType{
-            Odinary, Start, Success, Fail, Death, Empty
+        Odinary, Start, Success, Fail, Death, Empty
     };
 
     qint32 x, y;
@@ -102,20 +103,20 @@ struct QMCondition{
 };
 struct QMAction{
     enum QMParametrActionType{
-            Number, Procent, Mov, Equation
+        Number, Procent, Mov, Equation
     };
     enum QMParamterVisible{
-            DontTouch, Show, Hide
+        DontTouch, Show, Hide
     };
     QMParametr * param;
-//    QString parName;
+    //    QString parName;
     qint32 addNumber;
     QMParametrActionType type;
 
     QString equation;
     QMParamterVisible show;
     bool notEmpty(){
-                return !( addNumber == 0 && equation.isEmpty() && show == QMAction::DontTouch );
+        return !( addNumber == 0 && equation.isEmpty() && show == QMAction::DontTouch );
     }
 };
 
@@ -126,15 +127,15 @@ struct QMParametrRange{
 };
 
 struct QMStringReplaces{
-     QString date;
-     QString money;
-     QString fromPlanet;
-     QString fromStar;
-     QString toPlanet;
-     QString toStar;
-     QString ranger;
-     QString congString;
-     QString missionString;
+    QString date;
+    QString money;
+    QString fromPlanet;
+    QString fromStar;
+    QString toPlanet;
+    QString toStar;
+    QString ranger;
+    QString congString;
+    QString missionString;
 };
 
 class QMGraph
@@ -151,5 +152,5 @@ public:
     QMLocationList locations() const { return m_locations; }
     QMPathList paths() const { return m_paths; }
 };
-
+}
 #endif // QMGRAPH_H

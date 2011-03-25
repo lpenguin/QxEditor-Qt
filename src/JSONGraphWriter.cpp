@@ -16,14 +16,14 @@ QString Property2JSON(QString name, QString value){
     return "\""+name+"\""+":\""+value.replace("\"","\\\"").replace("\r\n", "\\n").replace("\n", "\\n").replace("\t","\\t")+"\"";
 }
 
-void JSONGraphWriter::WriteGraph( BaseGraph * graph, const QString & filename ){
+void JSONGraphWriter::WriteGraph( Graph * graph, const QString & filename ){
     QFile file( filename );
     if ( file.open(  QIODevice::WriteOnly ) ) {
 
         QTextStream stream( &file );
         QStringList props;
         QStringList versStrings;
-        foreach(BaseVer * v, graph->vers()){
+        foreach(Ver * v, graph->vers()){
             versStrings<<Ver2JSON(v);
         }
 
@@ -36,18 +36,18 @@ void JSONGraphWriter::WriteGraph( BaseGraph * graph, const QString & filename ){
 
 
 
-QString JSONGraphWriter::Edge2JSON(BaseEdge * edge){
+QString JSONGraphWriter::Edge2JSON(Edge * edge){
     QStringList props;
     props << m_infoWriter->EdgeInfo2JSON( edge->info())
              << Property2JSON("nextVer", edge->v1()->info()->id());
     return "{"+props.join(",\n  ")+"}";
 }
 
-QString JSONGraphWriter::Ver2JSON(BaseVer * ver){
+QString JSONGraphWriter::Ver2JSON(Ver * ver){
     QStringList props;
     props<<m_infoWriter->VerInfo2JSON(ver->info());
     QStringList edgesStrings;
-    foreach(BaseEdge * e, ver->parentGraph()->edges()){
+    foreach(Edge * e, ver->parentGraph()->edges()){
         if(e->v0() == ver ){
             edgesStrings<<Edge2JSON( e );
         }
@@ -58,7 +58,7 @@ QString JSONGraphWriter::Ver2JSON(BaseVer * ver){
     return "{"+props.join(",\n   ")+"}";
 }
 
-QStringList SimpleJSONInfoWriter::VerInfo2JSON(BaseVerInfo *info)
+QStringList SimpleJSONInfoWriter::VerInfo2JSON(VerInfo *info)
 {
     QStringList props;
     SimpleVerInfo * simpleInfo = (SimpleVerInfo *)info;
@@ -69,7 +69,7 @@ QStringList SimpleJSONInfoWriter::VerInfo2JSON(BaseVerInfo *info)
     return props;
 }
 
-QStringList SimpleJSONInfoWriter::EdgeInfo2JSON(BaseEdgeInfo *info)
+QStringList SimpleJSONInfoWriter::EdgeInfo2JSON(EdgeInfo *info)
 {
     QStringList props;
     SimpleEdgeInfo * simpleInfo = (SimpleEdgeInfo *)info;
@@ -82,7 +82,7 @@ QStringList SimpleJSONInfoWriter::EdgeInfo2JSON(BaseEdgeInfo *info)
     return props;
 }
 
-QStringList SimpleJSONInfoWriter::GraphInfo2JSON(BaseGraphInfo *info)
+QStringList SimpleJSONInfoWriter::GraphInfo2JSON(GraphInfo *info)
 {
     QStringList props;
     SimpleGraphInfo * simpleInfo = (SimpleGraphInfo *)info;

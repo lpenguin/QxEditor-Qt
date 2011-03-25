@@ -268,7 +268,7 @@ QString BsToESMAScriptConverter::ConvertBsRange(BsRange *range)
             .arg(ConvertBsExpression( range->max()));
 }
 
-QString BsToESMAScriptConverter::ConvertBlockSript(BlockScript *script)
+QString BsToESMAScriptConverter::ConvertBlockSript(BsScript *script)
 {
     return ConvertBsStatements( script->statements() );
 }
@@ -363,6 +363,7 @@ QString BsToESMAScriptConverter::ConvertQlParametr(QlParametr *parametr)
 {
     QStringList result;
     result << m_tagConverter.TagStart() + m_tagConverter.ParametrTag(parametr);
+    result << QString("var %1 = %2;").arg( parametr->var()->name() ).arg( ConvertBsExpression( parametr->startValue() ));
     foreach (QlParamStatement * statement, parametr->paramStatements()) {
         result << ConvertBsStatement( statement );
     }
@@ -383,7 +384,7 @@ QString BsToESMAScriptConverter::ConvertQlLocationTexts(QlLocationTexts *texts)
 {
     QStringList result;
     result << m_tagConverter.TagStart() + m_tagConverter.LocationTextsTag( texts );
-    result << QString("AddLocationTexts( '%1', function(){ return %2; }, ['%3'] );")
+    result << QString("AddLocationTexts( '%1', function(){ return %2; }, [\"%3\"] );")
               .arg( texts->locationId() )
               .arg(ConvertBsExpression( texts->expr()))
               .arg( texts->texts().join("\",\""));

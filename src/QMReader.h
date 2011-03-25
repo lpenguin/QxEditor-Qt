@@ -9,6 +9,7 @@
 #include <iostream>
 #include "QMGraph.h"
 
+using namespace QMScript;
 class QMReader
 {
 public:

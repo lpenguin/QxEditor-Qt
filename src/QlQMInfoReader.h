@@ -12,18 +12,18 @@ class QlQMInfoReader : public AbstractQMInfoReader{
 private:
     QMScriptToBsConverter m_qmToBs;
 public:
-    BaseVerInfo * ReadVerInfo( QMLocation * location );
-    virtual BaseEdgeInfo * ReadEdgeInfo( QMPath * path );
-    virtual BaseGraphInfo * ReadGraphInfo( QMGraph * graph );
+    VerInfo * ReadVerInfo( QMLocation * location );
+    virtual EdgeInfo * ReadEdgeInfo( QMPath * path );
+    virtual GraphInfo * ReadGraphInfo( QMGraph * graph );
 private:
     QlLocationTexts * ConvertLocationTexts(QMLocation * location);
 
     QlPathStatementList ConvertPathStatements( QMPath * path );
     QlParametrList ConvertParametrs(QMParametrList params );
     QlParametr * ConvertParametr( QMParametr * parametr);
-    BlockScript * ConvertActions(QMActionList actions);
+    BsScript * ConvertActions(QMActionList actions);
     BsExpression * ConvertConditions(QMConditionList conditions);
-    BaseVerInfo::VerType ConvertLocationType(QMLocation::QMLocationType type);
+    VerInfo::VerType ConvertLocationType(QMLocation::QMLocationType type);
 //    QString pathId( QMPath * path );
 };
 

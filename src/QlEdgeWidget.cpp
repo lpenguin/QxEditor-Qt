@@ -15,7 +15,7 @@ QlEdgeWidget::~QlEdgeWidget()
     delete m_converter;
 }
 
-void QlEdgeWidget::ShowEdge(BaseEdge *edge)
+void QlEdgeWidget::ShowEdge(Edge *edge)
 {
     QlEdgeInfo * info;
     if( info = qobject_cast<QlEdgeInfo *>(edge->info())){
@@ -29,7 +29,7 @@ void QlEdgeWidget::ShowEdge(BaseEdge *edge)
     }
 }
 
-void QlEdgeWidget::WriteEdge(BaseEdge *edge)
+void QlEdgeWidget::WriteEdge(Edge *edge)
 {
     QlEdgeInfo * info;
     if( info = qobject_cast<QlEdgeInfo *>(edge->info())){

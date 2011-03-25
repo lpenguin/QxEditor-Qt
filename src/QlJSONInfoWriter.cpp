@@ -5,7 +5,7 @@ QlJSONInfoWriter::QlJSONInfoWriter()
 }
 
 
-QStringList QlJSONInfoWriter::VerInfo2JSON(BaseVerInfo *info)
+QStringList QlJSONInfoWriter::VerInfo2JSON(VerInfo *info)
 {
     QStringList props;
     QlVerInfo * qlInfo = (QlVerInfo *)info;
@@ -19,7 +19,7 @@ QStringList QlJSONInfoWriter::VerInfo2JSON(BaseVerInfo *info)
     return props;
 }
 
-QStringList QlJSONInfoWriter::EdgeInfo2JSON(BaseEdgeInfo *info)
+QStringList QlJSONInfoWriter::EdgeInfo2JSON(EdgeInfo *info)
 {
     QStringList props;
     QlEdgeInfo * qlInfo = (QlEdgeInfo *)info;
@@ -33,7 +33,7 @@ QStringList QlJSONInfoWriter::EdgeInfo2JSON(BaseEdgeInfo *info)
     return props;
 }
 
-QStringList QlJSONInfoWriter::GraphInfo2JSON(BaseGraphInfo *info)
+QStringList QlJSONInfoWriter::GraphInfo2JSON(GraphInfo *info)
 {
     QStringList props;
     QlGraphInfo * qlInfo = (QlGraphInfo *)info;

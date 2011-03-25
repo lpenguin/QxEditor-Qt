@@ -9,9 +9,9 @@ class QlJSONInfoWriter : public AbstractJSONInfoWriter
 {
 public:
     QlJSONInfoWriter();
-    QStringList VerInfo2JSON(BaseVerInfo *info);
-    QStringList EdgeInfo2JSON(BaseEdgeInfo *info);
-    QStringList GraphInfo2JSON(BaseGraphInfo *info);
+    QStringList VerInfo2JSON(VerInfo *info);
+    QStringList EdgeInfo2JSON(EdgeInfo *info);
+    QStringList GraphInfo2JSON(GraphInfo *info);
 private:
     BsToESMAScriptConverter m_converter;
 };

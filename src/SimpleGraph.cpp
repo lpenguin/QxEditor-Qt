@@ -1,6 +1,9 @@
 #include "SimpleGraph.h"
+namespace Graphs{
 
 SimpleGraph::SimpleGraph(QObject *parent) :
-    BaseGraph(parent)
+    Graph(parent)
 {
+}
+
 }

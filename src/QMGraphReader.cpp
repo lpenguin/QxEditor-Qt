@@ -6,8 +6,8 @@ QMGraphReader::QMGraphReader( AbstractQMInfoReader * infoReader ):
 
 }
 
-BaseGraph * QMGraphReader::ReadGraph(const QString & filename, BaseGraph * graph ){
-    if( ! graph ) graph = new BaseGraph();
+Graph * QMGraphReader::ReadGraph(const QString & filename, Graph * graph ){
+    if( ! graph ) graph = new Graph();
     m_graph = graph;
     QMReader reader;
     m_qmGraph = reader.ReadGraph( filename );
@@ -20,7 +20,7 @@ BaseGraph * QMGraphReader::ReadGraph(const QString & filename, BaseGraph * graph
         ReadVers();
         ReadEdges();
     }
-    catch(Exception & e){
+    catch(Error & e){
         qDebug()<<e.message();
         return 0;
     }
@@ -35,11 +35,11 @@ void QMGraphReader::ReadVers()
     }
 }
 
-BaseVer * QMGraphReader::ReadVer(QMLocation *location)
+Ver * QMGraphReader::ReadVer(QMLocation *location)
 {
     QPoint pos = QPoint(location->x, location->y);
-    BaseVerInfo * info = m_infoReader->ReadVerInfo( location );
-    return new BaseVer( info, pos );
+    VerInfo * info = m_infoReader->ReadVerInfo( location );
+    return new Ver( info, pos );
 }
 
 void QMGraphReader::ReadEdges()
@@ -49,12 +49,12 @@ void QMGraphReader::ReadEdges()
     }
 }
 
-BaseEdge * QMGraphReader::ReadEdge(QMPath *path)
+Edge * QMGraphReader::ReadEdge(QMPath *path)
 {
-    BaseVer * v0 = FindVer( path->ownerLoc );
-    BaseVer * v1 = FindVer( path->nextLoc );
-    BaseEdgeInfo * info = m_infoReader->ReadEdgeInfo( path );
-    return new BaseEdge(info, v0, v1);
+    Ver * v0 = FindVer( path->ownerLoc );
+    Ver * v1 = FindVer( path->nextLoc );
+    EdgeInfo * info = m_infoReader->ReadEdgeInfo( path );
+    return new Edge(info, v0, v1);
 }
 
 void QMGraphReader::ReadGraphInfo()
@@ -62,7 +62,7 @@ void QMGraphReader::ReadGraphInfo()
     m_graph->setInfo( m_infoReader->ReadGraphInfo(m_qmGraph ));
 }
 
-BaseVer * QMGraphReader::FindVer( QMLocation *location)
+Ver * QMGraphReader::FindVer( QMLocation *location)
 {
     return m_graph->vers().at( m_qmGraph->locations().indexOf( location ) );
 }

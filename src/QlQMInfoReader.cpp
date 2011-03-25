@@ -1,7 +1,7 @@
 #include "QlQMInfoReader.h"
 
 
-BaseVerInfo * QlQMInfoReader::ReadVerInfo(QMLocation *location)
+VerInfo * QlQMInfoReader::ReadVerInfo(QMLocation *location)
 {
     QlLocationTexts * texts = ConvertLocationTexts( location );
     QlLocationStatementList statements;
@@ -13,7 +13,7 @@ BaseVerInfo * QlQMInfoReader::ReadVerInfo(QMLocation *location)
                          QString("L")+QString::number(location->locNumber) );
 }
 
-BaseEdgeInfo * QlQMInfoReader::ReadEdgeInfo(QMPath *path)
+EdgeInfo * QlQMInfoReader::ReadEdgeInfo(QMPath *path)
 {
     BsExpression * expr;
     if( ! path->logicalCondition.isEmpty() )
@@ -33,12 +33,12 @@ BaseEdgeInfo * QlQMInfoReader::ReadEdgeInfo(QMPath *path)
                           QString("P")+QString::number(path->pathNumber) );
 }
 
-BaseGraphInfo * QlQMInfoReader::ReadGraphInfo(QMGraph *graph)
+GraphInfo * QlQMInfoReader::ReadGraphInfo(QMGraph *graph)
 {
     m_qmToBs.setQmGlobals( graph->params() );
     return new QlGraphInfo( "[Not inplemented yet]",
                            graph->stringReplaces().missionString,
-                           new BlockScript(),
+                           new BsScript(),
                            ConvertParametrs( graph->params()), "Main");
 }
 
@@ -52,7 +52,7 @@ QlLocationTexts * QlQMInfoReader::ConvertLocationTexts(QMLocation *location)
     return new QlLocationTexts(QString("L%1").arg(location->locNumber), location->texts, expr);
 }
 
-BlockScript * QlQMInfoReader::ConvertActions(QMActionList actions)
+BsScript * QlQMInfoReader::ConvertActions(QMActionList actions)
 {
     return  m_qmToBs.ConvertQMActions(actions);
 }
@@ -69,23 +69,23 @@ BsExpression * QlQMInfoReader::ConvertConditions(QMConditionList conditions)
     return expr;
 }
 
-BaseVerInfo::VerType QlQMInfoReader::ConvertLocationType(QMLocation::QMLocationType type)
+VerInfo::VerType QlQMInfoReader::ConvertLocationType(QMLocation::QMLocationType type)
 {
     switch(type){
     case QMLocation::Death:
-        return BaseVerInfo::fail;
+        return VerInfo::fail;
     case QMLocation::Empty:
-        return BaseVerInfo::odinary;
+        return VerInfo::odinary;
     case QMLocation::Fail:
-        return BaseVerInfo::fail;
+        return VerInfo::fail;
     case QMLocation::Odinary:
-        return BaseVerInfo::odinary;
+        return VerInfo::odinary;
     case QMLocation::Start:
-        return BaseVerInfo::start;
+        return VerInfo::start;
     case QMLocation::Success:
-        return BaseVerInfo::win;
+        return VerInfo::win;
     }
-    return BaseVerInfo::odinary;
+    return VerInfo::odinary;
 
 }
 

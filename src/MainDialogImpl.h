@@ -65,8 +65,8 @@ private slots:
     void VersConnected( VerItem *, VerItem *);
 
 private:
-    BaseVer * createVer();
-    BaseEdge * createEdge( BaseVer * v0, BaseVer * v1 );
+    Ver * createVer();
+    Edge * createEdge( Ver * v0, Ver * v1 );
     BaseVerWidget * verWidget() const;
     BaseEdgeWidget * edgeWidget() const;
     BaseGraphWidget * graphWidget() const;

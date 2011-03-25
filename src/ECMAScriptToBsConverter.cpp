@@ -13,9 +13,9 @@ ECMAScriptToBsConverter::ECMAScriptToBsConverter()
     FillCharMap();
 }
 
-BlockScript * ECMAScriptToBsConverter::ConvertScript(const QStringList & list) throw( ParseError )
+BsScript * ECMAScriptToBsConverter::ConvertScript(const QStringList & list) throw( ParseError )
 {
-    BlockScript * script = new BlockScript;
+    BsScript * script = new BsScript;
     BsStatementList statements = ConvertStatements( list, 0, list.count() );
     script->AddStatements( statements );
     return script;
@@ -461,6 +461,7 @@ QString ECMAScriptToBsConverter::ConvertString(QString value)
 QlParametr * ECMAScriptToBsConverter::ConvertParametr(QStringList tags, BsStatementList statements)
 {
     BsVariable * var = ConvertVariable( tags.takeFirst() );
+    BsExpression * startValue = ConvertExpression( tags.takeFirst() );
     QlParamStatementList paramStatements;
     foreach(BsStatement * st, statements){
         switch( st->type()){
@@ -477,7 +478,7 @@ QlParametr * ECMAScriptToBsConverter::ConvertParametr(QStringList tags, BsStatem
             throw ParseError( "Invalid statement", ParseError::InvalidStatement);
         }
     }
-    return new QlParametr( var, paramStatements );
+    return new QlParametr( var, startValue, paramStatements );
 }
 
 //QScriptValue ECMAScriptToBsConverter::parseTag(QString tag)
@@ -488,50 +489,14 @@ QlParametr * ECMAScriptToBsConverter::ConvertParametr(QStringList tags, BsStatem
 //    sc
 //}
 
-qint32 ECMAScriptToBsConverter::FindQuoteEnd(const QString &str, qint32 startIndex) const throw( ParseError )
+
+QStringList ECMAScriptToBsConverter::parseList(const QString &str) const
 {
-    for(qint32 i = startIndex + 1; i < str.count(); i++){
-        if( str[i] == '\'' )
-            return i;
-    }
-    throw( ParseError(QString("Missing quote end in: %1 ( ==> %2 )").arg(str).arg(str.right( str.count() - startIndex )), ParseError::MissingQuoteEnd));
+    QString mid = midStr( str, 1, 1 );
+    return splitSmart( mid );
 }
 
-qint32 ECMAScriptToBsConverter::FindBracketEnd(const QString &str, qint32 startIndex,
-                                               const QChar & openBracket,
-                                               const QChar & closeBracket ) const throw( ParseError )
-{
-    qint32 bracketCounter = 1, i;
-    for(i = startIndex + 1; i < str.count() ; i++){
-        QChar ch = str[i];
-        if( str[i] == openBracket )
-            bracketCounter++;
-        else if( str[i] == closeBracket)
-            bracketCounter--;
-        if(!bracketCounter)
-            return i;
-    }
-//    ParseError(QString("Missing quote end in: %1 ( ==> %2 )").arg(str).arg(str.truncate( startIndex ))
-    if( bracketCounter ) throw( ParseError(QString("Missing bracket end in %1 ( ==> %2 )").arg(str).arg(str.right( str.count() - startIndex )), ParseError::MissingBracketEnd));
-}
-
-qint32 ECMAScriptToBsConverter::FindNextComma(const QString &str, qint32 startIndex) const throw( ParseError )
-{
-    for(qint32 i = startIndex; i < str.count(); i++){
-        if( str[i] == ',' )
-            return i;
-        else if( str[i]== '(' )
-            i = FindBracketEnd( str, i );
-        else if( str[i] == '\'')
-            i = FindQuoteEnd( str, i );
-        else if( str[i] == '[')
-            i = FindBracketEnd( str, i, QChar('['), QChar(']') );
-    }
-    return -1;
-}
-
-QString ECMAScriptToBsConverter::unpackSpecialChars(const QString &str) const
-{
+QString ECMAScriptToBsConverter::unpackSpecialChars(const QString &str) const  {
     QMapIterator<QString, QString> i(m_charMap);
     QString s = str;
     while(i.hasNext()){
@@ -540,27 +505,3 @@ QString ECMAScriptToBsConverter::unpackSpecialChars(const QString &str) const
     }
     return s;
 }
-
-QStringList ECMAScriptToBsConverter::splitSmart(const QString &str) const
-{
-    QStringList result;
-    int pos = 0, prev = 0 ;
-    while( (pos = FindNextComma( str, prev )) != -1 ){
-        result << str.mid( prev, pos - prev).trimmed();
-        prev = pos + 1;
-    }
-    result << str.mid( prev, str.count() - prev).trimmed();
-    return result;
-}
-
-QString ECMAScriptToBsConverter::midStr(const QString &str, qint32 left, qint32 right) const
-{
-    return str.mid( left, str.count() - right - 1);
-}
-
-QStringList ECMAScriptToBsConverter::parseList(const QString &str) const
-{
-    QString mid = midStr( str, 1, 1 );
-    return splitSmart( mid );
-}
-

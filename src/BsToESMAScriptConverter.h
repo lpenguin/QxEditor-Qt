@@ -7,7 +7,7 @@ class BsToESMAScriptConverter
 {
 public:
     BsToESMAScriptConverter();
-    QString ConvertBlockSript( BlockScript * script);
+    QString ConvertBlockSript( BsScript * script);
     QString ConvertBsConditionStatement( BsExpression *object );
     QString ConvertQlParametr(QlParametr * parametr);
     QString ConvertQlParametrList(QlParametrList list);

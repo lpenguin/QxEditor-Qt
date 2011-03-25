@@ -1,13 +1,13 @@
 #include "EdgeItem.h"
 
 float DistancePoint(QPointF p0, QPointF p1){
-	QPointF delta = p0 - p1;
-	return sqrt( pow( delta.x(), 2 ) +  pow( delta.x() , 2) );
+    QPointF delta = p0 - p1;
+    return sqrt( delta.x() * delta.x() +  delta.y() * delta.y() );
 }
 
 //
-EdgeItem::EdgeItem( BaseEdge * edge, QPointF endPoint, float curvature, float selectDistance, QGraphicsItem * parent  )
-	: QGraphicsPathItem(  parent )
+EdgeItem::EdgeItem( Edge * edge, QPointF endPoint, float curvature, float selectDistance, QGraphicsItem * parent  )
+    : QGraphicsPathItem(  parent )
 {
     m_edge = edge;
     m_curvature = curvature;
@@ -16,10 +16,10 @@ EdgeItem::EdgeItem( BaseEdge * edge, QPointF endPoint, float curvature, float se
     m_selectDistance = selectDistance;
     
     m_pen =  QPen(m_color, 3, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin);
-    points = 0;
+//    points = 0;
     pointsCount = 0;
 
-	UpdatePath();
+    UpdatePath();
     setAcceptHoverEvents(true);
     setParentItem( parent );
     setFlag(QGraphicsItem::ItemIsSelectable, true);
@@ -29,9 +29,9 @@ EdgeItem::EdgeItem( BaseEdge * edge, QPointF endPoint, float curvature, float se
 }
 //
 EdgeItem::~EdgeItem(){
-	qDebug()<<"Destructor EdgeItem"<<toString();
-	if( points ) 
-		delete []points;
+//    qDebug()<<"Destructor EdgeItem"<<toString();
+//    if( points )
+//        delete []points;
 }
 //void EdgeItem::UpdatePath()
 //{
@@ -75,7 +75,7 @@ EdgeItem::~EdgeItem(){
 
 //bool EdgeItem::Have(Ver * v0, Ver * v1)
 //{
-	//return m_v0->ver() == v0 && m_v1->ver() == v1;
+//return m_v0->ver() == v0 && m_v1->ver() == v1;
 //}
 
 
@@ -83,12 +83,12 @@ void EdgeItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, 
 {
     QPen selectedPen(Qt::black, 2, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin);
     QPen unselectedPen(Qt::black, 1, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin);
-	
-     if( isSelected() )
-         painter->setPen(selectedPen);
-     else
-         painter->setPen(unselectedPen);
-	
+
+    if( isSelected() )
+        painter->setPen(selectedPen);
+    else
+        painter->setPen(unselectedPen);
+
     painter->drawPath( path() );
     painter->drawPath( m_arrowPath );
 
@@ -97,21 +97,21 @@ void EdgeItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, 
 QRectF EdgeItem::boundingRect() const
 {
     //qDebug("rect");
-   // QRectF r = m_path.boundingRect();
-  //  qDebug()<<(void*)this<<" left "<<r.left()<<" top "<<r.top()<<" width  "<<r.width()<<" height "<<r.height();
+    // QRectF r = m_path.boundingRect();
+    //  qDebug()<<(void*)this<<" left "<<r.left()<<" top "<<r.top()<<" width  "<<r.width()<<" height "<<r.height();
     QPainterPathStroker s;
     s.setWidth(20);
     return s.createStroke( path() ).boundingRect();
-        //QRectF(0,0, 20*m_curve,m_p1.x() - m_p0.x());//
+    //QRectF(0,0, 20*m_curve,m_p1.x() - m_p0.x());//
 }
 QPainterPath EdgeItem::shape () const{
-	QPainterPathStroker s;
-	s.setWidth(20);
-	return s.createStroke( path() );
+    QPainterPathStroker s;
+    s.setWidth(20);
+    return s.createStroke( path() );
 }
 
 void EdgeItem::mousePressEvent(QGraphicsSceneMouseEvent *event){
-//	qDebug()<<"press on "<<(void*)this;
+    //	qDebug()<<"press on "<<(void*)this;
 }
 //bool EdgeItem::contains ( const QPointF & point ) const{
 //    qDebug()<<"cnt "<<(void*)this<<" "<<point.x()<<" "<<point.y();
@@ -144,34 +144,35 @@ void EdgeItem::UpdateArrow(){
 }
 
 void EdgeItem::UpdatePath( void ){
-	if( points )
-		delete []points;
+//    if( points )
+//        delete []points;
+    points.clear();
+    QPainterPath m_path;
+    m_path.moveTo(0, 0);
 
-	QPainterPath m_path;
-	m_path.moveTo(0, 0);
+    QPointF control = MidPoint();
+    double dist = DistancePoint(QPointF(0, 0) , control) + DistancePoint(control, m_endPoint);
 
-	QPointF control = MidPoint();
-        double dist = DistancePoint(QPointF(0, 0) , control) + DistancePoint(control, m_endPoint);
-	
-        int maxPointsCount = 8;
-	pointsCount = (int)(dist / m_selectDistance) + 1;
-        if(pointsCount > maxPointsCount ){
-            pointsCount = maxPointsCount;
-        }
-	points = new QPointF[pointsCount];
-	QPointF point;
-	for (int i = 0; i < pointsCount; i++){
-		point = BezierValue( (double)i / ( pointsCount - 1), control );
-		m_path.lineTo( point );
-		points[i] = point;
-	}
-	
-        setPath( m_path );
-        UpdateArrow();
+    int maxPointsCount = 8;
+    pointsCount = (int)(dist / m_selectDistance) + 1;
+    if(pointsCount > maxPointsCount ){
+        pointsCount = maxPointsCount;
+    }
+//    points = new QPointF[pointsCount];
+    QPointF point;
+    for (int i = 0; i < pointsCount; i++){
+        point = BezierValue( (double) i / ( pointsCount - 1), control );
+        m_path.lineTo( point );
+//        m_path.addEllipse(point, 3,3);
+        points << point + pos();
+    }
+
+    setPath( m_path );
+    UpdateArrow();
 }
 
 QPointF EdgeItem::BezierValue( double t, QPointF pm ){
-	double r1, r2, r3;
+    double r1, r2, r3;
     r1 = (1 - t) * (1 - t);
     r2 = 2 * t * (1 - t);
     r3 = t * t;
@@ -181,29 +182,33 @@ QPointF EdgeItem::BezierValue( double t, QPointF pm ){
 
 QPointF EdgeItem::MidPoint( void ){
 
-	double c,d,l;
-	d=m_endPoint.x() - pos().x();
-	c=m_endPoint.y() - pos().y();
+    double c,d,l;
+    d=m_endPoint.x() - pos().x();
+    c=m_endPoint.y() - pos().y();
 
-	l = sqrt(d * d + c * c);
-	return QPointF( d / 2 + m_curvature * c / l ,  c / 2 - m_curvature * d / l );
+    l = sqrt(d * d + c * c);
+    return QPointF( d / 2 + m_curvature * c / l ,  c / 2 - m_curvature * d / l );
 }
 
 qreal EdgeItem::Distance( QPointF point){
-	qreal minDist = 99999;
-	qreal dist;
-	for(int i = 0; i < pointsCount; i++){
-		dist = DistancePoint( points[i], point);
-		if( minDist > dist )
-			minDist = dist;
-	}
-	return minDist;
+//    qDebug()<<"Distance point: "<<point<<", pos: "<<pos()<<", end: "<<endPoint();
+    qreal minDist = 99999;
+    qreal dist;
+    for(int i = 0; i < points.count(); i++){
+//        qDebug()<<"dist: "<<dist;
+        dist = DistancePoint( points[i], point);
+        if( minDist > dist ){
+            minDist = dist;
+//            qDebug()<<"min";
+        }
+    }
+    return minDist;
 }
 QString EdgeItem::toString(){
-		return QString("EdgeItem( id: %1, v0: %2, v1: %3, this: %4)")
-                .arg( m_edge->info()->id() )
-                .arg( m_edge->v0()->info()->id() )
-                .arg( m_edge->v1()->info()->id() )
-		.arg( (int)this );
-	
+    return QString("EdgeItem( id: %1, v0: %2, v1: %3, this: %4)")
+            .arg( m_edge->info()->id() )
+            .arg( m_edge->v0()->info()->id() )
+            .arg( m_edge->v1()->info()->id() )
+            .arg( (int)this );
+
 }

@@ -257,7 +257,7 @@ QString BsToTagConverter::FunctionCallTag(BsFunctionCall *function)
 
 QString BsToTagConverter::ParametrTag(QlParametr *par)
 {
-    return QString("ql.param(%1)").arg(VariableTag(par->var()));
+    return QString("ql.param(%1, %2)").arg(VariableTag(par->var())).arg( ExpressionTag( par->startValue() ));
 }
 
 QString BsToTagConverter::LocationTextsTag(QlLocationTexts *texts)

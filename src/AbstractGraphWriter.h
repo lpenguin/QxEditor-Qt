@@ -4,6 +4,8 @@
 #include "BaseGraph.h"
 #include <QtCore>
 
+using namespace Graphs;
+
 class AbstractGraphWriter
 {
 //private:
@@ -11,7 +13,7 @@ class AbstractGraphWriter
 public:
     AbstractGraphWriter(/* AbstractInfoWriter * infoWriter = 0*/)/*:*/
         /*m_infoWriter( infoWriter )*/{}
-    virtual void WriteGraph( BaseGraph * graph, const QString & filename ) = 0;
+    virtual void WriteGraph( Graph * graph, const QString & filename ) = 0;
 //    void setInfoWriter( AbstractInfoWriter * infoWriter ){ m_infoWriter = infoWriter; }
 //    AbstractInfoWriter * infoWriter( void ) const { return m_infoWriter; }
 };

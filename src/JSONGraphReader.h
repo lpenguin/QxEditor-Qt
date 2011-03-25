@@ -9,7 +9,7 @@
 #include <QtScript>
 #include <QMessageBox>
 
-BaseVerInfo::VerType Str2Type( QString type );
+VerInfo::VerType Str2Type( QString type );
 
 enum eJSONGraphReaderType {
     JSONGraphReaderType = 1
@@ -17,16 +17,16 @@ enum eJSONGraphReaderType {
 
 class AbstractJSONInfoReader{
 public:
-    virtual BaseVerInfo * ReadVerInfo( QScriptValue value ) = 0;
-    virtual BaseEdgeInfo * ReadEdgeInfo( QScriptValue value ) = 0;
-    virtual BaseGraphInfo * ReadGraphInfo( QScriptValue value ) = 0;
+    virtual VerInfo * ReadVerInfo( QScriptValue value ) = 0;
+    virtual EdgeInfo * ReadEdgeInfo( QScriptValue value ) = 0;
+    virtual GraphInfo * ReadGraphInfo( QScriptValue value ) = 0;
 };
 
 class SimpleJSONInfoReader : public AbstractJSONInfoReader{
 public:
-    BaseVerInfo * ReadVerInfo( QScriptValue value );
-    BaseEdgeInfo * ReadEdgeInfo(  QScriptValue value );
-    BaseGraphInfo * ReadGraphInfo( QScriptValue value );
+    VerInfo * ReadVerInfo( QScriptValue value );
+    EdgeInfo * ReadEdgeInfo(  QScriptValue value );
+    GraphInfo * ReadGraphInfo( QScriptValue value );
 };
 
 class JSONGraphReader : public AbstractGraphReader
@@ -35,14 +35,14 @@ private:
     AbstractJSONInfoReader * m_infoReader;
 public:
     JSONGraphReader( AbstractJSONInfoReader * infoReader = 0);
-    virtual BaseGraph * ReadGraph(const QString & filename, BaseGraph * graph = 0);
+    virtual Graph * ReadGraph(const QString & filename, Graph * graph = 0);
     virtual int type() const { return JSONGraphReaderType; };
     void setInfoReader( AbstractJSONInfoReader * infoReader );
 private:
-    BaseVer * LoadVer( QScriptValue value );
-    void LoadVers( BaseGraph * graph, QScriptValue value );
-    void LoadEdges( BaseGraph * graph, QScriptValue value );
-    BaseEdge * LoadEdge( BaseGraph * graph, QScriptValue value, BaseVer * ver);
+    Ver * LoadVer( QScriptValue value );
+    void LoadVers( Graph * graph, QScriptValue value );
+    void LoadEdges( Graph * graph, QScriptValue value );
+    Edge * LoadEdge( Graph * graph, QScriptValue value, Ver * ver);
 };
 
 #endif // JSONGRAPHREADER_H

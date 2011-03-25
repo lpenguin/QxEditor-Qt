@@ -5,6 +5,14 @@
 #include "BlockScript.h"
 #include <QtCore>
 
+using namespace BlockScript;
+namespace QlType{
+    enum _t{
+        Constraint = BsObject::UserType + 1, Trigger, ShowVariable, BoundTrigger, ParamStatement, Parametr, LocationTexts, PathPriority, PathPassability, PathShowOrder
+    };
+}
+
+namespace BlockScript{
 class QlConstraint;
 class QlTrigger;
 class QlShowVariable;
@@ -19,11 +27,7 @@ typedef QList<QlParametr *> QlParametrList;
 typedef QList<QlPathStatement * > QlPathStatementList;
 typedef QList<QlLocationStatement * > QlLocationStatementList;
 
-namespace QlType{
-    enum _t{
-        Constraint = BsObject::UserType + 1, Trigger, ShowVariable, BoundTrigger, ParamStatement, Parametr, LocationTexts, PathPriority, PathPassability, PathShowOrder
-    };
-}
+
 
 class QlParamStatement : public BsStatement{
 public:
@@ -206,14 +210,17 @@ public:
 class QlParametr : public BsStatement{
 private:
     BsVariable * m_var;
+    BsExpression * m_startValue;
     QlParamStatementList m_paramStatements;
 //    void setList( QlParamStatementList & list, QlParamStatementList value );
 
 //    void add( QlParamStatementList & list, QlParamStatement * value);
 public:
-    QlParametr( BsVariable * var, QlParamStatementList paramStatements = QlParamStatementList()):
-        m_var(var){
+    QlParametr( BsVariable * var, BsExpression * startValue, QlParamStatementList paramStatements = QlParamStatementList())
+    {
         setParamStatements( paramStatements );
+        setVar( var );
+        setStartValue( startValue );
     }
 
     QlParamStatementList paramStatements() const{
@@ -228,6 +235,14 @@ public:
 
     void setParamStatements( QlParamStatementList paramStatements ){
         SETLA( paramStatements );
+    }
+
+    BsExpression * startValue() const {
+        return m_startValue;
+    }
+
+    void setStartValue( BsExpression * startValue ){
+        SETPA( startValue )
     }
 
     int type() const {
@@ -306,5 +321,5 @@ public:
         return QlType::PathPassability;
     }
 };
-
+}
 #endif // QUESTLOGIC_H

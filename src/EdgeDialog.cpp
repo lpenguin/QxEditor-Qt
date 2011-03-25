@@ -14,7 +14,7 @@ EdgeDialog::~EdgeDialog()
     delete ui;
 }
 
-int EdgeDialog::ShowEdge(BaseEdge *edge)
+int EdgeDialog::ShowEdge(Edge *edge)
 {
     m_edge = edge;
     ui->edgeWidget->ShowEdge( edge );

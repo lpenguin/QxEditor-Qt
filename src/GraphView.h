@@ -19,7 +19,7 @@ class GraphView : public QGraphicsView
 {
     Q_OBJECT
 private:
-    BaseGraph * m_graph;
+    Graph * m_graph;
     //QGraphicsItemGroup m_vers;
     // QGraphicsItemGroup m_edges;
     QList<VerItem *> m_vers;
@@ -29,23 +29,24 @@ private:
     VerItem * markedVer;
     bool movingVer;
 
-    void AppendEdge( BaseEdge * edge, QPointF pos, QPointF endPoint );
-    void AppendVer( BaseVer * ver, QPointF pos );
+    void AppendEdge( Edge * edge, QPointF pos, QPointF endPoint );
+    void AppendVer( Ver * ver, QPointF pos );
+    QGraphicsItem * minItem( const QPointF & pos );
 public:
     void RemoveEdge(EdgeItem * edge);
     void RemoveVer(VerItem * ver);
     int Curvature(EdgeItem * edge);
     //	void setGraph(Graph * graph);
-    VerItem * FindVer(BaseVer * v);
+    VerItem * FindVer(Ver * v);
     ~GraphView();
     void CleanGraph();
-    void LoadGraph(BaseGraph * graph);
+    void LoadGraph(Graph * graph);
     void Load(const QString & filename, AbstractGraphReader * reader);
     void Save(const QString & filename, AbstractGraphWriter * writer);
-    BaseGraph * graph() { return m_graph; }
+    Graph * graph() { return m_graph; }
     GraphView( QWidget * parent = 0  );
-    void AddVer( BaseVer * ver, QPointF pos);
-    void AddEdge( BaseEdge * edge, QPointF pos, QPointF endPoint );
+    void AddVer( Ver * ver, QPointF pos);
+    void AddEdge( Edge * edge, QPointF pos, QPointF endPoint );
 
 
 

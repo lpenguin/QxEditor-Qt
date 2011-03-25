@@ -6,13 +6,13 @@ QMScriptToBsConverter::QMScriptToBsConverter(QMParametrList qmGlobals):
     setQmGlobals( qmGlobals );
 }
 
-BlockScript * QMScriptToBsConverter::ConvertQMActions(QMActionList qmActions)
+BsScript * QMScriptToBsConverter::ConvertQMActions(QMActionList qmActions)
 {
     BsStatementList instructions;
     foreach( QMAction * action, qmActions ){
         instructions.append( ConvertQMAction( action ));
     }
-    return new BlockScript( instructions );
+    return new BsScript( instructions );
 }
 
 BsVariable * QMScriptToBsConverter::ConvertQMParametrToVariable(QMParametr * qmParametr)
@@ -25,7 +25,7 @@ BsStatementList QMScriptToBsConverter::ConvertQMAction(QMAction * qmAction)
     BsVariable * var = m_varMap[qmAction->param];
     qDebug()<<QString("Variable %1 (%2)").arg(qmAction->param->name).arg(qmAction->param->parNumber) ;
     if( !var )
-        throw( Exception(QString("Variable %1 (%2) not found").arg(qmAction->param->name).arg(qmAction->param->parNumber)) );
+        throw( Error(QString("Variable %1 (%2) not found").arg(qmAction->param->name).arg(qmAction->param->parNumber)) );
     BsAction *  action = new BsAction( var );
     BsStatementList list;
     switch(qmAction->type){
@@ -167,7 +167,8 @@ QlParametr *  QMScriptToBsConverter::ConvertQMParametr(QMParametr *qmParametr)
         }
         list << trig ;
     }
-    return new QlParametr( var, list );
+    BsExpression * startValue = new BsUserString( qmParametr->start );
+    return new QlParametr( var, startValue, list );
 }
 
 BsRangeList QMScriptToBsConverter::ConvertQMRanges(QMParametrRangeList ranges)

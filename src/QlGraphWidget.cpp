@@ -13,7 +13,7 @@ QlGraphWidget::~QlGraphWidget()
     delete ui;
 }
 
-void QlGraphWidget::ShowGraph(BaseGraph *graph)
+void QlGraphWidget::ShowGraph(Graph *graph)
 {
     QlGraphInfo * info;
     if( info = qobject_cast<QlGraphInfo *>(graph->info())){
@@ -24,6 +24,6 @@ void QlGraphWidget::ShowGraph(BaseGraph *graph)
     }
 }
 
-void QlGraphWidget::WriteGraph(BaseGraph *graph)
+void QlGraphWidget::WriteGraph(Graph *graph)
 {
 }

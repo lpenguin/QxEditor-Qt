@@ -13,10 +13,10 @@ SimpleGraphWidget::~SimpleGraphWidget()
     delete ui;
 }
 
-void SimpleGraphWidget::ShowGraph(BaseGraph *graph)
+void SimpleGraphWidget::ShowGraph(Graph *graph)
 {
 }
 
-void SimpleGraphWidget::WriteGraph(BaseGraph *graph)
+void SimpleGraphWidget::WriteGraph(Graph *graph)
 {
 }

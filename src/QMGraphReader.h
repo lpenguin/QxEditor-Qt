@@ -9,9 +9,9 @@
 
 class AbstractQMInfoReader{
 public:
-    virtual BaseVerInfo * ReadVerInfo( QMLocation * location ) = 0;
-    virtual BaseEdgeInfo * ReadEdgeInfo( QMPath * path ) = 0;
-    virtual BaseGraphInfo * ReadGraphInfo( QMGraph * graph ) = 0;
+    virtual VerInfo * ReadVerInfo( QMLocation * location ) = 0;
+    virtual EdgeInfo * ReadEdgeInfo( QMPath * path ) = 0;
+    virtual GraphInfo * ReadGraphInfo( QMGraph * graph ) = 0;
 };
 
 enum eQMGraphReaderType {
@@ -23,7 +23,7 @@ class QMGraphReader : public AbstractGraphReader
 //private:
 //    qint32 m_paramsCount;
 private:
-    BaseGraph * m_graph;
+    Graph * m_graph;
     QMGraph * m_qmGraph;
     AbstractQMInfoReader * m_infoReader;
 public:
@@ -34,13 +34,13 @@ public:
     }
 
     QMGraphReader( AbstractQMInfoReader * infoReader = 0 );
-    virtual BaseGraph * ReadGraph(const QString & filename, BaseGraph * graph = 0);
+    virtual Graph * ReadGraph(const QString & filename, Graph * graph = 0);
     void ReadVers( );
-    BaseVer * ReadVer( QMLocation * location);
+    Ver * ReadVer( QMLocation * location);
     void ReadEdges();
-    BaseEdge * ReadEdge( QMPath * path );
+    Edge * ReadEdge( QMPath * path );
     void ReadGraphInfo();
-    BaseVer * FindVer( QMLocation *location);
+    Ver * FindVer( QMLocation *location);
     virtual int type() const { return QMGraphReaderType; }
 };
 

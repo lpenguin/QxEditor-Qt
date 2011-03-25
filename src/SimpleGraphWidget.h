@@ -17,8 +17,8 @@ class SimpleGraphWidget : public BaseGraphWidget
 public:
     explicit SimpleGraphWidget(QWidget *parent = 0);
     ~SimpleGraphWidget();
-    void ShowGraph(BaseGraph *graph);
-    void WriteGraph(BaseGraph *graph);
+    void ShowGraph(Graph *graph);
+    void WriteGraph(Graph *graph);
 
 private:
     Ui::SimpleGraphWidget *ui;

@@ -62,7 +62,10 @@ HEADERS = \
     src/QlJSONInfoWriter.h \
     src/ECMAScriptToBsConverter.h \
     src/QlJSONInfoReader.h \
-    src/Exception.h
+    src/Error.h \
+    src/stringoper.h \
+    src/ParseError.h \
+    src/QmEqToBsConverter.h
 SOURCES = \
     src/main.cpp \
     src/GraphView.cpp \
@@ -103,7 +106,9 @@ SOURCES = \
     src/QlJSONInfoWriter.cpp \
     src/ECMAScriptToBsConverter.cpp \
     src/QlJSONInfoReader.cpp \
-    src/Exception.cpp
+    src/Error.cpp \
+    src/stringoper.cpp \
+    src/QmEqToBsConverter.cpp
 TEMPLATE = app
 INCLUDEPATH += src
 OTHER_FILES += 111.txt \

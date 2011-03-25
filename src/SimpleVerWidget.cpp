@@ -13,7 +13,7 @@ SimpleVerWidget::~SimpleVerWidget()
     delete ui;
 }
 
-void SimpleVerWidget::ShowVer(BaseVer *ver)
+void SimpleVerWidget::ShowVer(Ver *ver)
 {
     SimpleVerInfo * info;
     if( info = qobject_cast<SimpleVerInfo *>(ver->info())){
@@ -24,7 +24,7 @@ void SimpleVerWidget::ShowVer(BaseVer *ver)
     }
 }
 
-void SimpleVerWidget::WriteVer(BaseVer *ver)
+void SimpleVerWidget::WriteVer(Ver *ver)
 {
     SimpleVerInfo * info;
     if( info = qobject_cast<SimpleVerInfo *>(ver->info())){
@@ -35,30 +35,30 @@ void SimpleVerWidget::WriteVer(BaseVer *ver)
     }
 }
 
-BaseVerInfo::VerType SimpleVerWidget::radio2type ( void ){
+VerInfo::VerType SimpleVerWidget::radio2type ( void ){
     if( ui->odinaryRadio->isChecked())
-        return BaseVerInfo::odinary;
+        return VerInfo::odinary;
     if( ui->startRadio->isChecked())
-        return BaseVerInfo::start;
+        return VerInfo::start;
     if( ui->winRadio->isChecked())
-        return BaseVerInfo::win;
+        return VerInfo::win;
     if( ui->failRadio->isChecked())
-        return BaseVerInfo::fail;
-    return BaseVerInfo::odinary;
+        return VerInfo::fail;
+    return VerInfo::odinary;
 }
 
-void SimpleVerWidget::type2radio( BaseVerInfo::VerType type){
+void SimpleVerWidget::type2radio( VerInfo::VerType type){
     switch( type ){
-    case BaseVerInfo::odinary:
+    case VerInfo::odinary:
         ui->odinaryRadio->setChecked(true);
         break;
-    case BaseVerInfo::start:
+    case VerInfo::start:
         ui->startRadio->setChecked(true);
         break;
-    case BaseVerInfo::win:
+    case VerInfo::win:
         ui->winRadio->setChecked(true);
         break;
-    case BaseVerInfo::fail:
+    case VerInfo::fail:
         ui->failRadio->setChecked(true);
         break;
 

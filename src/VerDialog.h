@@ -16,11 +16,11 @@ class VerDialog : public QDialog
 public:
     explicit VerDialog(QWidget *parent = 0);
     ~VerDialog();
-    int ShowVer(BaseVer * ver);
+    int ShowVer(Ver * ver);
     void setVerWidget( BaseVerWidget * verWidget );
 private:
     Ui::VerDialog *ui;
-    BaseVer * m_ver;
+    Ver * m_ver;
 public slots:
     void buttonboxAccepted();
 };

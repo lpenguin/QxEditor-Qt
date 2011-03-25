@@ -2,6 +2,7 @@
 #include "dialogimpl.h"
 #include "MainDialogImpl.h"
 #include "Transliter.h"
+#include "stringoper.h"
 //
 int main(int argc, char ** argv)
 {
@@ -10,7 +11,6 @@ int main(int argc, char ** argv)
     MainDialogImpl win;
     win.show();
     app.connect( &app, SIGNAL( lastWindowClosed() ), &app, SLOT( quit() ) );
-
 
     return app.exec();
 }

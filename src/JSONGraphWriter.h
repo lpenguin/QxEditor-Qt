@@ -13,16 +13,16 @@ QString Property2JSON(QString name, QString value);
 
 class AbstractJSONInfoWriter{
 public:
-    virtual QStringList VerInfo2JSON( BaseVerInfo * info ) = 0;
-    virtual QStringList EdgeInfo2JSON( BaseEdgeInfo * info ) = 0;
-    virtual QStringList GraphInfo2JSON( BaseGraphInfo * info ) = 0;
+    virtual QStringList VerInfo2JSON( VerInfo * info ) = 0;
+    virtual QStringList EdgeInfo2JSON( EdgeInfo * info ) = 0;
+    virtual QStringList GraphInfo2JSON( GraphInfo * info ) = 0;
 };
 
 class SimpleJSONInfoWriter : public AbstractJSONInfoWriter{
 public:
-    virtual QStringList VerInfo2JSON( BaseVerInfo * info );
-    virtual QStringList EdgeInfo2JSON( BaseEdgeInfo * info );
-    virtual QStringList GraphInfo2JSON( BaseGraphInfo * info );
+    virtual QStringList VerInfo2JSON( VerInfo * info );
+    virtual QStringList EdgeInfo2JSON( EdgeInfo * info );
+    virtual QStringList GraphInfo2JSON( GraphInfo * info );
 };
 
 class JSONGraphWriter : public AbstractGraphWriter
@@ -40,9 +40,9 @@ public:
         return m_infoWriter;
     }
 
-    virtual void WriteGraph( BaseGraph * graph, const QString & filename );
-    QString Edge2JSON(BaseEdge * edge);
-    QString Ver2JSON(BaseVer * ver);
+    virtual void WriteGraph( Graph * graph, const QString & filename );
+    QString Edge2JSON(Edge * edge);
+    QString Ver2JSON(Ver * ver);
 };
 
 #endif // JSONGRAPHWRITER_H

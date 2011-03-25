@@ -2,12 +2,12 @@
 #define EXCEPTION_H
 
 #include <QtCore>
-class Exception : QObject
+class Error : QObject
 {
 public:
     Q_PROPERTY( QString message READ message WRITE setMessage)
-    Exception(QString message = QString(), QObject * parent = 0 );
-    Exception( const Exception & e ):
+    Error(QString message = QString(), QObject * parent = 0 );
+    Error( const Error & e ):
         m_message( e.m_message ){
 
     }

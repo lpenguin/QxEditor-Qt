@@ -7,13 +7,13 @@
 namespace Ui {
     class QuestSettingsDialog;
 }
-
+using namespace Graphs;
 class QuestSettingsDialog : public QDialog {
     Q_OBJECT
 public:
     QuestSettingsDialog(QWidget *parent = 0);
     ~QuestSettingsDialog();
-    void ShowGraph(BaseGraph * graph);
+    void ShowGraph(Graph * graph);
 protected:
     void changeEvent(QEvent *e);
 

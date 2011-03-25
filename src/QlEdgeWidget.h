@@ -18,8 +18,8 @@ class QlEdgeWidget : public BaseEdgeWidget
 public:
     explicit QlEdgeWidget(QWidget *parent = 0);
     ~QlEdgeWidget();
-    void ShowEdge(BaseEdge *edge);
-    void WriteEdge(BaseEdge *edge);
+    void ShowEdge(Edge *edge);
+    void WriteEdge(Edge *edge);
 private:
     Ui::QlEdgeWidget *ui;
     BsToESMAScriptConverter * m_converter;

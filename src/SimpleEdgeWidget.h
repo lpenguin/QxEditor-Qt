@@ -17,8 +17,8 @@ class SimpleEdgeWidget : public BaseEdgeWidget
 public:
     explicit SimpleEdgeWidget(QWidget *parent = 0);
     ~SimpleEdgeWidget();
-    void ShowEdge(BaseEdge *edge);
-    void WriteEdge(BaseEdge *edge);
+    void ShowEdge(Edge *edge);
+    void WriteEdge(Edge *edge);
 private:
     Ui::SimpleEdgeWidget *ui;
 };

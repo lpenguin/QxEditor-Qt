@@ -17,8 +17,8 @@ class QlGraphWidget : public BaseGraphWidget
 public:
     explicit QlGraphWidget(QWidget *parent = 0);
     ~QlGraphWidget();
-    void ShowGraph(BaseGraph *graph);
-    void WriteGraph(BaseGraph *graph);
+    void ShowGraph(Graph *graph);
+    void WriteGraph(Graph *graph);
 private:
     Ui::QlGraphWidget *ui;
     BsToESMAScriptConverter m_converter;

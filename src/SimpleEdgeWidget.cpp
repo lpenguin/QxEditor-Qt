@@ -13,7 +13,7 @@ SimpleEdgeWidget::~SimpleEdgeWidget()
     delete ui;
 }
 
-void SimpleEdgeWidget::ShowEdge(BaseEdge *edge)
+void SimpleEdgeWidget::ShowEdge(Edge *edge)
 {
     SimpleEdgeInfo * info;
     if( info = qobject_cast<SimpleEdgeInfo *>(edge->info())){
@@ -26,7 +26,7 @@ void SimpleEdgeWidget::ShowEdge(BaseEdge *edge)
     }
 }
 
-void SimpleEdgeWidget::WriteEdge(BaseEdge *edge)
+void SimpleEdgeWidget::WriteEdge(Edge *edge)
 {
     SimpleEdgeInfo * info;
     if( info = qobject_cast<SimpleEdgeInfo *>(edge->info())){

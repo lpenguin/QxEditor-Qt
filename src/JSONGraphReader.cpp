@@ -1,6 +1,6 @@
 #include "JSONGraphReader.h"
 
-BaseVerInfo::VerType Str2Type( QString type ){
+VerInfo::VerType Str2Type( QString type ){
         if( type == "start"	)
                 return SimpleVerInfo::start;
         if( type == "odinary"	)
@@ -17,7 +17,7 @@ JSONGraphReader::JSONGraphReader(AbstractJSONInfoReader * infoReader):
 {
 }
 
-BaseGraph * JSONGraphReader::ReadGraph(const QString & filename, BaseGraph * graph){
+Graph * JSONGraphReader::ReadGraph(const QString & filename, Graph * graph){
     QFile file( filename );
     if ( file.open(  QIODevice::ReadOnly ) ) {
 
@@ -32,11 +32,11 @@ BaseGraph * JSONGraphReader::ReadGraph(const QString & filename, BaseGraph * gra
             return 0;
         }
         if( !graph )
-            graph = new BaseGraph;
+            graph = new Graph;
 
         LoadVers(graph, sc);
         LoadEdges(graph, sc);
-        BaseGraphInfo * gi;
+        GraphInfo * gi;
         graph->setInfo( m_infoReader->ReadGraphInfo( sc ));
 //        }catch(ReaderError & e){
 //            qDebug()<<e.message();
@@ -54,7 +54,7 @@ BaseGraph * JSONGraphReader::ReadGraph(const QString & filename, BaseGraph * gra
     return 0;
 }
 
-void JSONGraphReader::LoadVers(  BaseGraph * graph, QScriptValue value ){
+void JSONGraphReader::LoadVers(  Graph * graph, QScriptValue value ){
     QScriptValueIterator it(value.property("vers"));
 
     while (it.hasNext()) {
@@ -62,7 +62,7 @@ void JSONGraphReader::LoadVers(  BaseGraph * graph, QScriptValue value ){
         if( ! it.value().isObject() )
             continue;
 //        try{
-            BaseVer * ver = LoadVer(it.value());
+            Ver * ver = LoadVer(it.value());
             graph->AddVer(ver);
 //        }catch(ReaderError & e){
 //            qDebug()<<e.message();
@@ -70,24 +70,24 @@ void JSONGraphReader::LoadVers(  BaseGraph * graph, QScriptValue value ){
     }
 }
 
-BaseVer * JSONGraphReader::LoadVer( QScriptValue value){
-    BaseVerInfo * info = m_infoReader->ReadVerInfo( value );
+Ver * JSONGraphReader::LoadVer( QScriptValue value){
+    VerInfo * info = m_infoReader->ReadVerInfo( value );
     QPoint point( value.property("x").toInteger(), value.property("y").toInteger());
-    return new BaseVer(info, point);
+    return new Ver(info, point);
 }
 
-BaseEdge * JSONGraphReader::LoadEdge( BaseGraph * graph, QScriptValue value, BaseVer * ver){
-    BaseVer * v1 = graph->FindVer( value.property("nextVer").toString());
-    BaseEdgeInfo * info = m_infoReader->ReadEdgeInfo( value );
-    return new BaseEdge(info, ver, v1);
+Edge * JSONGraphReader::LoadEdge( Graph * graph, QScriptValue value, Ver * ver){
+    Ver * v1 = graph->FindVer( value.property("nextVer").toString());
+    EdgeInfo * info = m_infoReader->ReadEdgeInfo( value );
+    return new Edge(info, ver, v1);
 }
 
-void JSONGraphReader::LoadEdges( BaseGraph * graph, QScriptValue value ){
+void JSONGraphReader::LoadEdges( Graph * graph, QScriptValue value ){
     QScriptValueIterator verIt(value.property("vers"));
-    QListIterator<BaseVer*> i(graph->vers());
+    QListIterator<Ver*> i(graph->vers());
     while (verIt.hasNext()) {
         verIt.next();
-        BaseVer * v = i.next();
+        Ver * v = i.next();
         if( ! verIt.value().isObject() )
             continue;
 
@@ -98,7 +98,7 @@ void JSONGraphReader::LoadEdges( BaseGraph * graph, QScriptValue value ){
             if( !edgeIt.value().isObject() )
                 continue;
 //            try{
-                BaseEdge * edge = LoadEdge( graph, edgeIt.value(),v);
+                Edge * edge = LoadEdge( graph, edgeIt.value(),v);
                 graph->AddEdge(edge);
 //            }catch(ReaderError & e){
 //                qDebug()<<e.message();
@@ -107,7 +107,7 @@ void JSONGraphReader::LoadEdges( BaseGraph * graph, QScriptValue value ){
     }
 }
 
-BaseVerInfo * SimpleJSONInfoReader::ReadVerInfo(QScriptValue value)
+VerInfo * SimpleJSONInfoReader::ReadVerInfo(QScriptValue value)
 {
     SimpleVerInfo * info = new SimpleVerInfo();
 
@@ -120,7 +120,7 @@ BaseVerInfo * SimpleJSONInfoReader::ReadVerInfo(QScriptValue value)
     return info;
 }
 
-BaseEdgeInfo * SimpleJSONInfoReader::ReadEdgeInfo(QScriptValue value)
+EdgeInfo * SimpleJSONInfoReader::ReadEdgeInfo(QScriptValue value)
 {
     SimpleEdgeInfo * info = new SimpleEdgeInfo();
     info->setActions( value.property("actions").toString() );
@@ -131,7 +131,7 @@ BaseEdgeInfo * SimpleJSONInfoReader::ReadEdgeInfo(QScriptValue value)
     return info;
 }
 
-BaseGraphInfo * SimpleJSONInfoReader::ReadGraphInfo(QScriptValue value)
+GraphInfo * SimpleJSONInfoReader::ReadGraphInfo(QScriptValue value)
 {
     SimpleGraphInfo * info = new SimpleGraphInfo(value.property("name").toString(),
                                                  value.property("description").toString(),

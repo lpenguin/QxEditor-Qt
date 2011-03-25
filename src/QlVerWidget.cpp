@@ -15,7 +15,7 @@ QlVerWidget::~QlVerWidget()
     delete m_converter;
 }
 
-void QlVerWidget::ShowVer(BaseVer *ver)
+void QlVerWidget::ShowVer(Ver *ver)
 {
     QlVerInfo * info;
     if( info = qobject_cast<QlVerInfo *>(ver->info())){
@@ -27,6 +27,6 @@ void QlVerWidget::ShowVer(BaseVer *ver)
     }
 }
 
-void QlVerWidget::WriteVer(BaseVer *ver)
+void QlVerWidget::WriteVer(Ver *ver)
 {
 }

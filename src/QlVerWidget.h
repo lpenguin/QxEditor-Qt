@@ -19,8 +19,8 @@ class QlVerWidget : public BaseVerWidget
 public:
     explicit QlVerWidget(QWidget *parent = 0);
     ~QlVerWidget();
-    void ShowVer(BaseVer *ver);
-    void WriteVer(BaseVer *ver);
+    void ShowVer(Ver *ver);
+    void WriteVer(Ver *ver);
 private:
     Ui::QlVerWidget *ui;
     BsToESMAScriptConverter * m_converter;

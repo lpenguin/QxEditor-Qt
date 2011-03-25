@@ -10,9 +10,9 @@ class QlJSONInfoReader : public AbstractJSONInfoReader
 {
 public:
     QlJSONInfoReader();
-    BaseVerInfo* ReadVerInfo(QScriptValue value);
-    BaseEdgeInfo* ReadEdgeInfo(QScriptValue value);
-    BaseGraphInfo* ReadGraphInfo(QScriptValue value);
+    VerInfo* ReadVerInfo(QScriptValue value);
+    EdgeInfo* ReadEdgeInfo(QScriptValue value);
+    GraphInfo* ReadGraphInfo(QScriptValue value);
 private:
     ECMAScriptToBsConverter m_converter;
     QlLocationTexts * getLocationTexts(QlLocationStatementList statements);

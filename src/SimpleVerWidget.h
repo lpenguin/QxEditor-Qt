@@ -17,14 +17,14 @@ class SimpleVerWidget : public BaseVerWidget
 public:
     explicit SimpleVerWidget(QWidget *parent = 0);
     ~SimpleVerWidget();
-    void ShowVer(BaseVer *ver);
-    void WriteVer(BaseVer *ver);
+    void ShowVer(Ver *ver);
+    void WriteVer(Ver *ver);
 
 private:
     Ui::SimpleVerWidget *ui;
 private:
-    BaseVerInfo::VerType radio2type ( void );
-    void type2radio( BaseVerInfo::VerType  type);
+    VerInfo::VerType radio2type ( void );
+    void type2radio( VerInfo::VerType  type);
 };
 
 #endif // SIMPLEVERWIDGET_H

@@ -1,6 +1,6 @@
 #include "BlockScript.h"
-
-BlockScript::BlockScript( BsStatementList statements  )
+namespace BlockScript{
+BsScript::BsScript( BsStatementList statements  )
 {
     AddStatements(statements);
 }
@@ -17,7 +17,7 @@ BsAction::BsAction(BsVariable *var, BsExpression *value, BsObject::BsOperation a
     setVar( var );
     m_actionType = actionType;
 }
-
+}
 //BsFunction::BsFunction(QString name, BsExpressionList arguments)
 //{
 ////    :

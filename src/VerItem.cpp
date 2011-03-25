@@ -1,6 +1,6 @@
 #include "VerItem.h"
 //
-VerItem::VerItem( BaseVer * ver, const QSizeF &size, QGraphicsItem * parent )
+VerItem::VerItem( Ver * ver, const QSizeF &size, QGraphicsItem * parent )
 	:  QGraphicsEllipseItem( parent ),  m_ver( ver ), m_size( size )
 {
 	UpdateBrush();
@@ -24,7 +24,7 @@ void VerItem::UpdateBrush()
 //    BaseInfo * info = m_ver->info();
 //    SimpleVerInfo * simpleInfo;
 //    if( simpleInfo = qobject_cast<SimpleVerInfo*>( m_ver->info() )){
-    BaseVerInfo* info = (BaseVerInfo*) (m_ver->info());
+    VerInfo* info = (VerInfo*) (m_ver->info());
     switch( info->verType()){
     case SimpleVerInfo::win:
         m_color =  QColor( Qt::blue);

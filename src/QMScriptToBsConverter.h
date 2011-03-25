@@ -4,9 +4,11 @@
 #include "QuestLogic.h"
 #include "QMReader.h"
 #include "Transliter.h"
-#include "Exception.h"
+#include "Error.h"
 
 #include <QtCore>
+
+using namespace  BlockScript;
 
 class QMScriptToBsConverter
 {
@@ -21,7 +23,7 @@ public:
     QMParametrList qmGlobals(){ return m_qmGlobals; }
     void setQmGlobals( QMParametrList qmGlobals );
 
-    BlockScript * ConvertQMActions( QMActionList qmActions);
+    BsScript * ConvertQMActions( QMActionList qmActions);
     QlParametr *  ConvertQMParametr( QMParametr * qmParametr);
     BsCondition * ConvertQMLocaigalCondition( QString condition );
     BsCondition * ConvertQMConditions( QMConditionList qmConditions );

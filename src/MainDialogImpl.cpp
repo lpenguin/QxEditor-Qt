@@ -266,7 +266,7 @@ void MainDialogImpl::AreaClicked( QPointF point, Qt::MouseButton){
     //    SimpleVerInfo * info = new SimpleVerInfo;
     //    info->setId( graphView->graph()->GetNewVerId() );
     //BaseVer * ver = new BaseVer( new SimpleVerInfo( graphView->graph()->GetNewVerId() ) );
-    BaseVer * ver = createVer();
+    Ver * ver = createVer();
     //    ver->setInfo( new SimpleVerInfo(graphView->graph()->GetNewVerId()));
     //        if( graphView->graph()->vers().count())
     //            ver->info()->setType( odinary );
@@ -284,7 +284,7 @@ void MainDialogImpl::AreaClicked( QPointF point, Qt::MouseButton){
 }
 
 void MainDialogImpl::VersConnected( VerItem * ver1, VerItem * ver2){
-    BaseEdge * edge = createEdge( ver1->ver(), ver2->ver() );
+    Edge * edge = createEdge( ver1->ver(), ver2->ver() );
     QSettings settings;
     if( settings.value("openNewDialog").toBool() ){
         if( edgeDialog->ShowEdge( edge ) == QDialog::Accepted )
@@ -305,30 +305,30 @@ void MainDialogImpl::setGraphType(MainDialogImpl::GraphType graphType)
 
 }
 
-BaseVer * MainDialogImpl::createVer()
+Ver * MainDialogImpl::createVer()
 {
-    BaseVer * ver;
+    Ver * ver;
     if( m_graphType == Simple )
-        ver = new BaseVer( new SimpleVerInfo( graphView->graph()->GetNewVerId() ) );
+        ver = new Ver( new SimpleVerInfo( graphView->graph()->GetNewVerId() ) );
     else if(m_graphType == QuestLogic )
-        ver = new BaseVer( new QlVerInfo( graphView->graph()->GetNewVerId() ) );
+        ver = new Ver( new QlVerInfo( graphView->graph()->GetNewVerId() ) );
     else
      return 0;
 
     if( graphView->graph()->vers().count())
-        ver->info()->setVerType( BaseVerInfo::odinary );
+        ver->info()->setVerType( VerInfo::odinary );
     else
-        ver->info()->setVerType( BaseVerInfo::start );
+        ver->info()->setVerType( VerInfo::start );
 
     return ver;
 }
 
-BaseEdge * MainDialogImpl::createEdge( BaseVer * v0, BaseVer * v1)
+Edge * MainDialogImpl::createEdge( Ver * v0, Ver * v1)
 {
     if( m_graphType == Simple )
-        return new BaseEdge( new SimpleEdgeInfo( graphView->graph()->GetNewEdgeId() ), v0, v1  );
+        return new Edge( new SimpleEdgeInfo( graphView->graph()->GetNewEdgeId() ), v0, v1  );
     else  if(m_graphType == QuestLogic )
-        return new BaseEdge( new QlEdgeInfo( graphView->graph()->GetNewEdgeId() ), v0, v1  );
+        return new Edge( new QlEdgeInfo( graphView->graph()->GetNewEdgeId() ), v0, v1  );
     else
         return 0;
 }

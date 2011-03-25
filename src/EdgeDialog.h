@@ -16,11 +16,11 @@ class EdgeDialog : public QDialog
 public:
     explicit EdgeDialog(QWidget *parent = 0);
     ~EdgeDialog();
-    int ShowEdge(BaseEdge * edge);
+    int ShowEdge(Edge * edge);
     void setEdgeWidget( BaseEdgeWidget * widget );
 private:
     Ui::EdgeDialog *ui;
-    BaseEdge * m_edge;
+    Edge * m_edge;
 public slots:
     void buttonboxAccepted();
 };
