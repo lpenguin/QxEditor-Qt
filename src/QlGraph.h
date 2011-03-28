@@ -164,6 +164,7 @@ public:
     void setActions( BsScript * actions ){
         SETPA( actions )
     }
+    virtual int tp() const {return 2; }
 };
 
 class QlGraph : public Graph

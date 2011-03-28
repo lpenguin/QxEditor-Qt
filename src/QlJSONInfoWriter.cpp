@@ -36,6 +36,7 @@ QStringList QlJSONInfoWriter::EdgeInfo2JSON(EdgeInfo *info)
 QStringList QlJSONInfoWriter::GraphInfo2JSON(GraphInfo *info)
 {
     QStringList props;
+    qDebug()<<info->tp();
     QlGraphInfo * qlInfo = (QlGraphInfo *)info;
     props<<Property2JSON("init",m_converter.ConvertQlParametrList( qlInfo->parametrList() ))
             <<Property2JSON("actions",m_converter.ConvertBlockSript( qlInfo->actions() ))

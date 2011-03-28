@@ -67,7 +67,7 @@ public:
         }
 
         QString conditions() const{
-            return m_actions;
+            return m_conditions;
         }
         QString question() const{
             return m_question;
@@ -85,9 +85,11 @@ private:
 public:
     SimpleGraphInfo(  QString name, QString description, QStringList libraries,  QString actions, QString id = QString::null, QObject * parent = 0):
         GraphInfo(name, description, libraries, id, parent), m_actions(actions){}
-    SimpleGraphInfo( QString id , QObject * parent = 0):
+    SimpleGraphInfo( QString id = QString() , QObject * parent = 0):
         GraphInfo(id, parent)
-    {}
+    {
+        m_actions = QString("");
+    }
     QString actions() const{
         return m_actions;
     }
@@ -95,6 +97,7 @@ public:
     void setActions( QString actions ){
         m_actions = actions;
     }
+    virtual int tp() const {return 1; }
 };
 
 //graph->setScript( sc.property("actions").toString());

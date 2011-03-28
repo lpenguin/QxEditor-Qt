@@ -56,6 +56,8 @@ private slots:
     void on_actionSettings_triggered();
     void on_actionActions_triggered();
     void on_actionParse_Qm_Equation_triggered();
+    void on_actionQl_Graph_triggered();
+    void on_actionSimple_triggered();
     void newFile();
     void open();
     void save();

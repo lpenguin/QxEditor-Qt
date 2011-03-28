@@ -303,6 +303,10 @@ void MainDialogImpl::setGraphType(MainDialogImpl::GraphType graphType)
     edgeDialog->setEdgeWidget( edgeWidget() );
     graphDialog->setGraphWidget( graphWidget() );
     graphView->CleanGraph();
+    if( graphType == Simple )
+        graphView->graph()->setInfo( new SimpleGraphInfo() );
+    else
+        graphView->graph()->setInfo( new QlGraphInfo( ));
 
 }
 
@@ -369,4 +373,10 @@ void MainDialogImpl::on_actionParse_Qm_Equation_triggered(){
     equationDialog->show();
 }
 
+void MainDialogImpl::on_actionQl_Graph_triggered(){
+    setGraphType( QuestLogic );
+}
 
+void MainDialogImpl::on_actionSimple_triggered(){
+    setGraphType( Simple );
+}

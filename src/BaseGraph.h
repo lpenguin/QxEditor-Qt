@@ -81,7 +81,9 @@ public:
     {}
     GraphInfo( QString id = QString(), QObject * parent = 0 ):
         Info(id, parent)
-    {}
+    {
+        m_libraries = QStringList();
+    }
 
     QStringList libraries() const {
         return m_libraries;
@@ -104,6 +106,7 @@ public:
     QString description() const{
         return m_description;
     }
+    virtual int tp() const {return 0; }
 };
 
 //class BaseGraphObject : public QObject{

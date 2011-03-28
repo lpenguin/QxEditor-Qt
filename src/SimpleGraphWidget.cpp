@@ -15,8 +15,16 @@ SimpleGraphWidget::~SimpleGraphWidget()
 
 void SimpleGraphWidget::ShowGraph(Graph *graph)
 {
+    SimpleGraphInfo * info;
+    if( info = qobject_cast<SimpleGraphInfo *>(graph->info())){
+        ui->actionsEdit->setPlainText( info->actions() );
+    }
 }
 
 void SimpleGraphWidget::WriteGraph(Graph *graph)
 {
+    SimpleGraphInfo * info;
+    if( info = qobject_cast<SimpleGraphInfo *>(graph->info())){
+        info->setActions( ui->actionsEdit->toPlainText());
+    }
 }

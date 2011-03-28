@@ -62,7 +62,7 @@ QString JSONGraphWriter::Ver2JSON(Ver * ver){
 QStringList SimpleJSONInfoWriter::VerInfo2JSON(VerInfo *info)
 {
     QStringList props;
-    SimpleVerInfo * simpleInfo = (SimpleVerInfo *)info;
+    SimpleVerInfo * simpleInfo = qobject_cast<SimpleVerInfo *>(info);
     props<<Property2JSON("id", simpleInfo->id())
             <<Property2JSON("actions", simpleInfo->actions())
             <<Property2JSON("text", simpleInfo->text())
@@ -73,7 +73,7 @@ QStringList SimpleJSONInfoWriter::VerInfo2JSON(VerInfo *info)
 QStringList SimpleJSONInfoWriter::EdgeInfo2JSON(EdgeInfo *info)
 {
     QStringList props;
-    SimpleEdgeInfo * simpleInfo = (SimpleEdgeInfo *)info;
+    SimpleEdgeInfo * simpleInfo = qobject_cast<SimpleEdgeInfo *>(info);
     props<<Property2JSON("id", simpleInfo->id())
             <<Property2JSON("actions", simpleInfo->actions())
             <<Property2JSON("text", simpleInfo->text())
@@ -86,7 +86,9 @@ QStringList SimpleJSONInfoWriter::EdgeInfo2JSON(EdgeInfo *info)
 QStringList SimpleJSONInfoWriter::GraphInfo2JSON(GraphInfo *info)
 {
     QStringList props;
-    SimpleGraphInfo * simpleInfo = (SimpleGraphInfo *)info;
+    SimpleGraphInfo * simpleInfo = (SimpleGraphInfo *)(info);
+//    if( ! (simpleInfo = qobject_cast<SimpleGraphInfo *>(info) ))
+//        return QStringList();
     props<<Property2JSON("actions", simpleInfo->actions())
             <<Property2JSON("name", simpleInfo->name())
             <<Property2JSON("description", simpleInfo->description());
