@@ -21,6 +21,7 @@ void JSONGraphWriter::WriteGraph( Graph * graph, const QString & filename ){
     if ( file.open(  QIODevice::WriteOnly ) ) {
 
         QTextStream stream( &file );
+        stream.setCodec("utf-8");
         QStringList props;
         QStringList versStrings;
         foreach(Ver * v, graph->vers()){

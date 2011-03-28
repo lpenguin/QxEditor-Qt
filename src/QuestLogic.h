@@ -90,11 +90,21 @@ private:
     BsVariable * m_var;
     BsRangeList m_ranges;
     QStringList m_strings;
+    bool m_showOnZero;
 public:
-    QlShowVariable( BsVariable * var, BsRangeList ranges, QStringList strings){
+    QlShowVariable( BsVariable * var, BsRangeList ranges, QStringList strings, bool showOnZero = true){
         setVar( var );
         setRanges( ranges );
         setStrings( strings );
+        setShowOnZero( showOnZero );
+    }
+
+    bool showOnZero(){
+        return m_showOnZero;
+    }
+
+    void setShowOnZero( bool showOnZero ){
+        m_showOnZero = showOnZero;
     }
 
     void setVar(BsVariable * var){

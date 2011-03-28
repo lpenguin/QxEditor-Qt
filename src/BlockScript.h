@@ -57,10 +57,10 @@ public:
     //        QObject( parent ){}
     virtual int type() const = 0;
     enum  BsType{
-        Default, Variable, Action, Operator, Condition, Value, Range,/* List,*/ Function,  FunctionCall, If, UserString, Script, VariableDefinition, Null, UserType
+        Default, Variable, Action, Operator, Condition, Value, Set, Range,/* List,*/ Function,  FunctionCall, If, UserString, Script, VariableDefinition, Null, UserType
     };
     enum  BsOperation{
-        Addition, Substraction, Multiplication, Division, Show, Hide, None, Mov
+        Addition, Substraction, Multiplication, Division, Div, Mod, Show, Hide, None, Mov
     };
     static QString addQuotes(QString text){
         return QString("'%1'").arg(text);
@@ -149,7 +149,7 @@ public:
     BsObject::BsOperation operation() const { return m_operation; }
     BsExpressionList arguments() const { return m_arguments; }
     virtual int type() const { return BsObject::Operator; }
-    void setOperation( BsObject::BsOperation value){ m_operation = value; }
+    void setOperation( BsObject::BsOperation operation){ m_operation = operation; }
     void addArgument( BsExpression * object ){ ADDL( m_arguments, object );}
     void clearArguments() { m_arguments.clear(); }
 };
@@ -169,11 +169,31 @@ public:
 //    void clearArguments() { m_arguments.clear(); }
 //};
 
+class BsSet : public BsExpression {
+public:
+    BsSet( BsExpressionList elems = BsExpressionList() ){
+        setElems( elems );
+    }
+
+    BsExpressionList elems() const{
+        return m_elems;
+    }
+
+    void setElems( BsExpressionList elems ){
+        SETLA( elems )
+    }
+    virtual int type() const{
+        return BsObject::Set;
+    }
+private:
+   BsExpressionList m_elems;
+};
+
 class BsCondition : public BsExpression{
 
 public:
     enum BsConditionType{
-        Equals, Greater, GreaterEq, Lower, LowerEq, And, Or, Not, In, Multiple, UserString
+        None, Equals, NotEquals, Greater, GreaterEq, Lower, LowerEq, And, Or, Not, In, Multiple, UserString
     };
 private:
     BsConditionType m_condition;

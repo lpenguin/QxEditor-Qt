@@ -15,15 +15,20 @@ VerInfo * QlQMInfoReader::ReadVerInfo(QMLocation *location)
 
 EdgeInfo * QlQMInfoReader::ReadEdgeInfo(QMPath *path)
 {
-    BsExpression * expr;
-    if( ! path->logicalCondition.isEmpty() )
-        expr = new BsCondition( BsCondition::And,
+    BsExpression * expr =  ConvertConditions(path->conditions);
+    if( ! path->logicalCondition.isEmpty() ){
+        BsExpression * eq = m_qmToBs.ConvertQMEquation( path->logicalCondition );
+        if( expr->type() != BsObject::Null )
+            expr = new BsCondition( BsCondition::And,
                                BsExpressionList() <<
-                               new BsUserString(path->logicalCondition) <<
+                               eq <<
                                ConvertConditions(path->conditions)
                                );
-    else
-        expr = ConvertConditions(path->conditions);
+        else
+            expr = eq;
+    }
+//    else
+//        expr = ConvertConditions(path->conditions);
 
     return new QlEdgeInfo( path->text,
                           path->question,
@@ -38,6 +43,7 @@ GraphInfo * QlQMInfoReader::ReadGraphInfo(QMGraph *graph)
     m_qmToBs.setQmGlobals( graph->params() );
     return new QlGraphInfo( "[Not inplemented yet]",
                            graph->stringReplaces().missionString,
+                           QStringList()<<"main.as",
                            new BsScript(),
                            ConvertParametrs( graph->params()), "Main");
 }
@@ -46,7 +52,9 @@ QlLocationTexts * QlQMInfoReader::ConvertLocationTexts(QMLocation *location)
 {
     BsExpression * expr;
     if( location->selectTextByFormula )
-        expr = new BsUserString(location->textFormula);
+//        m_qmToBs.c
+        expr = m_qmToBs.ConvertQMEquation( location->textFormula );
+//        expr = new BsUserString(location->textFormula);
     else
         expr = new BsNull();
     return new QlLocationTexts(QString("L%1").arg(location->locNumber), location->texts, expr);
@@ -59,14 +67,15 @@ BsScript * QlQMInfoReader::ConvertActions(QMActionList actions)
 
 BsExpression * QlQMInfoReader::ConvertConditions(QMConditionList conditions)
 {
-    BsCondition * cond = m_qmToBs.ConvertQMConditions( conditions );
-    BsExpressionList exprs = cond->arguments();
-    BsExpression * expr;
-    if( exprs.count() != 1)
-        expr = (BsExpression *)cond;
-    else
-        expr = exprs.at(0);
-    return expr;
+    BsExpression * cond = m_qmToBs.ConvertQMConditions( conditions );
+    return cond;
+//    BsExpressionList exprs = cond->arguments();
+//    BsExpression * expr;
+//    if( exprs.count() != 1)
+//        expr = (BsExpression *)cond;
+//    else
+//        expr = exprs.at(0);
+//    return expr;
 }
 
 VerInfo::VerType QlQMInfoReader::ConvertLocationType(QMLocation::QMLocationType type)

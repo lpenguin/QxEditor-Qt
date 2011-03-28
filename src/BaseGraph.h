@@ -74,13 +74,22 @@ class GraphInfo : public Info {
 private:
     QString m_name;
     QString m_description;
+    QStringList m_libraries;
 public:
-    GraphInfo( QString name, QString description, QString id = QString::null, QObject * parent = 0 ):
-        Info(id, parent ), m_name(name), m_description(description )
+    GraphInfo( QString name, QString description, QStringList libraries, QString id = QString::null, QObject * parent = 0 ):
+        Info(id, parent ), m_name(name), m_description(description ), m_libraries(libraries)
     {}
     GraphInfo( QString id = QString(), QObject * parent = 0 ):
         Info(id, parent)
     {}
+
+    QStringList libraries() const {
+        return m_libraries;
+    }
+
+    void setLibraries( QStringList libraries ){
+        m_libraries = libraries;
+    }
 
     void setName( QString name ){
         m_name = name;

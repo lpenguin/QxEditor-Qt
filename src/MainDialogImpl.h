@@ -21,6 +21,7 @@
 
 #include "QuestActionsDialog.h"
 #include "QuestSettingsDialog.h"
+#include "QmEquationDialog.h"
 
 class QAction;
 class QMenu;
@@ -46,6 +47,7 @@ private:
     EdgeDialog * edgeDialog;
     GraphDialog * graphDialog;
     QuestSettingsDialog * questSettingsDialog;
+    QmEquationDialog * equationDialog;
     GraphType m_graphType;
 private slots:
     void on_actionOpen_triggered();
@@ -53,6 +55,7 @@ private slots:
     void on_actionSave_as_triggered();
     void on_actionSettings_triggered();
     void on_actionActions_triggered();
+    void on_actionParse_Qm_Equation_triggered();
     void newFile();
     void open();
     void save();

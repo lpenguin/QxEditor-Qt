@@ -74,6 +74,8 @@ QString BsToTagConverter::ExpressionTag(BsExpression *obj)
         return NullTag( ( BsNull * )obj);
     case BsObject::Condition:
         return ConditionTag( ( BsCondition * )obj);
+    case BsObject::Set:
+        return SetTag( ( BsSet * )obj);
     case BsObject::Range:
         return RangeTag( ( BsRange * )obj);
     case BsObject::UserString:
@@ -171,6 +173,14 @@ QString BsToTagConverter::ConditionTagEnd() const
     return ":!bs*/";
 }
 
+QString BsToTagConverter::SetTag(BlockScript::BsSet *set)
+{
+    QStringList args;
+    foreach (BsExpression * obj, set->elems())
+        args<<ExpressionTag( obj );
+    return QString("set(%1)").arg(args.join(","));
+}
+
 QString BsToTagConverter::ConditionTag(BsCondition *condition)
 {
     QStringList args;
@@ -225,10 +235,11 @@ QString BsToTagConverter::ShowVariableTag(QlShowVariable *sv)
         texts << QString("'%1'").arg( packSpecialChars(str) );
     }
 
-    return QString("ql.show(%1, [%2], [%3] )")
+    return QString("ql.show(%1, [%2], [%3], %4 )")
             .arg( VariableTag(sv->var()))
             .arg( ranges.join(", ") )
-            .arg( texts.join(", ") );
+            .arg( texts.join(", ") )
+            .arg( sv->showOnZero() );
 }
 
 QString BsToTagConverter::BoundTriggerTag(QlBoundTrigger *trig)
@@ -303,6 +314,8 @@ QString BsToTagConverter::packSpecialChars(QString str) const
     }
     return str;
 }
+
+
 
 
 

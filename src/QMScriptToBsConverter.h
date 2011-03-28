@@ -7,6 +7,7 @@
 #include "Error.h"
 
 #include <QtCore>
+#include "QmEqToBsConverter.h"
 
 using namespace  BlockScript;
 
@@ -25,17 +26,19 @@ public:
 
     BsScript * ConvertQMActions( QMActionList qmActions);
     QlParametr *  ConvertQMParametr( QMParametr * qmParametr);
-    BsCondition * ConvertQMLocaigalCondition( QString condition );
-    BsCondition * ConvertQMConditions( QMConditionList qmConditions );
+    BsExpression * ConvertQMLocaigalCondition( QString condition );
+    BsExpression * ConvertQMEquation(QString equation);
+    BsExpression * ConvertQMConditions( QMConditionList qmConditions );
 private:
     BsVariable * ConvertQMParametrToVariable( QMParametr * qmParametr);
     BsStatementList ConvertQMAction( QMAction * qmAction );
-    BsUserString * ConvertQMEquation(QString equation);
+
     BsConditionList ConvertQMCondition( QMCondition * qmCondition );
     BsRangeList ConvertQMRanges( QMParametrRangeList ranges );
     QStringList ConvertQMRangesTexts( QMParametrRangeList ranges );
     QString ConvertQMParametrType(QMParametr::QMParametrType type);
 
+    QmEqToBsConverter m_eqConverter;
 
 };
 

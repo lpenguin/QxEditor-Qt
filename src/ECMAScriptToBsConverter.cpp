@@ -288,6 +288,7 @@ void ECMAScriptToBsConverter::FillOperatorTypes()
     m_operatorTypes.insert( "div", BsObject::Division);
     m_operatorTypes.insert( "sub", BsObject::Substraction);
     m_operatorTypes.insert( "mul", BsObject::Multiplication);
+//    m_operatorTypes.insert( "mod", BsObject::`);
 
 }
 
@@ -413,10 +414,14 @@ QlShowVariable * ECMAScriptToBsConverter::ConvertShowVariable( QStringList tags 
     foreach (QString str, rangesTags) {
         ranges << ConvertRange( str );
     }
-    QStringList texts, textsTags = tagArguments( tags.takeFirst() );
+    QString textsStr = tags.takeFirst();
+//    qDebug()<<textsStr;
+    QStringList texts, textsTags = splitSmart( midStr( textsStr, 1, 1) );
     foreach( QString str, textsTags )
         texts << ConvertString( str );
-    return new QlShowVariable( var, ranges, texts );
+//    qDebug()<<texts.count();
+    bool showOnZero = tags.takeFirst() == "true";
+    return new QlShowVariable( var, ranges, texts, showOnZero );
 }
 
 QlPathPassability * ECMAScriptToBsConverter::ConvertPathPassability(  QStringList tags )

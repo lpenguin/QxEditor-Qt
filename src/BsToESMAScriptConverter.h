@@ -14,8 +14,8 @@ public:
 
     QString ConvertQlPathStatementList( QlPathStatementList list );
     QString ConvertQlLocationStatementList( QlLocationStatementList list );
-private:
     QString ConvertBsExpression(BsExpression *obj);
+private:
     QString ConvertBsStatements(BsStatementList instructions);
     QString ConvertBsStatement(BsStatement *instruction);
 
@@ -30,6 +30,7 @@ private:
     QString ConvertBsOperator( BsOperator * expression );
     QString ConvertBsRange( BsRange * range );
     QString ConvertBsCondition( BsCondition * condition );
+    QString ConvertBsSet( BsSet * set );
 
     QString ConvertQlConstraint( QlConstraint * con);
     QString ConvertQlTrigger( QlTrigger * trig);

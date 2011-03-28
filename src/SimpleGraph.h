@@ -83,8 +83,8 @@ class SimpleGraphInfo : public GraphInfo{
 private:
     QString m_actions;
 public:
-    SimpleGraphInfo(  QString name, QString description, QString actions, QString id = QString::null, QObject * parent = 0):
-        GraphInfo(name, description, id, parent), m_actions(actions){}
+    SimpleGraphInfo(  QString name, QString description, QStringList libraries,  QString actions, QString id = QString::null, QObject * parent = 0):
+        GraphInfo(name, description, libraries, id, parent), m_actions(actions){}
     SimpleGraphInfo( QString id , QObject * parent = 0):
         GraphInfo(id, parent)
     {}

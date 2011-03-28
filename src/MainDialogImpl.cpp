@@ -34,6 +34,7 @@ MainDialogImpl::MainDialogImpl( QWidget * parent, Qt::WFlags f)
     edgeDialog= new EdgeDialog( this );
     graphDialog = new GraphDialog( this );
     questSettingsDialog = new QuestSettingsDialog( this );
+    equationDialog = new QmEquationDialog( this );
     setGraphType( QuestLogic );
 
     setCentralWidget( graphView );
@@ -364,6 +365,8 @@ BaseGraphWidget * MainDialogImpl::graphWidget() const
         return 0;
 }
 
-
+void MainDialogImpl::on_actionParse_Qm_Equation_triggered(){
+    equationDialog->show();
+}
 
 

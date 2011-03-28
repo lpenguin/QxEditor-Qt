@@ -18,6 +18,7 @@ public:
     QString ConditionTag( BsCondition * condition );
     QString ActionTag( BsAction * action );
     QString ExpressionTag(BsExpression * obj)  ;
+    QString SetTag(BsSet * obj)  ;
     QString VariableTag(BsVariable * variable)  ;
     QString FunctionTag(BsFunction * function)  ;
     QString FunctionCallTag(BsFunctionCall * function)  ;

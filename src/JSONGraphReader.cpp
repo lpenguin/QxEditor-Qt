@@ -22,6 +22,7 @@ Graph * JSONGraphReader::ReadGraph(const QString & filename, Graph * graph){
     if ( file.open(  QIODevice::ReadOnly ) ) {
 
         QTextStream stream( &file );
+        stream.setCodec("utf-8");
         QString str = stream.readAll();
         QScriptValue sc;
         QScriptEngine engine;
@@ -135,6 +136,7 @@ GraphInfo * SimpleJSONInfoReader::ReadGraphInfo(QScriptValue value)
 {
     SimpleGraphInfo * info = new SimpleGraphInfo(value.property("name").toString(),
                                                  value.property("description").toString(),
+                                                 value.property("libraries").toString().split(","),
                                                  value.property("actions").toString()
                                                  );
     return info;

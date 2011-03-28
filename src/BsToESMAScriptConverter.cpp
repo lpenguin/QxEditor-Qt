@@ -56,9 +56,9 @@ QString BsToESMAScriptConverter::ConvertBsAction(BsAction *action)
     QString value =  ConvertBsExpression(action->value());
     result << m_tagConverter.TagStart()+m_tagConverter.ActionTag( action );
     if( action->actionType() == BsAction::Show ){
-        result<<QString("show(%1);").arg( action->var()->name());
+        result<<QString("show('%1');").arg( action->var()->name());
     }else if( action->actionType() == BsAction::Hide){
-        result<<QString("hide(%1);").arg( action->var()->name());
+        result<<QString("hide('%1');").arg( action->var()->name());
     }else{
         QString operation = ActionTypeToString(action->actionType());
         result<<QString("%1 %2 %3;")
@@ -105,9 +105,12 @@ QString BsToESMAScriptConverter::ConvertBsValue(BsValue *value)
     return value->value();
 }
 
-QString BsToESMAScriptConverter::ConvertBsOperator(BsOperator *expression)
+QString BsToESMAScriptConverter::ConvertBsOperator(BsOperator *oper)
 {
-    return "[Not yet realized]";
+    QStringList args;
+    foreach( BsExpression * expr, oper->arguments() )
+        args << ConvertBsExpression( expr );
+    return args.join( m_operatorTypes[ oper->operation() ]);
 }
 
 QString BsToESMAScriptConverter::ConvertBsUserString(BsUserString *userString)
@@ -127,6 +130,8 @@ QString BsToESMAScriptConverter::ConvertBsExpression(BsExpression *obj)
         return ConvertBsFunction(( BsFunction * )obj );
     case BsObject::Condition:
         return ConvertBsCondition(( BsCondition * )obj );
+    case BsObject::Set:
+        return ConvertBsSet(( BsSet * )obj );
     case BsObject::Range:
         return ConvertBsRange(( BsRange * )obj );
     case BsObject::UserString:
@@ -268,6 +273,15 @@ QString BsToESMAScriptConverter::ConvertBsRange(BsRange *range)
             .arg(ConvertBsExpression( range->max()));
 }
 
+QString BsToESMAScriptConverter::ConvertBsSet(BlockScript::BsSet *set)
+{
+    QStringList arguments;
+    foreach( BsExpression * obj, set->elems()){
+        arguments<<ConvertBsExpression( obj );
+    }
+    return QString("[%1]").arg(arguments.join(","));
+}
+
 QString BsToESMAScriptConverter::ConvertBlockSript(BsScript *script)
 {
     return ConvertBsStatements( script->statements() );
@@ -318,10 +332,11 @@ QString BsToESMAScriptConverter::ConvertQlShowVariable(QlShowVariable *sv)
         texts<<QString("'%1'").arg(str);
     }
     result << m_tagConverter.TagStart()+m_tagConverter.ShowVariableTag( sv );
-    result << QString("AddShowRanges('%1', [%2], [%3]);")
+    result << QString("AddShowRanges('%1', [%2], [%3], %4);")
               .arg(sv->var()->name())
               .arg( ranges.join(","))
-              .arg( texts.join(","));
+              .arg( texts.join(","))
+              .arg( sv->showOnZero() );
     result<<m_tagConverter.TagEnd();
     return result.join("\n");
 }

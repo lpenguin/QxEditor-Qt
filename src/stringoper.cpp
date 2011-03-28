@@ -55,7 +55,7 @@ QStringList splitSmart(const QString &str, const QString & delim ) {
     int pos = 0, prev = 0 ;
     while( (pos = FindNextDelim( str, prev, delim )) != -1 ){
         result << str.mid( prev, pos - prev).trimmed();
-        prev = pos + 1;
+        prev = pos + delim.count();
     }
     result << str.mid( prev, str.count() - prev).trimmed();
     return result;

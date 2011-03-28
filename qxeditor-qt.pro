@@ -20,7 +20,8 @@ FORMS = ui/dialog.ui \
     src/VerDialog.ui \
     src/EdgeDialog.ui \
     src/QlGraphWidget.ui \
-    src/SimpleGraphWidget.ui
+    src/SimpleGraphWidget.ui \
+    src/QmEquationDialog.ui
 HEADERS = \
     src/GraphView.h \
     src/VerItem.h \
@@ -65,7 +66,8 @@ HEADERS = \
     src/Error.h \
     src/stringoper.h \
     src/ParseError.h \
-    src/QmEqToBsConverter.h
+    src/QmEqToBsConverter.h \
+    src/QmEquationDialog.h
 SOURCES = \
     src/main.cpp \
     src/GraphView.cpp \
@@ -108,7 +110,8 @@ SOURCES = \
     src/QlJSONInfoReader.cpp \
     src/Error.cpp \
     src/stringoper.cpp \
-    src/QmEqToBsConverter.cpp
+    src/QmEqToBsConverter.cpp \
+    src/QmEquationDialog.cpp
 TEMPLATE = app
 INCLUDEPATH += src
 OTHER_FILES += 111.txt \

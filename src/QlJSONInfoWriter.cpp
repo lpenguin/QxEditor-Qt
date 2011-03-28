@@ -40,6 +40,7 @@ QStringList QlJSONInfoWriter::GraphInfo2JSON(GraphInfo *info)
     props<<Property2JSON("init",m_converter.ConvertQlParametrList( qlInfo->parametrList() ))
             <<Property2JSON("actions",m_converter.ConvertBlockSript( qlInfo->actions() ))
             <<Property2JSON("name", qlInfo->name())
-            <<Property2JSON("description", qlInfo->description());
+            <<Property2JSON("description", qlInfo->description())
+            <<"\"libraries\":[\""+qlInfo->libraries().join("\",\"")+"\"]";
     return props;
 }

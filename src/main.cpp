@@ -3,7 +3,9 @@
 #include "MainDialogImpl.h"
 #include "Transliter.h"
 #include "stringoper.h"
-//
+#include "QmEqToBsConverter.h"
+#include "BsToESMAScriptConverter.h"
+
 int main(int argc, char ** argv)
 {
     initTransliter();
@@ -11,7 +13,6 @@ int main(int argc, char ** argv)
     MainDialogImpl win;
     win.show();
     app.connect( &app, SIGNAL( lastWindowClosed() ), &app, SLOT( quit() ) );
-
     return app.exec();
 }
 
