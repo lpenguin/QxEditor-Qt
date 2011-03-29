@@ -19,6 +19,12 @@ protected:
 
 private:
     Ui::QuestSettingsDialog *ui;
+public slots:
+    void on_addButton_clicked();
+    void on_browseButton_clicked();
+    void on_editButton_clicked();
+    void on_deleteButton_clicked();
+    void on_libsList_itemClicked();
 };
 
 #endif // QUESTSETTINGSDIALOG_H

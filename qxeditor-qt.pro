@@ -21,7 +21,8 @@ FORMS = ui/dialog.ui \
     src/EdgeDialog.ui \
     src/QlGraphWidget.ui \
     src/SimpleGraphWidget.ui \
-    src/QmEquationDialog.ui
+    src/QmEquationDialog.ui \
+    src/PlayerDialog.ui
 HEADERS = \
     src/GraphView.h \
     src/VerItem.h \
@@ -67,7 +68,8 @@ HEADERS = \
     src/stringoper.h \
     src/ParseError.h \
     src/QmEqToBsConverter.h \
-    src/QmEquationDialog.h
+    src/QmEquationDialog.h \
+    src/PlayerDialog.h
 SOURCES = \
     src/main.cpp \
     src/GraphView.cpp \
@@ -111,8 +113,17 @@ SOURCES = \
     src/Error.cpp \
     src/stringoper.cpp \
     src/QmEqToBsConverter.cpp \
-    src/QmEquationDialog.cpp
+    src/QmEquationDialog.cpp \
+    src/PlayerDialog.cpp
 TEMPLATE = app
 INCLUDEPATH += src
-OTHER_FILES += 111.txt \
-    2222.txt
+
+OTHER_FILES += \
+    src/qxplayer/Core/Player.js \
+    src/qxplayer/Core/Quest/Quest.js \
+    src/qxplayer/Core/Quest/Path.js \
+    src/qxplayer/Core/Quest/Location.js \
+    src/qxplayer/PlayerView.qml \
+    src/qxplayer/main.js \
+    src/qxplayer/Main.qml \
+    src/qxplayer/Core/mainFunctions.js

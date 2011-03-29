@@ -256,7 +256,7 @@ QString BsToESMAScriptConverter::ConvertBsCondition(BsCondition *condition)
             args<<ConvertBsExpression( obj );
         }
 //        args[0] = firstStr;
-        return QString("in(%1)").arg(args.join(","));
+        return QString("In(%1)").arg(args.join(","));
         //BsObject * target = condition->arguments().takeFirst();
 
     }

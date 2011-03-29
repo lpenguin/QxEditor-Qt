@@ -89,8 +89,14 @@ QStringList SimpleJSONInfoWriter::GraphInfo2JSON(GraphInfo *info)
     SimpleGraphInfo * simpleInfo = (SimpleGraphInfo *)(info);
 //    if( ! (simpleInfo = qobject_cast<SimpleGraphInfo *>(info) ))
 //        return QStringList();
+//    QStringList libs;
+//    foreach(QString lib, simpleInfo->libraries()){
+//        libs << QString("\"%1\"").arg( lib );
+//    }
+
     props<<Property2JSON("actions", simpleInfo->actions())
             <<Property2JSON("name", simpleInfo->name())
-            <<Property2JSON("description", simpleInfo->description());
+            <<Property2JSON("description", simpleInfo->description())
+           <<"\"libraries\":[\""+simpleInfo->libraries().join("\",\"")+"\"]";
     return props;
 }
