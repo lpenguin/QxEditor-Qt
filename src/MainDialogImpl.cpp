@@ -35,6 +35,8 @@ MainDialogImpl::MainDialogImpl( QWidget * parent, Qt::WFlags f)
     graphDialog = new GraphDialog( this );
     questSettingsDialog = new QuestSettingsDialog( this );
     equationDialog = new QmEquationDialog( this );
+    playerDialog = new PlayerDialog( this );
+
     setGraphType( QuestLogic );
 
     setCentralWidget( graphView );
@@ -379,4 +381,8 @@ void MainDialogImpl::on_actionQl_Graph_triggered(){
 
 void MainDialogImpl::on_actionSimple_triggered(){
     setGraphType( Simple );
+}
+
+void MainDialogImpl::on_actionPlay_triggered(){
+    playerDialog->Play( "" );
 }

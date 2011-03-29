@@ -1,4 +1,4 @@
-player = new Player();
+player = new Player( playerView );
 
 function init(){
     playerView.text = "Hiiii!!!!";

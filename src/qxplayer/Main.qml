@@ -1,7 +1,9 @@
 import QtQuick 1.0
 import "main.js" as Main
-import "Core/Player.js"
-import "Core/Quest/"
+import "Core/Player.js" as PlayerUnit
+import "Core/Quest/Location.js" as LocationUnit
+import "Core/Quest/Path.js" as PathUnit
+import "Core/Quest/Quest.js" as QuestUnit
 
 Rectangle{
     Text{

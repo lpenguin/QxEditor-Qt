@@ -14,6 +14,7 @@ class PlayerDialog : public QDialog
 public:
     explicit PlayerDialog(QWidget *parent = 0);
     ~PlayerDialog();
+    void Play( const QString & path );
 
 private:
     Ui::PlayerDialog *ui;

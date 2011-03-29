@@ -1,6 +1,7 @@
 QT = gui \
     core \
-    script
+    script \
+    declarative
 CONFIG += qt \
     warn_on \
     console   \
