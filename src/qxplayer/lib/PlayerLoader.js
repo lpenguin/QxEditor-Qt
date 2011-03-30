@@ -1,12 +1,36 @@
-var libraries;
+var PlayerLoader = function( path, handler ){
+    if( path  )
+        this.load( path, handler );
+}
 
-function load( path, handler ){
-    libraries = [];
-    Ajax.get(path, function( data ){
+PlayerLoader.prototype.libraries = [];
+PlayerLoader.prototype.loader = new URLLoader();
+
+PlayerLoader.prototype.loadLibs = function( libs, handler ){
+    var that = this;
+
+    var lib = libs.shift();
+    if(! lib ){
+        handler.call( null );
+        return;
+    }
+    console.log("loading library: "+lib)
+    this.loader.get( lib, function( data ){
+        that.libraries.push( data );
+        that.loadLibs( libs, handler )
+    })
+}
+
+PlayerLoader.prototype.load = function( path, handler ){
+    var that = this;
+
+    //var t = function(){ function a(){ return ''; } };
+    this.libraries = [];
+    this.loader.get(path, function( data ){
         var libs = data["libraries"];
         if( libs )
-            loadLibs( libs, function(){
-                data.libraries = libraries;
+            that.loadLibs( libs, function(){
+                data["libraries"] = that.libraries;
                 handler.call( null, data );
             });
         else
@@ -14,13 +38,4 @@ function load( path, handler ){
     }, "json" );
 }
 
-function loadLibs( libs, handler ){
-    var lib = libs.shift();
-    if(! lib )
-        handler.call( null );
-    Ajax.get( lib, function( data ){
-        console.log("on libs load " + data);
-        libraries.push( data );
-        //loadLibs( libs, handler )
-    } )
-}
+
