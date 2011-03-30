@@ -56,7 +56,7 @@ Quest.prototype.reset = function() {
     locations = [];
 }
 
-Quest.prototype.findLocation( id ){
+Quest.prototype.findLocation = function( id ){
     var loc;
     for( var i in _locations ){
         if( locations[i].id == id )
@@ -65,7 +65,7 @@ Quest.prototype.findLocation( id ){
     return null;
 }
 
-Quest.prototype.findStartLocation(){
+Quest.prototype.findStartLocation = function(){
     var loc;
     for( var i in _locations ){
         if( locations[i].type == 'start' )

@@ -14,8 +14,14 @@ PlayerDialog::~PlayerDialog()
     delete ui;
 }
 
-void PlayerDialog::Play(const QString &path)
+void PlayerDialog::Play(const QString &path, const QString & playerPath)
 {
-     ui->declarativeView->setSource( QUrl::fromLocalFile("/home/prian/src/QxEditor-Qt/src/qxplayer/Main.qml"));
+//     ui->declarativeView->rootContext()->setContextProperty( "networkManager", &manager );
+     ui->declarativeView->setSource( QUrl::fromLocalFile(playerPath));
+     QObject * o = (QObject*)ui->declarativeView->rootObject();
+     o->setProperty("questPath", path);
+
+     //ui->declarativeView->rootContext()
      ui->declarativeView->show();
+     exec();
 }

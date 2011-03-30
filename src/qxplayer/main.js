@@ -1,6 +1,10 @@
-player = new Player( playerView );
+var questPlayer = {};
 
-function init(){
-    playerView.text = "Hiiii!!!!";
-    playerView.addPath({ id:"P1"});
+function init(path){
+    if( !path )
+        return;
+    questPlayer = new PlayerUnit.Player( playerView );
+    PlayerLoader.load(path, function(data){
+        console.log("loaded")
+    });
 }

@@ -127,4 +127,7 @@ OTHER_FILES += \
     src/qxplayer/PlayerView.qml \
     src/qxplayer/main.js \
     src/qxplayer/Main.qml \
-    src/qxplayer/Core/mainFunctions.js
+    src/qxplayer/Core/mainFunctions.js \
+    src/qxplayer/lib/jx.js \
+    src/qxplayer/lib/loader.js \
+    src/qxplayer/lib/PlayerLoader.js

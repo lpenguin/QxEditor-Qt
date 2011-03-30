@@ -51,6 +51,8 @@ private:
     QmEquationDialog * equationDialog;
     GraphType m_graphType;
     PlayerDialog * playerDialog;
+    QString m_playerPath;
+
 private slots:
     void on_actionOpen_triggered();
     void on_actionSave_triggered();
@@ -85,7 +87,7 @@ private:
     void setCurrentFile(const QString &fileName);
     void updateRecentFileActions();
     QString strippedName(const QString &fullFileName);
-
+    void loadSettings();
     QString curFile;
 
 

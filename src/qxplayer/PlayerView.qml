@@ -1,10 +1,10 @@
 import QtQuick 1.0
 
-Component {
+Rectangle {
     //id:playerViewComponent
     property alias text: textView.text
     property alias stateText: stateTextView.text
-    function addPath( path ){ pathModel.append(path) }
+    function addPath( path ){ pathModel.append({ "path":path }) }
     function clearPaths() { pathModel.clear(); }
 
     signal pathSelected
@@ -13,7 +13,7 @@ Component {
         id:listDelegate
         Item{
             Text{
-                text: path.id
+                text: path.question
                 anchors.fill: parent
                 MouseArea{
                     anchors.fill: parent
@@ -28,8 +28,10 @@ Component {
     }
 
     Rectangle{
-        width: 800
-        height: 600
+        x: -297
+        y: -165
+        width: 600
+        height: 400
         Column{
             anchors.fill: parent
             Row{

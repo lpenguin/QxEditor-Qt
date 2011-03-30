@@ -30,6 +30,7 @@ MainDialogImpl::MainDialogImpl( QWidget * parent, Qt::WFlags f)
     QObject::connect(graphView, SIGNAL( VersConnected( VerItem *, VerItem *) ),
                      this, SLOT( VersConnected( VerItem *, VerItem *)));
 
+    loadSettings();
     verDialog = new VerDialog( this );
     edgeDialog= new EdgeDialog( this );
     graphDialog = new GraphDialog( this );
@@ -37,12 +38,14 @@ MainDialogImpl::MainDialogImpl( QWidget * parent, Qt::WFlags f)
     equationDialog = new QmEquationDialog( this );
     playerDialog = new PlayerDialog( this );
 
-    setGraphType( QuestLogic );
+    setGraphType( Simple );
 
     setCentralWidget( graphView );
 
     if( qApp->argc() > 1 )
         loadFile(QString(qApp->argv()[1]) );
+
+
 }
 //
 void MainDialogImpl::on_actionSettings_triggered(){
@@ -384,5 +387,16 @@ void MainDialogImpl::on_actionSimple_triggered(){
 }
 
 void MainDialogImpl::on_actionPlay_triggered(){
-    playerDialog->Play( "" );
+    playerDialog->Play( curFile , m_playerPath );
+}
+
+void MainDialogImpl::loadSettings()
+{
+    QSettings settings;
+    m_playerPath = settings.value("playerPath").toString();
+    if( m_playerPath.isEmpty() ){
+        m_playerPath = QFileDialog::getExistingDirectory(this, "Player path", QCoreApplication::applicationDirPath());
+        settings.setValue("playerPath", m_playerPath);
+    }
+    m_playerPath+="/Main.qml";
 }

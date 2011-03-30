@@ -172,5 +172,4 @@ function locationPaths( location ){
 }
         
 AddTrigger( function(){ ShowVars(); }, "stop", "showVars" );
-trace("main lib loaded");
 

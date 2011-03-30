@@ -2,7 +2,8 @@
 #define PLAYERDIALOG_H
 
 #include <QDialog>
-
+#include <QDeclarativeContext>
+#include <QtNetwork/QNetworkAccessManager>
 namespace Ui {
     class PlayerDialog;
 }
@@ -14,7 +15,7 @@ class PlayerDialog : public QDialog
 public:
     explicit PlayerDialog(QWidget *parent = 0);
     ~PlayerDialog();
-    void Play( const QString & path );
+    void Play( const QString & path, const QString & playerPath );
 
 private:
     Ui::PlayerDialog *ui;
