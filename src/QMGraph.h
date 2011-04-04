@@ -98,7 +98,16 @@ struct QMCondition{
     bool isEquals, isKraten;
     qint32 maxDiap, minDiap;
     bool notEmpty(){
-        return param && (isEquals || isKraten || ( maxDiap != param->max && minDiap != param->min ) );
+        if( !param )
+            return false;
+        qint32 min = param->min, max = param->max;
+        if( param->type != QMParametr::Odinary ){
+            if( param->critValue == QMParametr::Max )
+                max--;
+            if( param->critValue == QMParametr::Min )
+                min++;
+        }
+        return isEquals || isKraten ||  maxDiap != max || minDiap != min  ;
     }
 };
 struct QMAction{
