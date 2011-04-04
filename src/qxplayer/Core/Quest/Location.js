@@ -18,6 +18,6 @@ Location.prototype.paths = [];
 Location.prototype.initActions = "";
 
 Location.prototype.addPath = function( path ) {
-    paths.push( path );
+    this.paths.push( path );
 }
 

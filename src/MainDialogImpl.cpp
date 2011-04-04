@@ -34,7 +34,7 @@ MainDialogImpl::MainDialogImpl( QWidget * parent, Qt::WFlags f)
     verDialog = new VerDialog( this );
     edgeDialog= new EdgeDialog( this );
     graphDialog = new GraphDialog( this );
-    questSettingsDialog = new QuestSettingsDialog( this );
+    questSettingsDialog = new QuestSettingsDialog( this, m_playerPath );
     equationDialog = new QmEquationDialog( this );
     playerDialog = new PlayerDialog( this );
 

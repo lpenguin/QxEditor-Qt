@@ -1,11 +1,5 @@
 import QtQuick 1.0
 
-import "Core/Quest/Location.js" as LocationUnit
-import "Core/Quest/Path.js" as PathUnit
-import "Core/Quest/Quest.js" as QuestUnit
-import "Core/Player.js" as PlayerUnit
-import "lib/loader.js" as Ajax
-import "lib/PlayerLoader.js" as PlayerLoader
 import "main.js" as Main
 
 Rectangle{

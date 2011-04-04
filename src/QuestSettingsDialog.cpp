@@ -1,11 +1,12 @@
 #include "QuestSettingsDialog.h"
 #include "ui_QuestSettingsDialog.h"
 
-QuestSettingsDialog::QuestSettingsDialog(QWidget *parent) :
+QuestSettingsDialog::QuestSettingsDialog(QWidget *parent, const QString & playerPath) :
     QDialog(parent),
     ui(new Ui::QuestSettingsDialog)
 {
     ui->setupUi(this);
+    setPlayerPath( playerPath );
 }
 
 QuestSettingsDialog::~QuestSettingsDialog()
@@ -57,6 +58,16 @@ void QuestSettingsDialog::on_addButton_clicked(){
 }
 
 void QuestSettingsDialog::on_browseButton_clicked(){
+    QDir playerDir = QFileInfo(m_playerPath).dir() ;
+    QString searchPath;
+    if( ui->pathEdit->text().isEmpty() ){
+        searchPath = playerDir.path();
+    }else{
+        searchPath = playerDir.absoluteFilePath( ui->pathEdit->text() );
+    }
+    QString path = QFileDialog::getOpenFileName(this, tr("Select library path"), searchPath);
+    path = playerDir.relativeFilePath( path );
+    ui->pathEdit->setText( path );
 
 }
 
