@@ -5,12 +5,15 @@ VerInfo * QlQMInfoReader::ReadVerInfo(QMLocation *location)
 {
     QlLocationTexts * texts = ConvertLocationTexts( location );
     QlLocationStatementList statements;
+    QString id = QString("L")+QString::number(location->locNumber);
     if( texts->texts().count() > 1 )
         statements << texts;
+    if( location->type == QMLocation::Empty )
+        statements << new QlLocationEmpty( id );
     return new QlVerInfo(  texts->firstText(), statements,
                          ConvertActions(location->actions),
                          ConvertLocationType( location->type ),
-                         QString("L")+QString::number(location->locNumber) );
+                         id );
 }
 
 EdgeInfo * QlQMInfoReader::ReadEdgeInfo(QMPath *path)

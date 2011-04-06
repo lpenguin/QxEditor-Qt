@@ -175,7 +175,9 @@ int a;
         return ConvertPathPassability( tags );
     } else if (tag == "ql.showord") {
         return ConvertPathShowOrder( tags );
-    } else
+    } else if (tag == "ql.empty") {
+        return ConvertLocationEmpty( tags );
+    }else
         throw ParseError( QString("Unknown tag: %1").arg(tag), ParseError::UnknownTag );
 }
 
@@ -509,4 +511,10 @@ QString ECMAScriptToBsConverter::unpackSpecialChars(const QString &str) const  {
         s = s.replace(i.key(), i.value());
     }
     return s;
+}
+
+BlockScript::QlLocationEmpty * ECMAScriptToBsConverter::ConvertLocationEmpty(QStringList tags)
+{
+    QString locationId = ConvertString( tags.takeFirst() );
+    return new QlLocationEmpty(locationId);
 }

@@ -41,6 +41,7 @@ private:
     QString ConvertQlPathShowOrder( QlPathShowOrder * order );
     QString ConvertQlPathPassability( QlPathPassability * pass );
     QString ConvertQlLocationTexts( QlLocationTexts * texts );
+    QString ConvertQlLocationEmpty( QlLocationEmpty * empty );
 //    QString ConvertQlParametrStatement(QlParamStatement * statement );
 
     QString ExpressionTypeToString(BsObject::BsOperation operation );

@@ -315,6 +315,11 @@ QString BsToTagConverter::packSpecialChars(QString str) const
     return str;
 }
 
+QString BsToTagConverter::LocationEmptyTag(BlockScript::QlLocationEmpty *empty)
+{
+    return QString("ql.empty('%1')").arg(empty->locationId());
+}
+
 
 
 

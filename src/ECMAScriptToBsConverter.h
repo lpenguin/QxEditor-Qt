@@ -35,6 +35,7 @@ private:
     QlBoundTrigger * ConvertBoundTrigger(QStringList tags, BsStatementList statements);
     QlConstraint * ConvertConstraint(QStringList tags );
     QlLocationTexts * ConvertLocationTexts(QStringList tags );
+    QlLocationEmpty * ConvertLocationEmpty(QStringList tags );
     QlShowVariable * ConvertShowVariable(QStringList tags );
     QlPathPassability * ConvertPathPassability(QStringList tags );
     QlPathPriority * ConvertPathPriority(QStringList tags );

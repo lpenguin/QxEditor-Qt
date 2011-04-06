@@ -36,6 +36,7 @@ public:
     QString ShowVariableTag( QlShowVariable * sv);
     QString ParametrTag(QlParametr * par);
     QString LocationTextsTag( QlLocationTexts * texts );
+    QString LocationEmptyTag( QlLocationEmpty * empty );
     QString PathPriorityTag( QlPathPriority * prior);
     QString PathPassabilityTag( QlPathPassability * pass);
     QString PathShowOrderTag( QlPathShowOrder * order);

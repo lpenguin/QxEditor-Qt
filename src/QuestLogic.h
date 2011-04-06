@@ -8,7 +8,7 @@
 using namespace BlockScript;
 namespace QlType{
     enum _t{
-        Constraint = BsObject::UserType + 1, Trigger, ShowVariable, BoundTrigger, ParamStatement, Parametr, LocationTexts, PathPriority, PathPassability, PathShowOrder
+        Constraint = BsObject::UserType + 1, Trigger, ShowVariable, BoundTrigger, ParamStatement, Parametr, LocationTexts, PathPriority, PathPassability, PathShowOrder, LocationEmpty
     };
 }
 
@@ -171,6 +171,13 @@ public:
     void setLocationId( QString locationId ){
         m_locationId = locationId;
     }
+};
+
+class QlLocationEmpty : public QlLocationStatement{
+public:
+    virtual int type() const { return QlType::LocationEmpty; };
+    QlLocationEmpty( QString locationId = QString() )
+        :QlLocationStatement( locationId ){}
 };
 
 class QlLocationTexts : public QlLocationStatement{

@@ -45,6 +45,8 @@ QString BsToESMAScriptConverter::ConvertBsStatement(BsStatement *instruction)
         return ConvertQlPathShowOrder( (QlPathShowOrder*) instruction);
     case QlType::LocationTexts:
         return ConvertQlLocationTexts( (QlLocationTexts*) instruction );
+    case QlType::LocationEmpty:
+        return ConvertQlLocationEmpty( (QlLocationEmpty*)instruction );
     default:
         return QString("[ERROR]");
     }
@@ -455,6 +457,16 @@ QString BsToESMAScriptConverter::ConvertQlLocationStatementList(QlLocationStatem
     foreach( QlLocationStatement * stat, list){
         result << ConvertBsStatement( stat );
     }
+    return result.join("\n");
+}
+
+QString BsToESMAScriptConverter::ConvertQlLocationEmpty(BlockScript::QlLocationEmpty *empty)
+{
+    QStringList result;
+    result << m_tagConverter.TagStart() + m_tagConverter.LocationEmptyTag( empty );
+    result << QString("SetLocationEmpty( '%1' );")
+              .arg( empty->locationId() );
+    result << m_tagConverter.TagEnd();
     return result.join("\n");
 }
 
