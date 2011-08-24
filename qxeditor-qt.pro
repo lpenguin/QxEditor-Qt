@@ -1,7 +1,8 @@
 QT = gui \
     core \
     script \
-    declarative
+    declarative \
+    webkit
 CONFIG += qt \
     warn_on \
     console   \
@@ -129,4 +130,11 @@ OTHER_FILES += \
     src/qxplayer/Main.qml \
     src/qxplayer/Core/mainFunctions.js \
     src/qxplayer/lib/loader.js \
-    src/qxplayer/lib/PlayerLoader.js
+    src/qxplayer/lib/PlayerLoader.js \
+    ../QxPlayer-Js/js/player.js \
+    ../QxPlayer-Js/js/misc.js \
+    ../QxPlayer-Js/js/mainFunctions.js \
+    ../QxPlayer-Js/js/gridUI.js \
+    ../QxPlayer-Js/js/playerUI.js \
+    ../QxPlayer-Js/index.html \
+    ../QxPlayer-Js/css/playerui.css

@@ -143,7 +143,10 @@ private:
     BsScript * m_actions;
 public:
     QlGraphInfo( QString name = QString(), QString description = QString(), QStringList libraries = QStringList(),  QString id = QString(), QObject * parent = 0 ):
-        GraphInfo(name, description, libraries, id, parent ){}
+        GraphInfo(name, description, libraries, id, parent ){
+        m_parametrList = QlParametrList();
+        m_actions = new BsScript();
+    }
     QlGraphInfo( QString name, QString description, QStringList libraries, BsScript * actions, QlParametrList parametrList, QString id, QObject * parent = 0 ):
         GraphInfo(name, description, libraries, id, parent ){
         setParametrList( parametrList );

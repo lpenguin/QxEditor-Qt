@@ -156,28 +156,30 @@ void MainDialogImpl::loadFile(const QString &fileName)
     //	QXmlStreamReader in(&file);
     QApplication::setOverrideCursor(Qt::WaitCursor);
 
-
+    QString name = fileName;
     //graphView->Load(in);
-    if( fileName.endsWith(".json")){
+    if( name.endsWith(".json")){
         JSONGraphReader * reader = new JSONGraphReader;
         if( m_graphType == Simple )
             reader->setInfoReader( new SimpleJSONInfoReader );
         else if( m_graphType == QuestLogic )
             reader->setInfoReader( new QlJSONInfoReader );
-        graphView->Load( fileName, reader );
-    }else if(fileName.endsWith(".qm")){
+        graphView->Load( name, reader );
+    }else if(name.endsWith(".qm")){
         QMGraphReader * reader = new QMGraphReader;
         reader->setReader( new QlQMInfoReader );
-        graphView->Load( fileName, reader );
+        graphView->Load( name, reader );
+        setCurrentFile(name);
+        name = name+QString(".json");
     }else{
         QApplication::restoreOverrideCursor();
         statusBar()->showMessage(tr("Unknown extention"), 2000);
-        QMessageBox::warning(this, "Warning", tr("Unknown extention: %1").arg(fileName));
+        QMessageBox::warning(this, "Warning", tr("Unknown extention: %1").arg(name));
         return;
     }
     QApplication::restoreOverrideCursor();
 
-    setCurrentFile(fileName);
+    setCurrentFile(name);
     statusBar()->showMessage(tr("File loaded"), 2000);
 }
 
@@ -387,16 +389,21 @@ void MainDialogImpl::on_actionSimple_triggered(){
 }
 
 void MainDialogImpl::on_actionPlay_triggered(){
-    playerDialog->Play( curFile , m_playerPath );
+    this->save();
+    if(!curFile.isEmpty())
+        playerDialog->Play( curFile , m_playerPath );
 }
 
 void MainDialogImpl::loadSettings()
 {
     QSettings settings;
+    //settings.remove("playerPath");
     m_playerPath = settings.value("playerPath").toString();
     if( m_playerPath.isEmpty() ){
         m_playerPath = QFileDialog::getExistingDirectory(this, "Player path", QCoreApplication::applicationDirPath());
+        m_playerPath = QDir::toNativeSeparators(m_playerPath);
         settings.setValue("playerPath", m_playerPath);
+        qDebug()<<m_playerPath;
     }
-    m_playerPath+="/Main.qml";
+    //m_playerPath+="/Main.qml";
 }

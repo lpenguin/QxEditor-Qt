@@ -20,10 +20,8 @@ void QlVerWidget::ShowVer(Ver *ver)
     QlVerInfo * info;
     if( info = qobject_cast<QlVerInfo *>(ver->info())){
         ui->actionsEdit->setPlainText( m_converter->ConvertBlockSript(info->actions()));
-//        ui->verIdEdit->setText( info->id() );
         ui->textEdit->setPlainText(info->text());
         ui->initEdit->setPlainText( m_converter->ConvertQlLocationStatementList( info->locationStatements() ) );
-//        type2radio( info->verType());
     }
 }
 

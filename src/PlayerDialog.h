@@ -4,6 +4,8 @@
 #include <QDialog>
 #include <QDeclarativeContext>
 #include <QtNetwork/QNetworkAccessManager>
+#include <QDir>
+#include <QtCore>
 namespace Ui {
     class PlayerDialog;
 }
