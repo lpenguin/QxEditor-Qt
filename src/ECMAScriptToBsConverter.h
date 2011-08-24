@@ -34,6 +34,7 @@ private:
     QlTrigger * ConvertTrigger(QStringList tags, BsStatementList statements);
     QlBoundTrigger * ConvertBoundTrigger(QStringList tags, BsStatementList statements);
     QlConstraint * ConvertConstraint(QStringList tags );
+    QlIntConstraint * ConvertIntConstraint(QStringList tags );
     QlLocationTexts * ConvertLocationTexts(QStringList tags );
     QlLocationEmpty * ConvertLocationEmpty(QStringList tags );
     QlShowVariable * ConvertShowVariable(QStringList tags );
@@ -46,6 +47,7 @@ private:
     BsOperator * ConvertOperator(const QString &tag);
     BsCondition * ConvertCondition( const QString &tag );
     BsRange * ConvertRange( const QString &tag );
+    BsRange * ConvertCalcRange( const QString &tag );
     BsUserString * ConvertUserString( const QString &tag );
     BsFunction * ConvertFunction( const QString &tag );
     BsVariable * ConvertVariable( const QString &tag );

@@ -107,21 +107,20 @@ QMCondition * QMReader::ReadCondition(BinaryReader &br, qint32 paramNumber)
     int len = br.ReadInt32();
     condition->isEquals = br.ReadByte() == 1;
 
-    condition->isEquals = condition->isEquals && len != 0;
+    //condition->isEquals = condition->isEquals;
 
     for (int i = 0; i < len; i++)
         condition->equals.push_front( br.ReadInt32() );
     len = br.ReadInt32();
     condition->isKraten = br.ReadByte() == 1;
 //    condition->kraten = new Int32[len];
-    condition->isKraten = condition->isKraten && len != 0;
+    //condition->isKraten = condition->isKraten;
     for (int i = 0; i < len; i++)
         condition->kraten.push_front( br.ReadInt32() );
 
     if( m_params.count() > paramNumber)
         condition->param = m_params[paramNumber];
     else
-//        condition->param = 0;
         throw( QMException(QObject::tr("Parametr with number %1 does not exists").arg(paramNumber)) );
     return condition;
 }

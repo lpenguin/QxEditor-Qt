@@ -113,26 +113,35 @@ BsConditionList QMScriptToBsConverter::ConvertQMCondition(QMCondition *qmConditi
                                                 var <<
                                                 new BsRange(
                                                  new BsValue( QString::number(qmCondition->minDiap)),
-                                                 new BsValue( QString::number(qmCondition->maxDiap))
-                                                 ));
+                                                 new BsValue( QString::number(qmCondition->maxDiap)),
+                                                 false)
+                                                 );
         result<<cond;
     }
-    if( qmCondition->isEquals ){
+    if( qmCondition->equals.count() ){
         BsExpressionList list;
+        list<<var;
         foreach( int v, qmCondition->equals){
-            list<<var<<new BsValue( QString::number( v ));
+            list<<new BsValue( QString::number( v ));
         }
 
         BsCondition * cond = new BsCondition( BsCondition::In, list);
+        if( ! qmCondition->isEquals ){
+            cond = new BsCondition(BsCondition::Not, BsExpressionList() << cond);
+        }
         result<<cond;
     }
-    if( qmCondition->isKraten ){
+    if( qmCondition->kraten.count() ){
         BsExpressionList list;
+        list<<var;
         foreach( int v, qmCondition->kraten){
-            list<<var<<new BsValue( QString::number( v ));
+            list<<new BsValue( QString::number( v ));
         }
 
         BsCondition * cond = new BsCondition( BsCondition::Multiple, list);
+        if( ! qmCondition->isKraten ){
+            cond = new BsCondition(BsCondition::Not, BsExpressionList() << cond);
+        }
         result<<cond;
     }
     return result;
@@ -162,11 +171,11 @@ QlParametr *  QMScriptToBsConverter::ConvertQMParametr(QMParametr *qmParametr)
 {
     BsVariable * var = m_varMap[ qmParametr ];
     QlParamStatementList list;
-    list<<
-           new QlConstraint( var, new BsValue( QString::number(qmParametr->min)), new BsValue( QString::number(qmParametr->max)))
-                <<
-                new QlShowVariable( var, ConvertQMRanges( qmParametr->ranges),  ConvertQMRangesTexts(qmParametr->ranges),
-                                   qmParametr->showOnZero );
+    list<<new QlConstraint( var, new BsValue( QString::number(qmParametr->min)), new BsValue( QString::number(qmParametr->max)))
+        <<new QlShowVariable( var, ConvertQMRanges( qmParametr->ranges),  ConvertQMRangesTexts(qmParametr->ranges),
+                                   qmParametr->showOnZero )
+        <<new QlIntConstraint(var);
+
 
     if( qmParametr->type != QMParametr::Odinary){
         QlBoundTrigger * trig = new QlBoundTrigger();
@@ -189,7 +198,7 @@ BsRangeList QMScriptToBsConverter::ConvertQMRanges(QMParametrRangeList ranges)
 {
     BsRangeList list;
     foreach( QMParametrRange range, ranges){
-        list<<new BsRange( new BsValue(QString::number( range.min)), new BsValue(QString::number( range.max)));
+        list<<new BsRange( new BsValue(QString::number( range.min)), new BsValue(QString::number( range.max)), false);
     }
     return list;
 }

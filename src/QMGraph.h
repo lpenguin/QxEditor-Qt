@@ -125,7 +125,7 @@ struct QMAction{
     QString equation;
     QMParamterVisible show;
     bool notEmpty(){
-        return !( addNumber == 0 && equation.isEmpty() && show == QMAction::DontTouch );
+        return !( addNumber == 0 && equation.isEmpty() && show == QMAction::DontTouch && type != Mov);
     }
 };
 

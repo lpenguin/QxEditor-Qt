@@ -159,6 +159,8 @@ int a;
         return ConvertVariableDefinition( tags );
     } else if (tag == "ql.cons") {
         return ConvertConstraint( tags );
+    } else if (tag == "ql.icons") {
+        return ConvertIntConstraint( tags );
     } else if (tag == "ql.trig") {
         return ConvertTrigger( tags, statements );
     } else if (tag == "ql.bound") {
@@ -217,6 +219,8 @@ BsExpression * ECMAScriptToBsConverter::ConvertExpression(const QString &tag)
         return ConvertCondition( tag );
     } else if( name  == "ran"){
         return ConvertRange( tag );
+    } else if( name  == "cran"){
+        return ConvertCalcRange( tag );
     } else if( name  == "user"){
         return ConvertUserString(tag );
     } else if( name  == "func"){
@@ -251,7 +255,8 @@ BsRange * ECMAScriptToBsConverter::ConvertRange(const QString &tag)
 {
     QStringList tags = tagArguments( tag );
     return new BsRange( ConvertExpression( tags.takeFirst()),
-                       ConvertExpression( tags.takeFirst() ));
+                        ConvertExpression( tags.takeFirst() ),
+                        false);
 }
 
 BsUserString * ECMAScriptToBsConverter::ConvertUserString(const QString &tag)
@@ -517,4 +522,17 @@ BlockScript::QlLocationEmpty * ECMAScriptToBsConverter::ConvertLocationEmpty(QSt
 {
     QString locationId = ConvertString( tags.takeFirst() );
     return new QlLocationEmpty(locationId);
+}
+
+BlockScript::BsRange * ECMAScriptToBsConverter::ConvertCalcRange(const QString &tag)
+{
+    QStringList tags = tagArguments( tag );
+    return new BsRange( ConvertExpression( tags.takeFirst()),
+                       ConvertExpression( tags.takeFirst() ),
+                       true);
+}
+
+BlockScript::QlIntConstraint * ECMAScriptToBsConverter::ConvertIntConstraint(QStringList tags)
+{
+    return new QlIntConstraint( ConvertVariable( tags.takeFirst() ) );
 }

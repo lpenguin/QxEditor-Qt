@@ -33,6 +33,7 @@ private:
     QString ConvertBsSet( BsSet * set );
 
     QString ConvertQlConstraint( QlConstraint * con);
+    QString ConvertQlIntConstraint( QlIntConstraint * icon);
     QString ConvertQlTrigger( QlTrigger * trig);
     QString ConvertQlBoundTrigger( QlBoundTrigger * trig);
     QString ConvertQlShowVariable( QlShowVariable * sv);

@@ -39,6 +39,13 @@ BlockScript::BsExpression * QmEqToBsConverter::parseExpression(const QString &eq
 //                return new BsCondition( m_conditionTypes[oper], exprs );
 //                break;
             case In:
+                {
+                    BsExpression * e =  exprs.at(1);
+                    if(e->type() == BsObject::Range){
+                        BsRange * ran = (BsRange *)(e);
+                        ran->setCalcRandom( false );
+                    }
+                }
                 return new BsCondition( m_conditionTypes[oper], exprs );
 //                if( exprs.count() != 2)
 //                    throw new Error(QString("Invalid arguments count for '%1' (%2)").arg(oper).arg(equation));
@@ -46,7 +53,7 @@ BlockScript::BsExpression * QmEqToBsConverter::parseExpression(const QString &eq
             case To:
                 if( exprs.count() != 2)
                     throw new Error(QString("Invalid arguments count for '%1' (%2)").arg(oper).arg(equation));
-                return new BsRange( exprs.takeFirst(), exprs.takeFirst() );
+                return new BsRange( exprs.takeFirst(), exprs.takeFirst(), false );
             case Math:
                 //qDebug()<<oper<<" "<<m_operationTypes[oper];
                 return new BsOperator( m_operationTypes[oper], exprs );
@@ -144,7 +151,7 @@ BlockScript::BsVariable * QmEqToBsConverter::parseVariable(const QString &arg) t
 BlockScript::BsRange * QmEqToBsConverter::parseRange(const QString &arg) throw( ParseError )
 {
     QStringList items = arg.split("..");
-    return new BsRange( parseExpression(items.takeFirst()), parseExpression(items.takeLast()));
+    return new BsRange( parseExpression(items.takeFirst()), parseExpression(items.takeLast()), true);
 }
 
 BlockScript::BsSet * QmEqToBsConverter::parseSet(const QString &arg) throw( ParseError )

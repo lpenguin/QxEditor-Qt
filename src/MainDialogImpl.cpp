@@ -38,7 +38,7 @@ MainDialogImpl::MainDialogImpl( QWidget * parent, Qt::WFlags f)
     equationDialog = new QmEquationDialog( this );
     playerDialog = new PlayerDialog( this );
 
-    setGraphType( Simple );
+    setGraphType( QuestLogic );
 
     setCentralWidget( graphView );
 

@@ -257,10 +257,12 @@ class BsRange : public BsExpression {
 private:
     BsExpression * m_min;
     BsExpression * m_max;
+    bool m_calcRandom;//если true вычислять рандомное значение, иначе воспринимать как числовой диапазон
 public:
-    BsRange( BsExpression * min, BsExpression * max ){
+    BsRange( BsExpression * min, BsExpression * max, bool calcRandom ){
         setMin(min);
         setMax(max);
+        setCalcRandom( calcRandom );
     }
     virtual int type() const { return BsObject::Range; }
     BsExpression * min() { return m_min; }
@@ -271,6 +273,14 @@ public:
     }
     void setMax( BsExpression * max ){
         SETPA( max );
+    }
+
+    void setCalcRandom( bool calcRandom ){
+        m_calcRandom = calcRandom;
+    }
+
+    bool calcRandom() const{
+        return m_calcRandom;
     }
 };
 

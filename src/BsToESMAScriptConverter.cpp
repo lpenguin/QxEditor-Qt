@@ -29,6 +29,8 @@ QString BsToESMAScriptConverter::ConvertBsStatement(BsStatement *instruction)
         return ConvertBsUserString( (BsUserString * ) instruction );
     case BsObject::If:
         return ConvertBsIf( (BsIf * ) instruction );
+    case QlType::IntParametr:
+        return ConvertQlIntConstraint( (BlockScript::QlIntConstraint * ) instruction );
     case QlType::Constraint:
         return ConvertQlConstraint( (QlConstraint * ) instruction );
     case QlType::Trigger:
@@ -78,12 +80,12 @@ QString BsToESMAScriptConverter::ConvertBsFunction(BsFunction *function)
 {
     QStringList arguments;
     QStringList result;
-    result << m_tagConverter.TagStart()+m_tagConverter.FunctionTag( function );
+    //result << m_tagConverter.TagStart()+m_tagConverter.FunctionTag( function );
     foreach( BsExpression * obj, function->arguments()){
         arguments<<ConvertBsExpression( obj );
     }
-    result<<QString("%1(%2);").arg(function->name()).arg(arguments.join(","));
-    result<<m_tagConverter.TagEnd();
+    result<<QString("%1(%2)").arg(function->name()).arg(arguments.join(","));
+    //result<<m_tagConverter.TagEnd();
     return result.join("\n");
 }
 
@@ -238,31 +240,33 @@ QString BsToESMAScriptConverter::ConvertBsCondition(BsCondition *condition)
     case BsCondition::Not:
         if( condition->arguments().count() != 1 )
             return "[ERROR]";
-        return QString("not ( %1 )")
+        return QString("! ( %1 )")
                 .arg(ConvertBsExpression( condition->arguments().at(0)));
     case BsCondition::In:
     {
         if( condition->arguments().count() < 2 )
             return "[ERROR]";
         QStringList args;
-//        QString firstStr;
-//        BsExpression * first = condition->arguments().at(0);
 
-//        if( first->type() == BsObject::Variable ){
-//            BsVariable * var = (BsVariable*)(first);
-//            firstStr = QString("'%1'").arg(var->name());
-//        }
-//        else
-//            firstStr = ConvertBsExpression(first);
         foreach( BsExpression * obj, condition->arguments()){
             args<<ConvertBsExpression( obj );
         }
-//        args[0] = firstStr;
         return QString("In(%1)").arg(args.join(","));
-        //BsObject * target = condition->arguments().takeFirst();
 
     }
         break;
+    case BsCondition::Multiple:
+    {
+        if( condition->arguments().count() < 2 )
+            return "[ERROR]";
+        QStringList args;
+
+        foreach( BsExpression * obj, condition->arguments()){
+            args<<ConvertBsExpression( obj );
+        }
+        return QString("Mul(%1)").arg(args.join(","));
+    }
+    break;
     default:
         return "[ERROR]";
     }
@@ -270,9 +274,16 @@ QString BsToESMAScriptConverter::ConvertBsCondition(BsCondition *condition)
 
 QString BsToESMAScriptConverter::ConvertBsRange(BsRange *range)
 {
-    return QString("range(%1, %2)")
+    QString op;
+    if( range->calcRandom() ){
+        op = "crange";
+    }else{
+        op = "range";
+    }
+    return QString("%3(%1, %2)")
             .arg(ConvertBsExpression( range->min()))
-            .arg(ConvertBsExpression( range->max()));
+            .arg(ConvertBsExpression( range->max()))
+            .arg(op);
 }
 
 QString BsToESMAScriptConverter::ConvertBsSet(BlockScript::BsSet *set)
@@ -380,7 +391,7 @@ QString BsToESMAScriptConverter::ConvertQlParametr(QlParametr *parametr)
 {
     QStringList result;
     result << m_tagConverter.TagStart() + m_tagConverter.ParametrTag(parametr);
-    result << QString("var %1 = %2;").arg( parametr->var()->name() ).arg( ConvertBsExpression( parametr->startValue() ));
+    result << QString("%1 = %2;").arg( parametr->var()->name() ).arg( ConvertBsExpression( parametr->startValue() ));
     foreach (QlParamStatement * statement, parametr->paramStatements()) {
         result << ConvertBsStatement( statement );
     }
@@ -404,7 +415,7 @@ QString BsToESMAScriptConverter::ConvertQlLocationTexts(QlLocationTexts *texts)
     result << QString("AddLocationTexts( '%1', function(){ return %2; }, [\"%3\"] );")
               .arg( texts->locationId() )
               .arg(ConvertBsExpression( texts->expr()))
-              .arg( texts->texts().join("\",\""));
+              .arg( texts->texts().join("\",\"").replace("\r\n","\\\\n").replace("\n", QString("\\\\n")));
     result << m_tagConverter.TagEnd();
     return result.join("\n");
 }
@@ -467,6 +478,16 @@ QString BsToESMAScriptConverter::ConvertQlLocationEmpty(BlockScript::QlLocationE
     result << QString("SetLocationEmpty( '%1' );")
               .arg( empty->locationId() );
     result << m_tagConverter.TagEnd();
+    return result.join("\n");
+}
+
+QString BsToESMAScriptConverter::ConvertQlIntConstraint(BlockScript::QlIntConstraint *con)
+{
+    QStringList result;
+    result << m_tagConverter.TagStart()+m_tagConverter.IntConstraintTag( con );
+    result << QString("AddIntConstraint('%1');")
+              .arg(con->var()->name());
+    result<<m_tagConverter.TagEnd();
     return result.join("\n");
 }
 

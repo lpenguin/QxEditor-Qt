@@ -8,7 +8,7 @@
 using namespace BlockScript;
 namespace QlType{
     enum _t{
-        Constraint = BsObject::UserType + 1, Trigger, ShowVariable, BoundTrigger, ParamStatement, Parametr, LocationTexts, PathPriority, PathPassability, PathShowOrder, LocationEmpty
+        Constraint = BsObject::UserType + 1, Trigger, ShowVariable, BoundTrigger, ParamStatement, Parametr, LocationTexts, PathPriority, PathPassability, PathShowOrder, LocationEmpty, IntParametr
     };
 }
 
@@ -32,6 +32,22 @@ typedef QList<QlLocationStatement * > QlLocationStatementList;
 class QlParamStatement : public BsStatement{
 public:
     virtual int type() const{ return QlType::ParamStatement; }
+};
+
+class QlIntConstraint : public QlParamStatement{
+private:
+    BsVariable * m_var;
+public:
+    QlIntConstraint( BsVariable * var ){
+        setVar( var );
+    }
+    void setVar(BsVariable * var){
+        SETPA( var );
+    }
+
+    BsVariable * var() const { return m_var; }
+
+    virtual int type() const{ return QlType::IntParametr; }
 };
 
 class QlConstraint : public QlParamStatement{

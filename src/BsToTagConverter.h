@@ -31,6 +31,7 @@ public:
     QString IfTag( BsIf * if_);
 
     QString ConstraintTag( QlConstraint * con);
+    QString IntConstraintTag( QlIntConstraint * con);
     QString TriggerTag( QlTrigger * trig);
     QString BoundTriggerTag( QlBoundTrigger * trig);
     QString ShowVariableTag( QlShowVariable * sv);

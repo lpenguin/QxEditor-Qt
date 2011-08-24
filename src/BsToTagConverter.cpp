@@ -196,9 +196,16 @@ QString BsToTagConverter::ConditionTag(BsCondition *condition)
 
 QString BsToTagConverter::RangeTag(BsRange *range)
 {
-    return QString("ran(%1,%2)")
+    QString tag;
+    if(range->calcRandom()){
+        tag = "cran";
+    }else{
+        tag = "ran";
+    }
+    return QString("%3(%1,%2)")
             .arg(ExpressionTag( range->min() ))
-            .arg(ExpressionTag( range->max() ));
+            .arg(ExpressionTag( range->max() ))
+            .arg(tag);
 }
 
 QString BsToTagConverter::IfTag(BsIf *if_)
@@ -318,6 +325,11 @@ QString BsToTagConverter::packSpecialChars(QString str) const
 QString BsToTagConverter::LocationEmptyTag(BlockScript::QlLocationEmpty *empty)
 {
     return QString("ql.empty('%1')").arg(empty->locationId());
+}
+
+QString BsToTagConverter::IntConstraintTag(BlockScript::QlIntConstraint *con)
+{
+    return QString("ql.icons(%1)").arg(con->var()->name());
 }
 
 
