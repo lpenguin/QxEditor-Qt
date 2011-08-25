@@ -45,6 +45,8 @@ QString BsToESMAScriptConverter::ConvertBsStatement(BsStatement *instruction)
         return ConvertQlPathPriority( (QlPathPriority*) instruction);
     case QlType::PathShowOrder:
         return ConvertQlPathShowOrder( (QlPathShowOrder*) instruction);
+    case QlType::PathAlwaysShow:
+        return ConvertQlPathAlwaysShow( (QlPathAlwaysShow*) instruction );
     case QlType::LocationTexts:
         return ConvertQlLocationTexts( (QlLocationTexts*) instruction );
     case QlType::LocationEmpty:
@@ -488,6 +490,16 @@ QString BsToESMAScriptConverter::ConvertQlIntConstraint(BlockScript::QlIntConstr
     result << QString("AddIntConstraint('%1');")
               .arg(con->var()->name());
     result<<m_tagConverter.TagEnd();
+    return result.join("\n");
+}
+
+QString BsToESMAScriptConverter::ConvertQlPathAlwaysShow(BlockScript::QlPathAlwaysShow *alwShow)
+{
+    QStringList result;
+    result << m_tagConverter.TagStart() + m_tagConverter.PathAlwaysShowTag( alwShow );
+    result << QString("SetPathAlwaysShow( '%1' );")
+              .arg( alwShow->pathId() );
+    result << m_tagConverter.TagEnd();
     return result.join("\n");
 }
 

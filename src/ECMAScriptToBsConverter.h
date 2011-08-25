@@ -40,6 +40,7 @@ private:
     QlShowVariable * ConvertShowVariable(QStringList tags );
     QlPathPassability * ConvertPathPassability(QStringList tags );
     QlPathPriority * ConvertPathPriority(QStringList tags );
+    QlPathAlwaysShow * ConvertPathAlwaysShow(QStringList tags );
     QlParametr * ConvertParametr(QStringList tags, BsStatementList statements);
     QlPathShowOrder * ConvertPathShowOrder(QStringList tags );
 

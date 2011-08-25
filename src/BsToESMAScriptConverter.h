@@ -41,6 +41,8 @@ private:
     QString ConvertQlPathPriority( QlPathPriority * priority );
     QString ConvertQlPathShowOrder( QlPathShowOrder * order );
     QString ConvertQlPathPassability( QlPathPassability * pass );
+    QString ConvertQlPathAlwaysShow( QlPathAlwaysShow * alwShow );
+
     QString ConvertQlLocationTexts( QlLocationTexts * texts );
     QString ConvertQlLocationEmpty( QlLocationEmpty * empty );
 //    QString ConvertQlParametrStatement(QlParamStatement * statement );

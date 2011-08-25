@@ -41,6 +41,7 @@ public:
     QString PathPriorityTag( QlPathPriority * prior);
     QString PathPassabilityTag( QlPathPassability * pass);
     QString PathShowOrderTag( QlPathShowOrder * order);
+    QString PathAlwaysShowTag( QlPathAlwaysShow * alwaysShow);
 
     QString ExpressionTypeToString(BsObject::BsOperation operation );
     QString ActionTypeToString(BsObject::BsOperation operation );

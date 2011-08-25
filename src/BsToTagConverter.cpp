@@ -332,6 +332,12 @@ QString BsToTagConverter::IntConstraintTag(BlockScript::QlIntConstraint *con)
     return QString("ql.icons(%1)").arg(con->var()->name());
 }
 
+QString BsToTagConverter::PathAlwaysShowTag(BlockScript::QlPathAlwaysShow *alwaysShow)
+{
+    return QString("ql.alwshow('%1')")
+            .arg( packSpecialChars( alwaysShow->pathId() ));
+}
+
 
 
 

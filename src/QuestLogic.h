@@ -8,7 +8,7 @@
 using namespace BlockScript;
 namespace QlType{
     enum _t{
-        Constraint = BsObject::UserType + 1, Trigger, ShowVariable, BoundTrigger, ParamStatement, Parametr, LocationTexts, PathPriority, PathPassability, PathShowOrder, LocationEmpty, IntParametr
+        Constraint = BsObject::UserType + 1, Trigger, ShowVariable, BoundTrigger, ParamStatement, Parametr, LocationTexts, PathPriority, PathPassability, PathShowOrder, PathAlwaysShow, LocationEmpty, IntParametr
     };
 }
 
@@ -354,5 +354,15 @@ public:
         return QlType::PathPassability;
     }
 };
-}
+
+class QlPathAlwaysShow : public QlPathStatement{
+
+public:
+    QlPathAlwaysShow( QString pathId):
+        QlPathStatement( pathId ){}
+
+    virtual int type() const{
+        return QlType::PathAlwaysShow;
+    }
+};}
 #endif // QUESTLOGIC_H

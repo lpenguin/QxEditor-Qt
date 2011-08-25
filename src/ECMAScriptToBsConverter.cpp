@@ -179,6 +179,8 @@ int a;
         return ConvertPathShowOrder( tags );
     } else if (tag == "ql.empty") {
         return ConvertLocationEmpty( tags );
+    } else if( tag == "ql.alwshow") {
+        return ConvertPathAlwaysShow( tags );
     }else
         throw ParseError( QString("Unknown tag: %1").arg(tag), ParseError::UnknownTag );
 }
@@ -535,4 +537,10 @@ BlockScript::BsRange * ECMAScriptToBsConverter::ConvertCalcRange(const QString &
 BlockScript::QlIntConstraint * ECMAScriptToBsConverter::ConvertIntConstraint(QStringList tags)
 {
     return new QlIntConstraint( ConvertVariable( tags.takeFirst() ) );
+}
+
+BlockScript::QlPathAlwaysShow * ECMAScriptToBsConverter::ConvertPathAlwaysShow(QStringList tags)
+{
+    QString pathId = ConvertString( tags.takeFirst() );
+    return new QlPathAlwaysShow(pathId );
 }
