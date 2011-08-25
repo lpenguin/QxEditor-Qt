@@ -44,11 +44,18 @@ EdgeInfo * QlQMInfoReader::ReadEdgeInfo(QMPath *path)
 GraphInfo * QlQMInfoReader::ReadGraphInfo(QMGraph *graph)
 {
     m_qmToBs.setQmGlobals( graph->params() );
+    QlParametrList params = ConvertParametrs( graph->params());
+    QMStringReplaces sr = graph->stringReplaces();
+    params << new QlParametr(new BsVariable("Ranger"), new BsValue("'"+sr.ranger+"'"))
+           << new QlParametr(new BsVariable("FromStar"),new  BsValue("'"+sr.fromStar+"'"))
+           << new QlParametr(new BsVariable("FromPlanet"),new BsValue("'"+sr.fromPlanet+"'"))
+           << new QlParametr(new BsVariable("ToPlanet"),new  BsValue("'"+sr.toPlanet+"'"))
+           << new QlParametr(new BsVariable("ToStar"), new BsValue("'"+sr.toStar+"'"));
     return new QlGraphInfo( "[Not inplemented yet]",
                            graph->stringReplaces().missionString,
                            QStringList()<<"main.as",
                            new BsScript(),
-                           ConvertParametrs( graph->params()), "Main");
+                           params, "Main");
 }
 
 QlLocationTexts * QlQMInfoReader::ConvertLocationTexts(QMLocation *location)

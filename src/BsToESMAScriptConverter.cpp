@@ -393,7 +393,7 @@ QString BsToESMAScriptConverter::ConvertQlParametr(QlParametr *parametr)
 {
     QStringList result;
     result << m_tagConverter.TagStart() + m_tagConverter.ParametrTag(parametr);
-    result << QString("%1 = %2;").arg( parametr->var()->name() ).arg( ConvertBsExpression( parametr->startValue() ));
+    result << QString("%1 = %2;AddToVars('%1');").arg( parametr->var()->name() ).arg( ConvertBsExpression( parametr->startValue() ));
     foreach (QlParamStatement * statement, parametr->paramStatements()) {
         result << ConvertBsStatement( statement );
     }

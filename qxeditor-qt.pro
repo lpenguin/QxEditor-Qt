@@ -24,7 +24,8 @@ FORMS = ui/dialog.ui \
     src/QlGraphWidget.ui \
     src/SimpleGraphWidget.ui \
     src/QmEquationDialog.ui \
-    src/PlayerDialog.ui
+    src/PlayerDialog.ui \
+    src/SettingsDialog.ui
 HEADERS = \
     src/GraphView.h \
     src/VerItem.h \
@@ -71,7 +72,8 @@ HEADERS = \
     src/ParseError.h \
     src/QmEqToBsConverter.h \
     src/QmEquationDialog.h \
-    src/PlayerDialog.h
+    src/PlayerDialog.h \
+    src/SettingsDialog.h
 SOURCES = \
     src/main.cpp \
     src/GraphView.cpp \
@@ -116,7 +118,8 @@ SOURCES = \
     src/stringoper.cpp \
     src/QmEqToBsConverter.cpp \
     src/QmEquationDialog.cpp \
-    src/PlayerDialog.cpp
+    src/PlayerDialog.cpp \
+    src/SettingsDialog.cpp
 TEMPLATE = app
 INCLUDEPATH += src
 

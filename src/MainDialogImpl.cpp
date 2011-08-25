@@ -30,14 +30,15 @@ MainDialogImpl::MainDialogImpl( QWidget * parent, Qt::WFlags f)
     QObject::connect(graphView, SIGNAL( VersConnected( VerItem *, VerItem *) ),
                      this, SLOT( VersConnected( VerItem *, VerItem *)));
 
-    loadSettings();
+
     verDialog = new VerDialog( this );
     edgeDialog= new EdgeDialog( this );
     graphDialog = new GraphDialog( this );
     questSettingsDialog = new QuestSettingsDialog( this, m_playerPath );
     equationDialog = new QmEquationDialog( this );
     playerDialog = new PlayerDialog( this );
-
+    settigsDialog = new SettingsDialog( this );
+    loadSettings();
     setGraphType( QuestLogic );
 
     setCentralWidget( graphView );
@@ -400,10 +401,22 @@ void MainDialogImpl::loadSettings()
     //settings.remove("playerPath");
     m_playerPath = settings.value("playerPath").toString();
     if( m_playerPath.isEmpty() ){
-        m_playerPath = QFileDialog::getExistingDirectory(this, "Player path", QCoreApplication::applicationDirPath());
-        m_playerPath = QDir::toNativeSeparators(m_playerPath);
+        settigsDialog->setPlayerPath(m_playerPath);
+        if( settigsDialog->exec() == QDialog::Accepted ){
+            m_playerPath = settigsDialog->playerPath();
+            settings.setValue("playerPath", m_playerPath);
+        }
         settings.setValue("playerPath", m_playerPath);
         qDebug()<<m_playerPath;
     }
     //m_playerPath+="/Main.qml";
+}
+
+void MainDialogImpl::on_actionPreferences_triggered(){
+    settigsDialog->setPlayerPath(m_playerPath);
+    if( settigsDialog->showSettings() == QDialog::Accepted ){
+        m_playerPath = settigsDialog->playerPath();
+        QSettings settings;
+        settings.setValue("playerPath", m_playerPath);
+    }
 }
