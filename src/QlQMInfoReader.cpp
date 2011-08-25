@@ -128,8 +128,9 @@ QlPathStatementList QlQMInfoReader::ConvertPathStatements(QMPath *path)
     QString id = QString("P%1").arg(path->pathNumber);
     result << new QlPathPriority( id, path->priority)
            << new QlPathShowOrder(id, path->showOrder)
-           << new QlPathPassability(id, path->prohodimost )
-           << new QlPathAlwaysShow(id);
+           << new QlPathPassability(id, path->prohodimost );
+    if(path->alwaysShow)
+           result << new QlPathAlwaysShow(id);
     return result;
 }
 

@@ -416,7 +416,7 @@ QString BsToESMAScriptConverter::ConvertQlLocationTexts(QlLocationTexts *texts)
     result << m_tagConverter.TagStart() + m_tagConverter.LocationTextsTag( texts );
     result << QString("AddLocationTexts( '%1', function(){ return %2; }, [\"%3\"] );")
               .arg( texts->locationId() )
-              .arg(ConvertBsExpression( texts->expr()))
+              .arg(texts->expr()->type() == BsObject::Null ? QString("switchLocationText()") : ConvertBsExpression( texts->expr()))
               .arg( texts->texts().join("\",\"").replace("\r\n","\\\\n").replace("\n", QString("\\\\n")));
     result << m_tagConverter.TagEnd();
     return result.join("\n");
