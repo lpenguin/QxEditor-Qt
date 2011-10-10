@@ -82,9 +82,11 @@ BsStatementList QMScriptToBsConverter::ConvertQMAction(QMAction * qmAction)
 BsExpression * QMScriptToBsConverter::ConvertQMEquation(QString equation)
 {
     QMapIterator<QMParametr *, BsVariable *> i(m_varMap);
+    QString parName;
     while(i.hasNext()){
         i.next();
-        equation = equation.replace( QString("p") + QString::number( i.key()->parNumber+1),
+        parName = QString("p") + QString::number( i.key()->parNumber+1);
+        equation = equation.replace( QRegExp(parName+"[^\d]"),
                                     i.value()->name());
     }
     return m_eqConverter.parseExpression( equation );

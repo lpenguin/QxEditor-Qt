@@ -1,5 +1,12 @@
 #include "BsToESMAScriptConverter.h"
 
+QString quoteBadChars( QString str ){
+    return str.replace("\r\n","\\\\n")
+            .replace("\n", "\\\\n");
+            //.replace("'","\\'");
+            //.replace("\"","'");
+}
+
 BsToESMAScriptConverter::BsToESMAScriptConverter()
 {
     FillOperatorTypes();
@@ -344,7 +351,7 @@ QString BsToESMAScriptConverter::ConvertQlShowVariable(QlShowVariable *sv)
         ranges<<ConvertBsRange( ran );
     }
     foreach( QString str, sv->strings()){
-        texts<<QString("'%1'").arg(str);
+        texts<<QString("'%1'").arg(quoteBadChars(str));
     }
     result << m_tagConverter.TagStart()+m_tagConverter.ShowVariableTag( sv );
     result << QString("AddShowRanges('%1', [%2], [%3], %4);")
@@ -371,7 +378,7 @@ QString BsToESMAScriptConverter::ConvertQlBoundTrigger(QlBoundTrigger *trig)
               .arg(trig->var()->name())
               .arg(type)
               .arg(trig->value()->value())
-              .arg(trig->text());
+              .arg(quoteBadChars(trig->text()));
     result<<m_tagConverter.TagEnd();
     return result.join("\n");
 }
@@ -410,14 +417,16 @@ QString BsToESMAScriptConverter::ConvertQlParametrList(QlParametrList list)
     return result.join("\n");
 }
 
+
 QString BsToESMAScriptConverter::ConvertQlLocationTexts(QlLocationTexts *texts)
 {
     QStringList result;
     result << m_tagConverter.TagStart() + m_tagConverter.LocationTextsTag( texts );
-    result << QString("AddLocationTexts( '%1', function(){ return %2; }, [\"%3\"] );")
+    result << QString("AddLocationTexts( '%1', function(){ return %2; }, ['%3'] );")
               .arg( texts->locationId() )
               .arg(texts->expr()->type() == BsObject::Null ? QString("switchLocationText()") : ConvertBsExpression( texts->expr()))
-              .arg( texts->texts().join("\",\"").replace("\r\n","\\\\n").replace("\n", QString("\\\\n")));
+              .arg( quoteBadChars( texts->texts().join("','") )
+                   );
     result << m_tagConverter.TagEnd();
     return result.join("\n");
 }
