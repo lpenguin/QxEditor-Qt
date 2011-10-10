@@ -124,20 +124,20 @@ TEMPLATE = app
 INCLUDEPATH += src
 
 OTHER_FILES += \
-    src/qxplayer/Core/Player.js \
-    src/qxplayer/Core/Quest/Quest.js \
-    src/qxplayer/Core/Quest/Path.js \
-    src/qxplayer/Core/Quest/Location.js \
-    src/qxplayer/PlayerView.qml \
-    src/qxplayer/main.js \
-    src/qxplayer/Main.qml \
-    src/qxplayer/Core/mainFunctions.js \
-    src/qxplayer/lib/loader.js \
-    src/qxplayer/lib/PlayerLoader.js \
-    ../QxPlayer-Js/js/player.js \
-    ../QxPlayer-Js/js/misc.js \
-    ../QxPlayer-Js/js/mainFunctions.js \
-    ../QxPlayer-Js/js/gridUI.js \
-    ../QxPlayer-Js/js/playerUI.js \
-    ../QxPlayer-Js/index.html \
-    ../QxPlayer-Js/css/playerui.css
+    player/css/playerui.css \
+    player/index.html \
+    player/quest.info \
+    player/quests.json \
+    player/js/playerUI.js \
+    player/js/player.js \
+    player/js/misc.js \
+    player/js/mainFunctions.js \
+    player/js/jquery-1.6.2.min.js \
+    player/js/gridUI.js \
+    player/quests/testQuotes.json \
+    player/quests/test.json \
+    player/quests/main.json \
+    player/quests/Gobsavr.qm.json \
+    player/quests/Bondiana.qm.json \
+    player/quests/bank2.json \
+    player/quests/bank.json

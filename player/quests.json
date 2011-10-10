@@ -1,0 +1,15 @@
+{
+    "quests" : [{
+        "name" : "Gobsavr",
+        "url" : "quests/Gobsavr.qm.json"
+    },{
+    "name" : "Bondiana",
+    "url" : "quests/Bondiana.qm.json"
+    },{
+    "name" : "Test",
+    "url" : "quests/test.json"
+    },{
+    "name" : "Bank",
+    "url" : "quests/bank.json"
+    }]
+}

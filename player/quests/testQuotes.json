@@ -1,0 +1,15 @@
+{"init":"//!bs:ql.param(var(Ranger), val('<Ranger>'))\nRanger = '<Ranger>';AddToVars('Ranger');\n//!bs:end\n//!bs:ql.param(var(FromStar), val('<FromStar>'))\nFromStar = '<FromStar>';AddToVars('FromStar');\n//!bs:end\n//!bs:ql.param(var(FromPlanet), val('<FromPlanet>'))\nFromPlanet = '<FromPlanet>';AddToVars('FromPlanet');\n//!bs:end\n//!bs:ql.param(var(ToPlanet), val('<ToPlanet>'))\nToPlanet = '<ToPlanet>';AddToVars('ToPlanet');\n//!bs:end\n//!bs:ql.param(var(ToStar), val('<ToStar>'))\nToStar = '<ToStar>';AddToVars('ToStar');\n//!bs:end",
+ "actions":"",
+ "name":"[Not inplemented yet]",
+ "description":"Описание задания",
+ "libraries":["main.as"],
+ "vers":[
+  {"id":"L1",
+   "actions":"",
+   "init":"//!bs:ql.texts('L1', null, ['123 &sq;123&sq; &rl;&nl;&rl;&nl;123&rl;&nl;321&rl;&nl;&rl;&nl;123 &sq;&sq;&sq; 123','456&rl;&nl;&sq;567&sq;'])\nAddLocationTexts( 'L1', function(){ return switchLocationText(); }, [\"123 \'123\' \\n\\n123\\n321\\n\\n123 \'\'\' 123\\",\\"456\\n\'567\'\"] );\n//!bs:end",
+   "text":"123 '123' \n\n123\n321\n\n123 ''' 123",
+   "type":"start",
+   "edges":[
+   ],
+   "x":"280",
+   "y":"180"}]}
