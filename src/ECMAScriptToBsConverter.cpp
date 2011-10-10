@@ -479,6 +479,9 @@ QlParametr * ECMAScriptToBsConverter::ConvertParametr(QStringList tags, BsStatem
     QlParamStatementList paramStatements;
     foreach(BsStatement * st, statements){
         switch( st->type()){
+        case QlType::IntParametr:
+            paramStatements << (QlIntConstraint *) st;
+            break;
         case  QlType::Constraint:
             paramStatements << (QlConstraint *) st;
             break;
@@ -489,7 +492,7 @@ QlParametr * ECMAScriptToBsConverter::ConvertParametr(QStringList tags, BsStatem
             paramStatements << (QlShowVariable *) st;
             break;
         default:
-            throw ParseError( "Invalid statement", ParseError::InvalidStatement);
+            throw ParseError( QString("Invalid statement type: %1 (class %2)").arg(st->type()).arg(st->metaObject()->className()), ParseError::InvalidStatement);
         }
     }
     return new QlParametr( var, startValue, paramStatements );

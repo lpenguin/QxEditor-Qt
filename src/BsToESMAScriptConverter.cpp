@@ -487,8 +487,7 @@ QString BsToESMAScriptConverter::ConvertQlIntConstraint(BlockScript::QlIntConstr
 {
     QStringList result;
     result << m_tagConverter.TagStart()+m_tagConverter.IntConstraintTag( con );
-    result << QString("AddIntConstraint('%1');")
-              .arg(con->var()->name());
+    result << QString("AddIntConstraint('%1');").arg(con->var()->name());
     result<<m_tagConverter.TagEnd();
     return result.join("\n");
 }

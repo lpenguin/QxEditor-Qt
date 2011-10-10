@@ -329,7 +329,8 @@ QString BsToTagConverter::LocationEmptyTag(BlockScript::QlLocationEmpty *empty)
 
 QString BsToTagConverter::IntConstraintTag(BlockScript::QlIntConstraint *con)
 {
-    return QString("ql.icons(%1)").arg(con->var()->name());
+    qDebug()<<"Name: "<<con->var()->name()<<QString("ql.icons(%1)").arg(con->var()->name());
+    return QString("ql.icons(%1)").arg(VariableTag(con->var()));
 }
 
 QString BsToTagConverter::PathAlwaysShowTag(BlockScript::QlPathAlwaysShow *alwaysShow)

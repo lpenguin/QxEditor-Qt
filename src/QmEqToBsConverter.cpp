@@ -20,6 +20,8 @@ void QmEqToBsConverter::FillOperations()
 
 BlockScript::BsExpression * QmEqToBsConverter::parseExpression(const QString &equation) throw( ParseError )
 {
+    if( equation.isEmpty() )
+        return new BsNull;
     foreach( OperatorPair operatorPair, m_operations ){
         QStringList operatorGroup = operatorPair.second;
         QString oper = findOperator( equation, operatorGroup );

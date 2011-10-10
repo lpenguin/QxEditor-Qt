@@ -6,6 +6,7 @@ VerInfo * QlQMInfoReader::ReadVerInfo(QMLocation *location)
     QlLocationTexts * texts = ConvertLocationTexts( location );
     QlLocationStatementList statements;
     QString id = QString("L")+QString::number(location->locNumber);
+    qDebug()<<QString("ID: %1").arg(id);
     if( texts->texts().count() > 1 )
         statements << texts;
     if( location->type == QMLocation::Empty )
