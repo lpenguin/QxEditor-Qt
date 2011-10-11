@@ -1,12 +1,7 @@
 BUGS:
 
 -- В квесте Galaxy.qm --
-error in actions:
-//!bs:ql.param(var(vremya), var(0)) vremya = 0;AddToVars('vremya');
-//!bs:ql.cons(var(vremya), val(0), val(360))
-AddConstraint('vremya', 0, 360);
-//!bs:end
-//!bs:ql.show(var(vremya), [ran(val(0),val(360))], ['Время: {<> div 60} час. {<> mod 60} мин.'], 0 )...
+error in actions://!bs:ql.param(var(vremya), var(0)) vremya = 0;AddToVars('vremya');//!bs:ql.cons(var(vremya), val(0), val(360))AddConstraint('vremya', 0, 360);//!bs:end//!bs:ql.show(var(vremya), [ran(val(0),val(360))], ['Время: {<> div 60} час. {<> mod 60} мин.'], 0 )...
 SyntaxError: syntax error 155
 
 error in actions: /*!bs:cond(and,cond(in,var(vremya),ran(val(0),val(359))),cond(in,var(podozr.),ran(val(0),val(9))),cond(in,var(vipito),ran(val(0),val(499))),cond(in,var(denjgi),ran(val(0),val(10000)))):!bs*/ ( In(vremya,range(0, 359)) ) && ( In(podozr.,range(0, 9)) ) && ( ...
@@ -26,3 +21,5 @@ TODO:
 
 -- Сделать возможность загрузить json квест и проиграть его.
 
+-- Сделать проверку имен переменных на формат принятый в JavaScript, из-за этого много багов. --
+   Возможно сделать диалог с переименованием переменной
