@@ -140,4 +140,5 @@ OTHER_FILES += \
     player/quests/Gobsavr.qm.json \
     player/quests/Bondiana.qm.json \
     player/quests/bank2.json \
-    player/quests/bank.json
+    player/quests/bank.json \
+    todo.txt

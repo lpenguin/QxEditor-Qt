@@ -17,7 +17,7 @@ BsScript * QMScriptToBsConverter::ConvertQMActions(QMActionList qmActions)
 
 BsVariable * QMScriptToBsConverter::ConvertQMParametrToVariable(QMParametr * qmParametr)
 {
-    qmParametr->name = qmParametr->name.replace("(", "lb").replace(")", "rb");
+    qmParametr->name = qmParametr->name.replace("(", "lb").replace(")", "rb").replace(" ","_").replace(".","dt");
     return new BsVariable( Transliter::Translate( qmParametr->name ) );
 }
 

@@ -1,0 +1,28 @@
+BUGS:
+
+-- В квесте Galaxy.qm --
+error in actions:
+//!bs:ql.param(var(vremya), var(0)) vremya = 0;AddToVars('vremya');
+//!bs:ql.cons(var(vremya), val(0), val(360))
+AddConstraint('vremya', 0, 360);
+//!bs:end
+//!bs:ql.show(var(vremya), [ran(val(0),val(360))], ['Время: {<> div 60} час. {<> mod 60} мин.'], 0 )...
+SyntaxError: syntax error 155
+
+error in actions: /*!bs:cond(and,cond(in,var(vremya),ran(val(0),val(359))),cond(in,var(podozr.),ran(val(0),val(9))),cond(in,var(vipito),ran(val(0),val(499))),cond(in,var(denjgi),ran(val(0),val(10000)))):!bs*/ ( In(vremya,range(0, 359)) ) && ( In(podozr.,range(0, 9)) ) && ( ...
+SyntaxError: syntax error 116
+
+-- При загрузке нового квеста - вылет с ошибкой сегментации
+
+-- При ошибке конвертации (в консольном режиме) - вылет с ошибкой сегментации, неправильно очищается граф
+
+TODO:
+
+-- Добавить парсинг выражений в выводимый текст --
+   Например: 'Время: {<> div 60} час. {<> mod 60} мин.'
+
+-- Сделать отдельные странички для плеера квестов в редакторе
+   и для плеера в браузере. Чтобы не перезаписывать quest.info
+
+-- Сделать возможность загрузить json квест и проиграть его.
+
