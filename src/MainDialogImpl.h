@@ -92,7 +92,7 @@ private:
     QString strippedName(const QString &fullFileName);
     void loadSettings();
     QString curFile;
-
+    void ConvertFile(const QString & from, const QString & to);//Converting *.qm file to *.json
 
     enum { MaxRecentFiles = 5 };
     QAction *recentFileActs[MaxRecentFiles];

@@ -22,6 +22,12 @@ BlockScript::BsExpression * QmEqToBsConverter::parseExpression(const QString &eq
 {
     if( equation.isEmpty() )
         return new BsNull;
+    if( equation.at(0) == QChar('(') ){
+        if( FindBracketEnd(equation) == equation.count() - 1){
+            return parseExpression( equation.mid(1, equation.count() - 2));
+
+        }
+    }
     foreach( OperatorPair operatorPair, m_operations ){
         QStringList operatorGroup = operatorPair.second;
         QString oper = findOperator( equation, operatorGroup );
@@ -125,7 +131,7 @@ bool QmEqToBsConverter::isSet(const QString &arg)
 
 bool QmEqToBsConverter::isValue(const QString &arg)
 {
-    return QRegExp("^\\d+$").indexIn( arg ) != -1;
+    return QRegExp("^[\\d\\.\\,\\-]+$").indexIn( arg ) != -1;
 }
 
 BlockScript::BsExpression * QmEqToBsConverter::parseArg(const QString &arg) throw( ParseError )

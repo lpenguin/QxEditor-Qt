@@ -43,8 +43,23 @@ MainDialogImpl::MainDialogImpl( QWidget * parent, Qt::WFlags f)
 
     setCentralWidget( graphView );
 
-    if( qApp->argc() > 1 )
-        loadFile(QString(qApp->argv()[1]) );
+    if( qApp->argc() >= 2 ){
+        if( QString(qApp->argv()[1]) == QString("--convert") ){
+            if( qApp->argc() == 4 ){
+                QString from = QString(qApp->argv()[2]);
+                QString to = QString(qApp->argv()[3]);
+                ConvertFile(from, to);
+                qApp->exit(0);
+                exit(0);
+            }else{
+                qDebug("Invalid parametrs");
+                qApp->exit(1);
+            }
+
+        }else
+            loadFile(QString(qApp->argv()[1]) );
+    }
+
 
 
 }
@@ -426,4 +441,12 @@ void MainDialogImpl::on_actionPreferences_triggered(){
         QSettings settings;
         settings.setValue("playerPath", m_playerPath);
     }
+}
+
+void MainDialogImpl::ConvertFile(const QString &from, const QString &to)
+{
+    graphView->CleanGraph();
+    setGraphType( QuestLogic );
+    loadFile( from );
+    saveFile( to );
 }

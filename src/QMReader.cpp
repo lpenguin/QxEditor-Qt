@@ -318,7 +318,11 @@ QMStringReplaces QMReader::ReadStringReplaces(BinaryReader & br)
     try{
         br.ReadInt32();
         stringReplaces.toStar = br.ReadString();
-        br.skipRawData(56);
+        br.ReadInt32();
+        stringReplaces.distance = br.ReadString();
+        br.ReadInt32();
+        stringReplaces.artefact = br.ReadString();
+        br.ReadInt32();
         stringReplaces.toPlanet = br.ReadString();
         br.ReadInt32();
         stringReplaces.date = br.ReadString();
@@ -412,7 +416,11 @@ QMPathList QMReader::ReadPaths(BinaryReader & br)
 void QMReader::ReadHeader(BinaryReader & br)
 {
     try{
-        br.skipRawData(37);
+        qint32 version = br.ReadInt32();
+        if( version != TGE_LAST_VERSION ){
+            throw QMException("Wrong QM version");
+        }
+        br.skipRawData(33);
         qint32 xGridSize = br.ReadInt32();//10(51) - vbig,15(34) - big,22(23) - medium,30(17) - small
         qint32 yGridSize = br.ReadInt32();//8(89-44) - vbig,12(59-88) -big,18(39-58) - medium,24(29-43) - small
 

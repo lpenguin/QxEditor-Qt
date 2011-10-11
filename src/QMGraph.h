@@ -145,6 +145,8 @@ struct QMStringReplaces{
     QString ranger;
     QString congString;
     QString missionString;
+    QString distance;
+    QString artefact;
 };
 
 class QMGraph

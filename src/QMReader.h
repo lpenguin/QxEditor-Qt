@@ -8,7 +8,7 @@
 #include "BinaryReader.h"
 #include <iostream>
 #include "QMGraph.h"
-
+#define TGE_LAST_VERSION 1111111123
 using namespace QMScript;
 class QMReader
 {

@@ -17,6 +17,7 @@ BsScript * QMScriptToBsConverter::ConvertQMActions(QMActionList qmActions)
 
 BsVariable * QMScriptToBsConverter::ConvertQMParametrToVariable(QMParametr * qmParametr)
 {
+    qmParametr->name = qmParametr->name.replace("(", "lb").replace(")", "rb");
     return new BsVariable( Transliter::Translate( qmParametr->name ) );
 }
 
@@ -86,7 +87,7 @@ BsExpression * QMScriptToBsConverter::ConvertQMEquation(QString equation)
     while(i.hasNext()){
         i.next();
         parName = QString("p") + QString::number( i.key()->parNumber+1);
-        equation = equation.replace( QRegExp(parName+"[^\d]"),
+        equation = equation.replace( QRegExp(parName+"(:[^\d])"),
                                     i.value()->name());
     }
     return m_eqConverter.parseExpression( equation );

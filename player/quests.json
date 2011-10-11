@@ -1,15 +1,1 @@
-{
-    "quests" : [{
-        "name" : "Gobsavr",
-        "url" : "quests/Gobsavr.qm.json"
-    },{
-    "name" : "Bondiana",
-    "url" : "quests/Bondiana.qm.json"
-    },{
-    "name" : "Test",
-    "url" : "quests/test.json"
-    },{
-    "name" : "Bank",
-    "url" : "quests/bank.json"
-    }]
-}
+{"quests": [{"url": "./quests/bank.json", "name": "Bank"}, {"url": "./quests/boat.json", "name": "Boat"}, {"url": "./quests/bondiana.json", "name": "Bondiana"}, {"url": "./quests/build.json", "name": "Build"}, {"url": "./quests/casino.json", "name": "Casino"}, {"url": "./quests/commando.json", "name": "Commando"}, {"url": "./quests/diamond.json", "name": "Diamond"}, {"url": "./quests/diehard.json", "name": "Diehard"}, {"url": "./quests/energy.json", "name": "Energy"}, {"url": "./quests/examen.json", "name": "Examen"}, {"url": "./quests/fishing.json", "name": "Fishing"}, {"url": "./quests/galaxy.json", "name": "Galaxy"}, {"url": "./quests/gladiator.json", "name": "Gladiator"}, {"url": "./quests/gobsaur.json", "name": "Gobsaur"}, {"url": "./quests/hachball.json", "name": "Hachball"}, {"url": "./quests/ikebana.json", "name": "Ikebana"}, {"url": "./quests/main.json", "name": "Main"}, {"url": "./quests/menzols.json", "name": "Menzols"}, {"url": "./quests/murder.json", "name": "Murder"}, {"url": "./quests/newflora.json", "name": "Newflora"}, {"url": "./quests/penetrator.json", "name": "Penetrator"}, {"url": "./quests/poroda.json", "name": "Poroda"}, {"url": "./quests/prison.json", "name": "Prison"}, {"url": "./quests/rush.json", "name": "Rush"}, {"url": "./quests/siege.json", "name": "Siege"}, {"url": "./quests/spy.json", "name": "Spy"}, {"url": "./quests/test.json", "name": "Test"}, {"url": "./quests/tomb.json", "name": "Tomb"}]}

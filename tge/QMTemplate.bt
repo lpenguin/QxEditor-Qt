@@ -80,7 +80,12 @@ struct FILE{
     struct StringReplaces{
         int skip;
         wstr toStar;
-        FSkip(56);
+        //FSkip(56);
+        int skip;
+        wstr distance;
+        int skip;
+        wstr artefact;
+        int skip;
         wstr toPlanet;
         int skip;
         wstr date;
