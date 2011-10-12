@@ -39,8 +39,22 @@ var Player = function(){
                 text = "";
             for(var name in globals.vars){
                 re = new RegExp("\<"+name+"\>", 'g');
-                text = text.replace(re, globals[name])
+                text = text.replace(re, globals[name]);
             }
+            var openBracket = 0;
+            var from = 0;
+            while( (openBracket = text.indexOf("{", from)) != -1){
+                var closeBracket = text.indexOf( "}", openBracket + 1);
+                if( closeBracket == -1)
+                    break;
+
+                var exp = text.substring( openBracket + 1, closeBracket );
+                var actions = this.compileActions( exp );
+                var res = actions();
+                text = text.substring(0, openBracket ) + res + text.substring(closeBracket + 1);
+                from = openBracket + res.toString().length - 1;
+            }
+
             return text;
         };
 

@@ -444,7 +444,8 @@ function ShowVars(){
             alert("Range not found for: "+ name);
             return;
         }
-        var txt = o.texts[ n ].replace('<>', v);
+        var txt = player.replaceStrings(o.texts[ n ]);
+
         if( txt )
             player.setStatusText( player.getStatusText() + txt + "\n" );
 

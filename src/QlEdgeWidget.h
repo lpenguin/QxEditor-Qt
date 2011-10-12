@@ -6,6 +6,7 @@
 #include "BaseGraph.h"
 #include "QlGraph.h"
 #include "BsToESMAScriptConverter.h"
+#include "ECMAScriptToBsConverter.h"
 
 namespace Ui {
     class QlEdgeWidget;
@@ -22,7 +23,8 @@ public:
     void WriteEdge(Edge *edge);
 private:
     Ui::QlEdgeWidget *ui;
-    BsToESMAScriptConverter * m_converter;
+    BsToESMAScriptConverter * m_bsToEsConverter;
+    ECMAScriptToBsConverter * m_esToBsConverter;
 };
 
 #endif // QLEDGEWIDGET_H

@@ -141,4 +141,8 @@ OTHER_FILES += \
     player/quests/Bondiana.qm.json \
     player/quests/bank2.json \
     player/quests/bank.json \
-    todo.txt
+    todo.txt \
+    player/player.html \
+    scripts/genQuestFile.py \
+    scripts/manager.py \
+    scripts/settings.cfg

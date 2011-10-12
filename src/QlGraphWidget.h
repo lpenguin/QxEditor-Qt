@@ -6,6 +6,8 @@
 #include "BaseGraph.h"
 #include "QlGraph.h"
 #include "BsToESMAScriptConverter.h"
+#include "ECMAScriptToBsConverter.h"
+
 namespace Ui {
     class QlGraphWidget;
 }
@@ -21,7 +23,8 @@ public:
     void WriteGraph(Graph *graph);
 private:
     Ui::QlGraphWidget *ui;
-    BsToESMAScriptConverter m_converter;
+    BsToESMAScriptConverter m_bsToEsConverter;
+    ECMAScriptToBsConverter m_esToBsConverter;
 };
 
 #endif // QLGRAPHWIDGET_H

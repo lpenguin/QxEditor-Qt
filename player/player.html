@@ -13,7 +13,7 @@
 <script type="text/javascript" src="js/gridUI.js"></script>
 <script type="text/javascript">
 var player, ui;
-var defQuest = "quests/main.json";
+
 function init(path){
     ui = new PlayerUI({
             textField : $("#textField"),
@@ -29,15 +29,11 @@ function init(path){
 }
 $(document).ready(function(){
     var path = document.location.toString();
-    if( path.match('#') ){
-        var file = path.split('#')[1];
-        init( file );
-    }else
-        init( defQuest );
-/*    $.getJSON( "quest.info", function(data){
-        init(data.path);
-    });
-    */
+    var file = jsObject.questPath;
+    init( file );
+//    $.getJSON( "quest.info", function(data){
+//        init(data.path);
+//   });
 });
 </script>
 </head>

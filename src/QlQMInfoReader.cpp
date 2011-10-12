@@ -33,9 +33,10 @@ EdgeInfo * QlQMInfoReader::ReadEdgeInfo(QMPath *path)
     }
 //    else
 //        expr = ConvertConditions(path->conditions);
-
-    return new QlEdgeInfo( path->text,
-                          path->question,
+    QString text = m_qmToBs.ConvertQMEquationsInText(path->text);
+    QString question = m_qmToBs.ConvertQMEquationsInText(path->question);
+    return new QlEdgeInfo( text,
+                          question,
                           expr,
                           ConvertActions( path->actions ),
                           ConvertPathStatements( path ),
@@ -68,7 +69,12 @@ QlLocationTexts * QlQMInfoReader::ConvertLocationTexts(QMLocation *location)
 //        expr = new BsUserString(location->textFormula);
     else
         expr = new BsNull();
-    return new QlLocationTexts(QString("L%1").arg(location->locNumber), location->texts, expr);
+    QStringList texts;
+    foreach(QString text, location->texts){
+        texts<<m_qmToBs.ConvertQMEquationsInText( text );
+    }
+
+    return new QlLocationTexts(QString("L%1").arg(location->locNumber), texts, expr);
 }
 
 BsScript * QlQMInfoReader::ConvertActions(QMActionList actions)

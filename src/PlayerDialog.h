@@ -4,6 +4,8 @@
 #include <QDialog>
 #include <QDeclarativeContext>
 #include <QtNetwork/QNetworkAccessManager>
+#include <QWebFrame>
+
 #include <QDir>
 #include <QtCore>
 namespace Ui {
@@ -21,6 +23,9 @@ public:
 
 private:
     Ui::PlayerDialog *ui;
+    QObject * jsObject;
+public slots:
+    void populateJavaScriptWindowObject();
 };
 
 #endif // PLAYERDIALOG_H

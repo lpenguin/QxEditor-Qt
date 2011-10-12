@@ -6,7 +6,7 @@
 #include "BaseGraph.h"
 #include "QlGraph.h"
 #include "BsToESMAScriptConverter.h"
-
+#include "ECMAScriptToBsConverter.h"
 
 namespace Ui {
     class QlVerWidget;
@@ -23,7 +23,8 @@ public:
     void WriteVer(Ver *ver);
 private:
     Ui::QlVerWidget *ui;
-    BsToESMAScriptConverter * m_converter;
+    BsToESMAScriptConverter * m_bsToEsConverter;
+    ECMAScriptToBsConverter * m_esToBsConverter;
 };
 
 #endif // QLVERWIDGET_H

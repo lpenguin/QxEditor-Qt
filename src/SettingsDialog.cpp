@@ -15,7 +15,7 @@ SettingsDialog::~SettingsDialog()
 
 void SettingsDialog::browseButtonClicked()
 {
-    QString res  = QFileDialog::getExistingDirectory(this, "Player path", QCoreApplication::applicationDirPath());
+    QString res  = QFileDialog::getOpenFileName(this, "Player path" );
 
     res = QDir::toNativeSeparators(res);
     if( ! res.isEmpty() ){

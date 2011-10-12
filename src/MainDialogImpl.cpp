@@ -422,7 +422,8 @@ void MainDialogImpl::loadSettings()
     QSettings settings;
     //settings.remove("playerPath");
     m_playerPath = settings.value("playerPath").toString();
-    if( m_playerPath.isEmpty() ){
+    QFile f(m_playerPath );
+    if( m_playerPath.isEmpty() || !f.exists()){
         settigsDialog->setPlayerPath(m_playerPath);
         if( settigsDialog->exec() == QDialog::Accepted ){
             m_playerPath = settigsDialog->playerPath();

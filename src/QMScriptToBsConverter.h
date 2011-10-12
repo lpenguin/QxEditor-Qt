@@ -7,7 +7,11 @@
 #include "Error.h"
 
 #include <QtCore>
+#include <QInputDialog>
+
 #include "QmEqToBsConverter.h"
+#include "BsToESMAScriptConverter.h"
+#include "stringoper.h"
 
 using namespace  BlockScript;
 
@@ -29,17 +33,18 @@ public:
     BsExpression * ConvertQMLocaigalCondition( QString condition );
     BsExpression * ConvertQMEquation(QString equation);
     BsExpression * ConvertQMConditions( QMConditionList qmConditions );
+    QString ConvertQMEquationsInText(const QString & text );
 private:
     BsVariable * ConvertQMParametrToVariable( QMParametr * qmParametr);
     BsStatementList ConvertQMAction( QMAction * qmAction );
 
     BsConditionList ConvertQMCondition( QMCondition * qmCondition );
     BsRangeList ConvertQMRanges( QMParametrRangeList ranges );
-    QStringList ConvertQMRangesTexts( QMParametrRangeList ranges );
+    QStringList ConvertQMRangesTexts( QMParametrRangeList ranges, const QString & varName );
     QString ConvertQMParametrType(QMParametr::QMParametrType type);
 
     QmEqToBsConverter m_eqConverter;
-
+    BsToESMAScriptConverter m_bsConverter;
 };
 
 #endif // QMSCRIPTTOBSCONVERTER_H

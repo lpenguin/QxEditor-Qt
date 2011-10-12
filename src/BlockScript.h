@@ -17,6 +17,7 @@
 #define FORL( a ) FOR( 0, a.count())
 
 #define SETL( a, b ) {\
+    a.clear();\
     FORL(b){ \
     SETPARENT(b[i]);\
     a.append( b[i] );\
