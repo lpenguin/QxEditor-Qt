@@ -233,7 +233,7 @@ QStringList QMScriptToBsConverter::ConvertQMRangesTexts(QMParametrRangeList rang
     QStringList list;
     QString text;
     foreach( QMParametrRange range, ranges){
-        text = range.text.replace("<>", varName);
+        text = range.text.replace("<>", QString("{%1}").arg(varName));
         text = ConvertQMEquationsInText( text );
         list<<text;
     }

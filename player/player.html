@@ -28,12 +28,13 @@ function init(path){
     });
 }
 $(document).ready(function(){
+
+    $("#positionButton").click(function(){
+        $("#position").html("location: "+loc.id+"<br />path: "+path.id);
+    });
     var path = document.location.toString();
     var file = jsObject.questPath;
     init( file );
-//    $.getJSON( "quest.info", function(data){
-//        init(data.path);
-//   });
 });
 </script>
 </head>
@@ -54,6 +55,8 @@ $(document).ready(function(){
 			<td></td>
 		</tr>
 	</table>
+        <div id='position'></div>
 	<div id='error'></div>
+        <!--<input id='positionButton' value='Position' type='button' />-->
 </body>
 </html>

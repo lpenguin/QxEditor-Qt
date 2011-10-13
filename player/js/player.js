@@ -126,14 +126,14 @@ var Player = function(){
             var maxLength = 256;
 		return function(){
 			try{
-				return eval( actions );
+                            return eval( actions );
 			}catch(err){
-				//alert('error in actions:\n'+actions+"\n"+err);
                                 var a = actions;
                                 if( a.length > maxLength)
                                      a = a.substring(0, maxLength)+"...";
-                                //alert(actions);
-                                $("#error").html($("#error").html()+'<br /><br /><b>error in actions</b>:\n'+a+"\n"+err+"\n"+err.lineNumber);
+                                $("#error").html($("#error").html()+
+                                                 '<br /><br /><b>error in actions</b>:\n'+a+"\n"
+                                                 +err+"\nline: "+err.lineNumber);
 			}
 		};
 	};
@@ -142,7 +142,7 @@ var Player = function(){
 		var c = conditions;
 		c = c.replace(/\/\*[^\/\*]*\*\//,'');
 		c = c.replace(/(^\s+)|(\s+$)/g, "");
-		if( c == "" )
+                if( !c )
 			return this.compileActions('(1)');
 		return this.compileActions(conditions);
 	};
