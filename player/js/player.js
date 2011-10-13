@@ -93,6 +93,10 @@ var Player = function(){
 		this.ui.clearChoices();
 	};
 	
+        this.getChoices = function(){
+            return this.choices;
+        };
+
 	this.onChoiceSelected = function(index){
 		var choice = this.choices[index];
 		choice.actions();

@@ -59,3 +59,7 @@ body {
     background-color : #2F393C;
     color : #AFB0B1;
 }
+
+.hidden {
+    display : none;
+}

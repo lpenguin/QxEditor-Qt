@@ -210,8 +210,8 @@ QlParametr *  QMScriptToBsConverter::ConvertQMParametr(QMParametr *qmParametr)
             trig->setBoundType(QlBoundTrigger::Max);
             trig->setValue( new BsValue(QString::number(qmParametr->max)));
         }else{
-            trig->setBoundType(QlBoundTrigger::Max);
-            trig->setValue( new BsValue(QString::number(qmParametr->max)));
+            trig->setBoundType(QlBoundTrigger::Min);
+            trig->setValue( new BsValue(QString::number(qmParametr->min)));
         }
         list << trig ;
     }

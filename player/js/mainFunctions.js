@@ -19,6 +19,8 @@ var pathShowOrderMap = {};
 var locationTextsMap = {};
 var intMap = {};
 
+
+var failParams = [];
 //Main functions
 function reset(){
     triggers = [];
@@ -346,18 +348,32 @@ function showPathes(loc){
 }
 
 function onAnyLocationEnter(enteredLoaction){
-	clearDisplay();
+        clearDisplay();
 	loc = enteredLoaction;
 	path = null;
 	player.setText(loc.text);
 	if( playPreTriggers() == 'jump')
 		return;
-	showPathes(loc);
 	if(  loc.actions() == 'jump')
 		return
+        showPathes(loc);
+        var choicesCount = player.getChoices().length;
+
+        if( failParams.length && ! choicesCount){
+            clearDisplay();
+            player.setText(failParams[0].text);
+            player.clearChoices();
+            ShowVars();
+            player.addChoice({text : 'Конец квеста.', actions : function(){questEnd();}});
+            return 'jump';
+        }
+
 	if( playPostTriggers() == 'jump')
 		return;
 	prevLocation = loc;
+        failParams = [];
+
+
 }
 
 function onAnyPathEnter(enteredPath){
@@ -528,6 +544,7 @@ function switchLocationText(){
 }
 
 function CheckConstraints( varName ){
+        console.log(varName)
 	if( constraintsMap[ varName] ){
 		var r = constraintsMap[ varName];
 		var v = globals[varName];
@@ -544,12 +561,9 @@ function CheckConstraints( varName ){
 	
 	if( b = boundMap[varName] ){
 		var v = globals[varName];
+                console.log(b.type+" "+b.value);
 		if( b.type == 'max' && v >= b.value || b.type == 'min' && v <= b.value){
-			clearDisplay();
-			player.setText(b.text);
-			player.clearChoices();
-                        player.addChoice({text : 'Конец квеста.', actions : function(){questEnd();}});
-			return 'jump';
+                        failParams.push(b);
 		}
 				
 	}

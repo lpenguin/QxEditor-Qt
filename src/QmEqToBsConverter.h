@@ -21,7 +21,7 @@ public:
     QmEqToBsConverter();
     BsExpression * parseExpression( const QString & equation) throw( ParseError );
 private:
-    QString findOperator( const QString & expr, const QStringList & operators);
+    QStringList findOperator( const QString & expr, const QStringList & operators, QString & oper);
     BsExpressionList parseExpressions( const QStringList & exprs ) throw( ParseError );
     BsExpression * parseArg( const QString & arg ) throw( ParseError );
 

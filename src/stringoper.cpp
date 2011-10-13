@@ -27,22 +27,24 @@ qint32 FindBracketEnd(const QString &str, qint32 startIndex,
     if( bracketCounter ) throw( ParseError(QString("Missing bracket end in %1 ( ==> %2 )").arg(str).arg(str.right( str.count() - startIndex )), ParseError::MissingBracketEnd));
 }
 
-qint32 FindNextDelim(const QString &str, qint32 startIndex, const QString & delim) throw( ParseError )
+qint32 FindInScript(const QString &str, qint32 startIndex, const QString & delim) throw( ParseError )
 {
     QString search = str;
     search.remove(0, startIndex );
     qint32 pos = startIndex, trunc;
+
     while( search.count() ){
-//    for(qint32 i = startIndex; i < str.count(); i++){
-        if( search.startsWith( delim) )
-            return pos;
+
+        if( QRegExp("^"+delim).indexIn(search) == 0 ){
+                return pos;
+        }
         else if( search.startsWith( QChar( '(' ) ) ){
             trunc = FindBracketEnd( search );
         } else if(  search.startsWith('\'') ){
             trunc = FindQuoteEnd( search ) + 1;
         } else if( search.startsWith('[') )
             trunc = FindBracketEnd( search, 0, QChar('['), QChar(']') );
-          else
+        else
             trunc = 1;
         pos += trunc;
         search.remove(0, trunc );
@@ -50,14 +52,44 @@ qint32 FindNextDelim(const QString &str, qint32 startIndex, const QString & deli
     return -1;
 }
 
-QStringList splitSmart(const QString &str, const QString & delim ) {
-    QStringList result;
-    int pos = 0, prev = 0 ;
-    while( (pos = FindNextDelim( str, prev, delim )) != -1 ){
-        result << str.mid( prev, pos - prev).trimmed();
-        prev = pos + delim.count();
+/*qint32 FindInScript(const QString &str, qint32 startIndex, const QRegExp & delim) throw( ParseError )
+{
+    QString search = str;
+    search.remove(0, startIndex );
+    qint32 pos = startIndex, trunc;
+
+    while( search.count() ){
+        if( search.startsWith(delim) )
+                return pos;
+        else if( search.startsWith( QChar( '(' ) ) ){
+            trunc = FindBracketEnd( search );
+        } else if(  search.startsWith('\'') ){
+            trunc = FindQuoteEnd( search ) + 1;
+        } else if( search.startsWith('[') )
+            trunc = FindBracketEnd( search, 0, QChar('['), QChar(']') );
+        else
+            trunc = 1;
+        pos += trunc;
+        search.remove(0, trunc );
     }
-    result << str.mid( prev, str.count() - prev).trimmed();
+    return -1;
+}*/
+
+
+QStringList splitSmart(QString str, QString delim ) {
+    QStringList result;
+    int pos = 0;
+    delim = delim.replace("+", "\\+")
+            .replace(".", "\\.")
+            .replace("*","\\*");
+
+    delim = QRegExp("^\\w+$").indexIn(delim) == 0 ? "\\W+"+delim+"\\W+" : delim;
+
+    while( (pos = FindInScript( str, 0, delim )) != -1 ){
+        result << str.left( pos).trimmed();
+        str = str.mid(pos).replace( QRegExp("^"+delim), "" );
+    }
+    result << str.trimmed();
     return result;
 }
 

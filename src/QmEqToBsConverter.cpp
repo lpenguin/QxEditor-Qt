@@ -30,9 +30,11 @@ BlockScript::BsExpression * QmEqToBsConverter::parseExpression(const QString &eq
     }
     foreach( OperatorPair operatorPair, m_operations ){
         QStringList operatorGroup = operatorPair.second;
-        QString oper = findOperator( equation, operatorGroup );
+        //QString oper = findOperator( equation, operatorGroup );
+        QString oper;
+         QStringList slices = findOperator( equation, operatorGroup, oper );
         if( !oper.isEmpty() ){
-            QStringList slices = splitSmart( equation, oper );
+            //QStringList slices = splitSmart( equation, oper );
             BsExpressionList exprs = parseExpressions( slices );
             switch( operatorPair.first ){
             case And:
@@ -71,14 +73,18 @@ BlockScript::BsExpression * QmEqToBsConverter::parseExpression(const QString &eq
     return parseArg( equation );
 }
 
-QString QmEqToBsConverter::findOperator(const QString &expr, const QStringList &operators)
+QStringList QmEqToBsConverter::findOperator(const QString &expr, const QStringList &operators, QString & operOut)
 {
+    QStringList res;
     foreach( QString oper, operators ){
-        //qDebug() << expr << oper ;
-        if( FindNextDelim( expr, 0, oper) != -1 )
-            return oper;
+        res = splitSmart(expr, oper);
+        if( res.count() > 1 ){
+            operOut = oper;
+            return res;
+        }
     }
-    return QString("");
+    operOut = "";
+    return QStringList();
 }
 
 BlockScript::BsExpressionList QmEqToBsConverter::parseExpressions(const QStringList &exprs) throw( ParseError )
@@ -138,7 +144,6 @@ BlockScript::BsExpression * QmEqToBsConverter::parseArg(const QString &arg) thro
 {
     QString str = arg;
     str = str.remove(QRegExp("^\\[")).remove(QRegExp("\\]$"));
-    qDebug()<< str;
     if( isVariable( str ) ){
         return parseVariable( str );
     } else if( isSet( str )){
